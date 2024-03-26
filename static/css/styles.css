@@ -1248,3 +1248,37 @@ transform: scale(1.05); /* Scale up slightly on hover */
   transform: translateX(20%);
 }
 
+
+
+/*THIS BELOW CODE IS FOR ANIMATED LINE*/
+.animated-line {
+  height: 2px; /* Height of the line */
+  background-color: #3498db; /* Color of the line */
+  border: none;
+  margin: 20px 0; /* Margin above and below the line */
+  position: relative;
+}
+
+/* Animation for the line */
+.animated-line::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Width of the line */
+  height: 100%;
+  background-color: #f39c12; /* Color of the animated part */
+  animation: expand 2s ease-in-out infinite; /* Animation properties */
+}
+
+@keyframes expand {
+  0% {
+    width: 0; /* Initial width of the animated part */
+  }
+  50% {
+    width: 100%; /* Width when halfway through animation */
+  }
+  100% {
+    width: 0; /* Width at the end of animation */
+  }
+}

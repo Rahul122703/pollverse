@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Line</title>
+<style>
+  /* Customizing the hr tag */
+  .animated-line {
+    height: 2px; /* Height of the line */
+    background-color: #3498db; /* Color of the line */
+    border: none;
+    margin: 20px 0; /* Margin above and below the line */
+    position: relative;
+  }
+
+  /* Animation for the line */
+  .animated-line::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Width of the line */
+    height: 100%;
+    background-color: #f39c12; /* Color of the animated part */
+    animation: expand 2s ease-in-out infinite; /* Animation properties */
+  }
+
+  @keyframes expand {
+    0% {
+      width: 0; /* Initial width of the animated part */
+    }
+    50% {
+      width: 100%; /* Width when halfway through animation */
+    }
+    100% {
+      width: 0; /* Width at the end of animation */
+    }
+  }
+</style>
+</head>
+<body>
+  <!-- HTML for the animated line -->
+  <hr class="animated-line">
+</body>
+</html>

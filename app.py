@@ -330,7 +330,8 @@ def anonymous():
 def search():
     search_form = SearchForm()
     searched = search_form.text.data
-    comments = database.session.execute(database.select(Comment).where(func.ilike(Comment.head, searched + '%'))).scalar()
+    comments = Comment.query
+    comments = comments.filter(Comment.head.like('%' + searched +'%'))
     print(comments)
     return render_template('search.html',comments = comments)
 

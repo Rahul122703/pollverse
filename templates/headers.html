@@ -84,7 +84,7 @@
         </button>
         
         <!-- Animated Search -->
-        <form class="d-flex align-items-center" method="POST">
+        <form class="d-flex align-items-center"action = "{{url_for('search')}}" method="POST">
             {{ search_form.text(class="form-control search-input me-2") }}
             <button class="btn btn-outline-primary" type="submit">
                 <i class="fas fa-search"></i>

@@ -330,7 +330,7 @@ def anonymous():
 def search():
     search_form = SearchForm()
     if search_form.validate_on_submit():
-        return render_template('search.html')
+        return render_template('search.html',searched = search_form.text.data)
     return render_template('search.html')
 
 

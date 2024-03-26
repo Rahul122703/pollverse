@@ -1,0 +1,28 @@
+{% include "headers.html" %}
+{% from "bootstrap5/form.html" import render_form %} 
+<header class="masthead" style="background-image: url('https://as1.ftcdn.net/v2/jpg/04/51/13/70/1000_F_451137058_AxK9G8q8ApdMoj2lnkRhJeeTs0YONi4v.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h3>{{ user_obj.username}} is adding a new poll</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='body') }}
+<div class="center-wrapper">
+    <form action="{{ url_for('new_comment') }}" method="POST" class="beautiful-form animated-form">
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <div class="animated-form">
+            {{ render_form(comment_form) }}
+        </div>
+    </form>
+</div>
+{{ ckeditor.load() }}
+{{ ckeditor.config(name='body') }}
+{% include "footer.html" %}

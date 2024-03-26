@@ -1,0 +1,14 @@
+Project Description:
+Our project is a discussion forum developed using Python with Flask framework for the backend and SQL database for data management. The aim of the project is to provide a platform where users can anonymously create polls and initiate discussions, while other logged-in users can view and participate in these discussions. The system incorporates sentiment analysis to gauge the sentiment of the comments over time, helping administrators make informed decisions on the validity of poll results.
+
+Key Features:
+
+Anonymous Poll Creation: Logged-in users can anonymously create polls on various topics of interest.
+Discussion Threads: Users can initiate and participate in discussion threads related to the polls.
+Sentiment Analysis: The system employs sentiment analysis to analyze the sentiments expressed in the comments over time, aiding administrators in determining the consensus on poll results.
+User Authentication: The system provides secure user authentication functionalities, allowing users to register, log in, and manage their accounts.
+User Profiles: Each user has a profile page where they can view their activity, including polls created and participated in, and discussions initiated or joined.
+Responsive Interface: The project includes intuitive interfaces for the home page, contact page, user profile page, and other essential sections, ensuring a smooth user experience.
+Database Connectivity: All user data, poll information, and discussion threads are stored and managed efficiently using an SQL database, ensuring data integrity and reliability.
+College Event Support: The project is designed to facilitate digital events in college settings, providing a platform for discussions and polls that can be utilized for various events and activities.
+Overall, our project serves as a valuable tool for facilitating discussions and gathering insights on various topics within a college community. It aims to enhance engagement and collaboration among students and administrators, ultimately contributing to the betterment of college situations and supporting future digital events.

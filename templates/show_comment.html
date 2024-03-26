@@ -1,0 +1,148 @@
+{% include "headers.html" %}
+{% if comment.bg_image %}
+    <header class="masthead" style="background-image: url('{{comment.bg_image}}')">
+{% else %}
+    <header class="masthead" style="background-image: url('https://img.freepik.com/free-vector/alien-planet-landscape-cosmic-background-deserted-coastline-with-mountains-view-glowing-cleft-stars-shining-spheres-space-extraterrestrial-pc-game-backdrop-cartoon-vector-illustration_107791-8012.jpg?t=st=1710166061~exp=1710169661~hmac=e5f30cfff4c6d45a617074f6385acae70b9f3853d1961c607c8491daa18385b7&w=1380')">
+{% endif %}
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <span class="subheading"><h2><b>{{comment.head}}</b></h2></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+<body background = "#ccd4e0">
+    <div class="comment-thread">
+        <div class="comment-container">
+            <div class="user-info">
+                {% if comment.anonymous %}
+                    <img src = "https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                    <div class="username">{{random_username}}</div>
+                {% else %}
+                    <img src = "{{comment.comment_author.icon}}" class="user-icon" />
+                    <div class="username">{{comment.comment_author.username}}</div>
+                {% endif %}
+            </div>
+          <div class="comment-content">{{ comment.body | safe}}</div>
+          <div class="votes">
+            <span class="upvote" onclick="vote(this)">▲</span>
+            <span class="vote-count">0</span>
+            <span class="downvote" onclick="vote(this)">▼</span>
+          </div>
+          <button class="toggle-replies-button" onclick="toggleReplies(this, 'new-comment')">+</button>
+          <span class="reply-symbol" onclick="toggleReply(this)">↵</span>
+          <div class="reply-input" style="display:none;">
+            <textarea placeholder="Your reply" class="minimal-input"></textarea>
+            <button onclick="saveReply(this)">Save</button>
+          </div>
+          <div class="replies-container">
+            
+          </div>
+        </div>
+      </div>
+    
+    </body>
+    <!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- THIS BELOW CODE IS FOR DYNAMIC FUNCTIONING OF THE COMMENTING SYTSTEM-->
+<script>
+  function toggleReply(button) {
+    var replyInput = button.nextElementSibling;
+    replyInput.style.display = (replyInput.style.display === 'none') ? 'block' : 'none';
+    }
+    
+    function saveReply(button) {
+    var replyInput = button.previousElementSibling;
+    var replyText = replyInput.value.trim();
+    if (replyText !== '') {
+        var parentComment = button.closest('.comment-container');
+        var repliesContainer = parentComment.querySelector('.replies-container');
+    
+        var replyContainerId = 'reply-' + Date.now(); // Generate unique ID for reply container
+        var replyContainer = `
+        <div class="comment-container" id="${replyContainerId}" style="background-color: rgb(255, 204, 203);">
+            <div class="user-info">
+            <div class="user-icon"><img src = "{{ user_obj.icon }}" class="user-icon"/></div>
+            <div class="username">{{ user_obj.username }}</div>
+            </div>
+            <div class="comment-content">${replyText}</div>
+            <button class="toggle-replies-button" onclick="toggleReplies(this, '${replyContainerId}')">+</button>
+            <span class="reply-symbol" onclick="toggleReply(this)">↵</span>
+            <div class="reply-input" cstyle="display:none;">
+            <textarea placeholder="Your reply" class="minimal-input"></textarea>
+            <button onclick="saveReply(this)">Save</button>
+            </div>
+            <div class="replies-container">
+            <!-- Nested replies will go here -->
+            </div>
+        </div>
+        `;
+    
+        repliesContainer.innerHTML += replyContainer;
+        replyInput.value = ''; // Clear input field after saving reply
+    }
+    }
+    
+    function toggleReplies(button, commentId) {
+    var repliesContainer = document.getElementById(commentId).querySelector('.replies-container');
+    var replies = repliesContainer.querySelectorAll('.comment-container');
+    
+    for (var i = 0; i < replies.length; i++) {
+        replies[i].style.display = (replies[i].style.display === 'none') ? 'block' : 'none';
+    }
+    
+    // Change button text based on replies visibility
+    button.textContent = (replies[0].style.display === 'none') ? '+' : '-';
+    }
+    
+    // Function to toggle comments visibility
+    document.getElementById('toggle-comments').addEventListener('click', function() {
+    var comments = document.querySelectorAll('.comment-container');
+    for (var i = 0; i < comments.length; i++) {
+        comments[i].style.display = (comments[i].style.display === 'none') ? 'block' : 'none';
+    }
+    });
+    
+    function vote(voteButton) {
+    var voteCountSpan = voteButton.parentElement.querySelector('.vote-count');
+    var voteCount = parseInt(voteCountSpan.textContent);
+    
+    if (voteButton.classList.contains('upvote')) {
+        voteCount++;
+    } else if (voteButton.classList.contains('downvote')) {
+        voteCount--;
+    }
+    
+    voteCountSpan.textContent = voteCount;
+    }
+    
+    
+    function vote(voteButton) {
+    var voteCountSpan = voteButton.parentElement.querySelector('.vote-count');
+    var voteCount = parseInt(voteCountSpan.textContent);
+    
+    var upvoteButton = voteButton.parentElement.querySelector('.upvote');
+    var downvoteButton = voteButton.parentElement.querySelector('.downvote');
+    
+    if (voteButton.classList.contains('upvote')) {
+        if (!upvoteButton.classList.contains('active')) {
+        voteCount++;
+        voteCountSpan.textContent = voteCount;
+        upvoteButton.classList.add('active');
+        downvoteButton.classList.remove('active');
+        }
+    } else if (voteButton.classList.contains('downvote')) {
+        if (!downvoteButton.classList.contains('active')) {
+        voteCount--;
+        voteCountSpan.textContent = voteCount;
+        downvoteButton.classList.add('active');
+        upvoteButton.classList.remove('active');
+        }
+    }
+    }
+</script>
+{% include "footer.html" %}
+</html>

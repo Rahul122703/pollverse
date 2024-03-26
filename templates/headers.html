@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    {{ bootstrap.load_css() }}
+    {% from "bootstrap5/form.html" import render_form %} 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>PollVerse</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"/>
+</head>
+<body>
+
+
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+    <form action = "{{ url_for('sidenav') }}" method = "POST">
+        <button  style="
+            font-size: 20px;
+            background-color: Transparent;
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 20px;
+            margin-left: 20px;
+            transition: 
+                background-color 0.3s ease,
+                transform 0.2s;
+        " 
+        onclick="w3_open()" 
+        onmouseover="this.innerHTML='➤'" 
+        onmouseout="this.innerHTML='►'">➤</button>
+    </form>
+        
+        <!-- User Dropdown -->
+        <div class="navbar-brand">
+            <div class="nav-item dropdown">
+                
+                {% if logged_in %}
+                    <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{user_obj.icon}}" height="50" width="50" class="rounded-circle" alt="User Icon"/>
+                    </a>
+                {% else %}
+                    <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='assets/icons/user.svg') }}" height="50" width="50" class="rounded-circle" alt="User Icon"/> User Account
+                    </a>
+                {% endif %}
+                
+                <ul class="dropdown-menu animated" aria-labelledby="navbarDropdown">
+                    {% if logged_in %}
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for('register') }}" class="register-link dropdown-item">Register here</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">View {{user_obj.username}}</a></li>
+                        {% if anonymous_mode == 0  %}
+                            <li><a class="dropdown-item" href="{{ url_for('anonymous') }}">Go Incognito</a></li>
+                        {% endif %}
+                        {% if anonymous_mode  %}
+                            <li><a class="dropdown-item" href="{{ url_for('anonymous') }}">Reveal</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li><a class="dropdown-item" href="{{ url_for('index') }}">Log In</a></li>
+                    {% endif %}
+                </ul>
+                
+            </div>
+        </div>
+
+        <!-- Navbar Toggle Button (Hamburger Icon) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Animated Search -->
+        <form class="d-flex align-items-center" method="POST">
+            {{ search_form.text(class="form-control search-input me-2") }}
+            <button class="btn btn-outline-primary" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        
+        
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('index') }}">Polls</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('about') }}">About</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('new_comment') }}">Sample Post</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('contact') }}">Contact</a></li>
+                {% if current_user_id == 1 %}
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('database_control') }}">Admin</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+    
+
+
+    <!-- Your page content goes here -->
+    {% if current_user_id == 0 %}
+        <div class="overlay" id="loginPopup">
+            <div class="popup">
+                <h2>Login</h2>
+                
+                    {% if error == 1 %}
+                    <form action ="{{  url_for('change_password') }}" method="POST">
+                        <form action ="{{ url_for('change_password') }}"  method="POST">
+                            {{ render_form(otp_form) }}
+                        </form>
+                    
+                    {% elif error %}
+                    <form action ="{{ url_for('login') }}" method="POST">
+                        <a href = "{{ url_for('change_password') }}">
+                            <p style="color: #ff4d4d; /* Red color for error message */ 
+                                font-size: 16px; /* Larger font size */ 
+                                font-weight: bold; /* Bold text */ 
+                                background-color: #ffe6e6; /* Light red background color */ 
+                                padding: 10px; /* Padding around the error message */ 
+                                border-radius: 5px; /* Rounded corners */ 
+                                border: 1px solid #ff9999; /* Border around the error message */ 
+                                margin-bottom: 10px; /* Margin below the error message */">
+                                    {{ error }}
+                            </p>
+                        </a>
+                    {% endif %}
+                    <form action ="{{ url_for('login') }}" method="POST">
+                        {{ render_form(login_form) }}
+                    </form>
+                <p>Don't have an account? <a href="{{ url_for('register') }}" class="register-link">Register here</a></p>
+            </div>
+        </div>
+    {% endif %}
+
+{% if sidenav == 1 %}
+    <div class="w3-sidebar w3-bar-block w3-animate-left" 
+    id="mySidebar" 
+    style="
+        background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5)); /* Transparent mirror effect */
+        z-index: 998; /* Ensure sidebar is above other content */
+        width:250px;
+        border-radius: 30px; /* Rounded corners */
+    ">
+    <form action = "{{ url_for('sidenav') }}" method = "POST">
+        <button class="w3-bar-item w3-button w3-large" 
+                onclick="w3_close()" 
+                style="
+                    
+                    color: #fff;
+                    border: none;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    background-color: #ffc107;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease, transform 0.2s;
+                ">
+            Close &times;
+        </button>
+    </form>
+
+    <a href="#" class="w3-bar-item w3-button" style="color: #fff;">Link 1</a>
+    <a href="#" class="w3-bar-item w3-button" style="color: #fff;">Link 2</a>
+    <a href="#" class="w3-bar-item w3-button" style="color: #fff;">Link 3</a>
+    </div>
+{% endif %}

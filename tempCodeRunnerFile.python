@@ -1,0 +1,5 @@
+import requests
+category = 'happiness'
+api_url = 'https://api.api-ninjas.com/v1/quotes?category=communication'
+response = requests.get(api_url, headers={'X-Api-Key': 'oBCu1eDCEZdDYk6oHgIokQ==kjmShcGj3Tcbu34B'}).json()
+print(response)

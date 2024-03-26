@@ -1,0 +1,70 @@
+{% include "headers.html" %}
+<header class="masthead" 
+style="background-image: url('https://img.freepik.com/free-vector/alien-planet-landscape-cosmic-background-deserted-coastline-with-mountains-view-glowing-cleft-stars-shining-spheres-space-extraterrestrial-pc-game-backdrop-cartoon-vector-illustration_107791-8012.jpg?t=st=1710166061~exp=1710169661~hmac=e5f30cfff4c6d45a617074f6385acae70b9f3853d1961c607c8491daa18385b7&w=1380')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h3>Have a great day {{user_obj.username}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container_987">
+  <img src="{{user_obj.icon}}" alt="Profile Picture" class="profile-picture_456">
+
+  <div class="personal-info_789">
+    <h2>Personal Information</h2>
+    <p><strong>Username:</strong> {{user_obj.username}}</p>
+    <p><strong>Email:</strong> {{user_obj.email}}</p>
+    <!-- Move the Edit Profile button here -->
+    <div class="edit-profile_654">
+      <button id="edit-profile-btn_234" class="button_edit-profile_234">Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Edit Profile form -->
+{% from "bootstrap5/form.html" import render_form %}
+<div id="edit-profile-modal_789" class="modal_789">
+  <div class="modal-content_654">
+    <span class="close_321">&times;</span>
+    <h2>Edit Profile</h2>
+    <form method = "POST" action = "{{url_for('profile')}}">
+      {{ render_form(profile_form) }}
+    </form>
+  </div>
+</div>
+
+<script>document.addEventListener('DOMContentLoaded', function() {
+  // JavaScript to handle the click event for opening the edit profile form
+  document.getElementById('edit-profile-btn_234').addEventListener('click', function() {
+    // Get the modal element
+    var modal = document.getElementById('edit-profile-modal_789');
+    
+    // Display the modal
+    modal.style.display = 'block';
+  });
+
+  // Close the modal when the user clicks on the close button (X)
+  document.getElementsByClassName('close_321')[0].addEventListener('click', function() {
+    // Get the modal element
+    var modal = document.getElementById('edit-profile-modal_789');
+    
+    // Hide the modal
+    modal.style.display = 'none';
+  });
+
+  // Close the modal when the user clicks outside of it
+  window.addEventListener('click', function(event) {
+    // Get the modal element
+    var modal = document.getElementById('edit-profile-modal_789');
+    
+    // If the clicked element is the modal, close it
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  });
+});</script>
+{% include "footer.html" %}

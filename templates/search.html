@@ -1,5 +1,8 @@
 {% include "headers.html" %}
 
 <h1>{{searched}}</h1>
+{% for comment in comments %}
+    <a href = "{{ url_for('show_comment',comment_id = comment.id) }}">{{comment.head}}</a>
+{% endfor %}
 </body>
 {% include "footer.html" %}

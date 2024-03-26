@@ -1,1 +1,1 @@
-    if search_form.validate_on_submit():
+current_page

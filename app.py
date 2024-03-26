@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy.orm import relationship,DeclarativeBase,Mapped,mapped_column
-from sqlalchemy import Integer, String, Boolean
+from sqlalchemy import Integer, String, Boolean,func
 
 import random
 import requests
@@ -329,9 +329,10 @@ def anonymous():
 @app.route('/search',methods = ['POST','GET'])
 def search():
     search_form = SearchForm()
-    if search_form.validate_on_submit():
-        return render_template('search.html',searched = search_form.text.data)
-    return render_template('search.html')
+    searched = search_form.text.data
+    comments = database.session.execute(database.select(Comment).where(func.ilike(Comment.head, searched + '%'))).scalar()
+    print(comments)
+    return render_template('search.html',comments = comments)
 
 
 @app.route('/sidenav',methods = ['POST','GET'])

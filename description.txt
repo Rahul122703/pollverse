@@ -12,3 +12,11 @@ Responsive Interface: The project includes intuitive interfaces for the home pag
 Database Connectivity: All user data, poll information, and discussion threads are stored and managed efficiently using an SQL database, ensuring data integrity and reliability.
 College Event Support: The project is designed to facilitate digital events in college settings, providing a platform for discussions and polls that can be utilized for various events and activities.
 Overall, our project serves as a valuable tool for facilitating discussions and gathering insights on various topics within a college community. It aims to enhance engagement and collaboration among students and administrators, ultimately contributing to the betterment of college situations and supporting future digital events.
+
+
+
+https://chitchat-7p6l.onrender.com
+{% comment %} <div class="reply-input" style="display:none;">
+                    <textarea placeholder="Your reply" class="minimal-input"></textarea>
+                    <button onclick="saveReply(this)">Save</button>
+                </div> {% endcomment %}

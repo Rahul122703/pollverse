@@ -1,4 +1,5 @@
 {% include "headers.html" %}
+{% from "bootstrap5/form.html" import render_form %}
 {% if comment.bg_image %}
     <header class="masthead" style="background-image: url('{{comment.bg_image}}')">
 {% else %}
@@ -14,134 +15,116 @@
             </div>
         </div>
     </header>
-    <div class="comment-thread">
-        <div class="comment-container">
-            <div class="user-info">
-                {% if comment.anonymous %}
-                    <img src = "https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
-                    <div class="username">{{random_username}}</div>
-                {% else %}
-                    <img src = "{{comment.comment_author.icon}}" class="user-icon" />
-                    <div class="username">{{comment.comment_author.username}}</div>
-                {% endif %}
-            </div>
-          <div class="comment-content">{{ comment.body | safe}}</div>
-          <div class="votes">
-            <span class="upvote" onclick="vote(this)">▲</span>
-            <span class="vote-count">0</span>
-            <span class="downvote" onclick="vote(this)">▼</span>
-          </div>
-          <button class="toggle-replies-button" onclick="toggleReplies(this, 'new-comment')">+</button>
-          <span class="reply-symbol" onclick="toggleReply(this)">↵</span>
-          <div class="reply-input" style="display:none;">
-            <textarea placeholder="Your reply" class="minimal-input"></textarea>
-            <button onclick="saveReply(this)">Save</button>
-          </div>
-          <div class="replies-container">
-            
-          </div>
-        </div>
-      </div>
+
+<div class = "center-wrapper">
+    <div class="tabset">
+    <!-- Tab 1 -->
+    <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
+    <label for="tab1">Comments</label>
+    <!-- Tab 2 -->
+    <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
+    <label for="tab2">Your comment</label>
+    <!-- Tab 3 -->
+    <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
+    <label for="tab3">Emotions</label>
     
-    </body>
-    <!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- THIS BELOW CODE IS FOR DYNAMIC FUNCTIONING OF THE COMMENTING SYTSTEM-->
+    <div class="tab-panels">
+      <section id="marzen" class="tab-panel">
+            <h2>Comments</h2>
+                <div class="comment-thread">
+                    <div class="comment-container">
+                        <div class="user-info">
+                            {% if comment.anonymous %}
+                                <img src = "https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                                <div class="username">{{random_username}}</div>
+                            {% else %}
+                                <a href="{{ url_for('comment_profile', user_id=comment.comment_author.id) }}">
+                                    <div class="user-info123">
+                                        <img src="{{ comment.comment_author.icon }}" class="user-icon123" />
+                                        <div class="username123">{{ comment.comment_author.username }}</div>
+                                    </div>
+                                </a>
+                            {% endif %}    
+                        </div>
+                        <div class="datetime">{{comment.date}}</div>
+                    <div class="comment-content">{{ comment.body | safe}}</div>
+                        <div class="votes">
+                            <span class="upvote" onclick="vote(this)">▲</span>
+                            <span class="vote-count">0</span>
+                            <span class="downvote" onclick="vote(this)">▼</span>
+                        </div>
+                    </div>
+                </div>
+                {% for reply in all_replies: %}
+                    <div class="comment-container" style="position: relative;">
+                        <div class="user-info">
+                            {% if reply.anonymous %}
+                                <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                                <div class="username">{{random_username}}</div>
+                            {% else %}
+                                <img src="{{reply.subcomment_author.icon}}" class="user-icon" />
+                                <div class="username">{{reply.subcomment_author.username}}</div>
+                            {% endif %}
+                        </div>
+                        <div class="datetime">{{reply.date}}</div>
+                        <div class="comment-content">{{ reply.body | safe}}</div>
+                        <div class="votes">
+                            <span class="upvote" onclick="vote(this)">▲</span>
+                            <span class="vote-count">0</span>
+                            <span class="downvote" onclick="vote(this)">▼</span>
+                        </div>
+                        {% if current_user_id == reply.subcomment_author.id or  current_user_id == 1%}
+                            <button class="delete-button321" data-target="deletePopup{{reply.id}}" style="position: absolute; bottom: 0; right: 0;">
+                                <div class="cross321">&#10005;</div>
+                            </button>
+                            
+                            <div class="popup321" id="deletePopup{{reply.id}}">
+                                <div class="popup-content321">
+                                <div class="message321">Are you sure you want to delete this reply?</div>
+                                <div class="button-container321">
+                                    <form method = "POST" action = "{{ url_for('delete_reply',reply_id = reply.id) }}">
+                                    
+                                        <button class="yes-button321">YES</button>
+                                    </form>
+                                    <button class="no-button321">NO</button>
+                                </div>
+                                </div>
+                            </div>
+                        {%  endif %}
+                        <div class="green-strip" style="position: absolute; border-radius: 16px; top: 0; left: 0; width: 100%; height: 10px; background-color: rgba(0, 255, 0, 0.5); cursor: pointer;"></div>
+                    </div>
+                {% endfor %}
+        </section>
+      <section id="rauchbier" class="tab-panel">
+        <h2>Your comment</h2>
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+        <form method = "POST"  action = "{{url_for('show_comment',comment_id = comment.id)}}">
+            {{ render_form(reply_form) }}
+        </form>
+      </section>
+      <section id="dunkles" class="tab-panel">
+        <h2>Emotions</h2>
+        <p><strong>Overall Impression:</strong> A dark, strong, malty German lager beer that emphasizes the malty-rich and somewhat toasty qualities of continental malts without being sweet in the finish.</p>
+        <p><strong>History:</strong> Originated in the Northern German city of Einbeck, which was a brewing center and popular exporter in the days of the Hanseatic League (14th to 17th century). Recreated in Munich starting in the 17th century. The name “bock” is based on a corruption of the name “Einbeck” in the Bavarian dialect, and was thus only used after the beer came to Munich. “Bock” also means “Ram” in German, and is often used in logos and advertisements.</p>
+      </section>
+    </div>
+    
+  </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-  function toggleReply(button) {
-    var replyInput = button.nextElementSibling;
-    replyInput.style.display = (replyInput.style.display === 'none') ? 'block' : 'none';
-    }
-    
-    function saveReply(button) {
-    var replyInput = button.previousElementSibling;
-    var replyText = replyInput.value.trim();
-    if (replyText !== '') {
-        var parentComment = button.closest('.comment-container');
-        var repliesContainer = parentComment.querySelector('.replies-container');
-    
-        var replyContainerId = 'reply-' + Date.now(); // Generate unique ID for reply container
-        var replyContainer = `
-        <div class="comment-container" id="${replyContainerId}" style="background-color: rgb(255, 204, 203);">
-            <div class="user-info">
-            <div class="user-icon"><img src = "{{ user_obj.icon }}" class="user-icon"/></div>
-            <div class="username">{{ user_obj.username }}</div>
-            </div>
-            <div class="comment-content">${replyText}</div>
-            <button class="toggle-replies-button" onclick="toggleReplies(this, '${replyContainerId}')">+</button>
-            <span class="reply-symbol" onclick="toggleReply(this)">↵</span>
-            <div class="reply-input" cstyle="display:none;">
-            <textarea placeholder="Your reply" class="minimal-input"></textarea>
-            <button onclick="saveReply(this)">Save</button>
-            </div>
-            <div class="replies-container">
-            <!-- Nested replies will go here -->
-            </div>
-        </div>
-        `;
-    
-        repliesContainer.innerHTML += replyContainer;
-        replyInput.value = ''; // Clear input field after saving reply
-    }
-    }
-    
-    function toggleReplies(button, commentId) {
-    var repliesContainer = document.getElementById(commentId).querySelector('.replies-container');
-    var replies = repliesContainer.querySelectorAll('.comment-container');
-    
-    for (var i = 0; i < replies.length; i++) {
-        replies[i].style.display = (replies[i].style.display === 'none') ? 'block' : 'none';
-    }
-    
-    // Change button text based on replies visibility
-    button.textContent = (replies[0].style.display === 'none') ? '+' : '-';
-    }
-    
-    // Function to toggle comments visibility
-    document.getElementById('toggle-comments').addEventListener('click', function() {
-    var comments = document.querySelectorAll('.comment-container');
-    for (var i = 0; i < comments.length; i++) {
-        comments[i].style.display = (comments[i].style.display === 'none') ? 'block' : 'none';
-    }
+$(document).ready(function(){
+    $('.green-strip').hover(function(){
+        // Mouse enter
+        $('.popup-message').css('display', 'block');
+    }, function(){
+        // Mouse leave
+        $('.popup-message').css('display', 'none');
     });
-    
-    function vote(voteButton) {
-    var voteCountSpan = voteButton.parentElement.querySelector('.vote-count');
-    var voteCount = parseInt(voteCountSpan.textContent);
-    
-    if (voteButton.classList.contains('upvote')) {
-        voteCount++;
-    } else if (voteButton.classList.contains('downvote')) {
-        voteCount--;
-    }
-    
-    voteCountSpan.textContent = voteCount;
-    }
-    
-    
-    function vote(voteButton) {
-    var voteCountSpan = voteButton.parentElement.querySelector('.vote-count');
-    var voteCount = parseInt(voteCountSpan.textContent);
-    
-    var upvoteButton = voteButton.parentElement.querySelector('.upvote');
-    var downvoteButton = voteButton.parentElement.querySelector('.downvote');
-    
-    if (voteButton.classList.contains('upvote')) {
-        if (!upvoteButton.classList.contains('active')) {
-        voteCount++;
-        voteCountSpan.textContent = voteCount;
-        upvoteButton.classList.add('active');
-        downvoteButton.classList.remove('active');
-        }
-    } else if (voteButton.classList.contains('downvote')) {
-        if (!downvoteButton.classList.contains('active')) {
-        voteCount--;
-        voteCountSpan.textContent = voteCount;
-        downvoteButton.classList.add('active');
-        upvoteButton.classList.remove('active');
-        }
-    }
-    }
+});
 </script>
+
 {% include "footer.html" %}
 </html>

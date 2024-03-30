@@ -1,6 +1,6 @@
 from flask import Flask,render_template,redirect,url_for,abort,request
 from flask_bootstrap import Bootstrap5
-from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm
+from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm
 from flask_ckeditor import CKEditor
 
 from flask_login import LoginManager,UserMixin,login_user,logout_user,current_user
@@ -32,8 +32,8 @@ user_icon = None
 sidenav = 0
 current_page = None
 
-site_mail = "xieminiprojet@gmail.com"
-site_pass  = "yerp yfnl htro eimm"
+from_email = "xieminiproject@gmail.com"
+app_pass = "omni tvxy oelb dctl"
 
 app =  Flask(__name__)
 
@@ -67,6 +67,10 @@ database.init_app(app)
 
 bootstrap_app = Bootstrap5(app)
 
+
+def format_time_and_date(date_time):
+    return date_time.strftime("%H:%M %d/%m/%Y")
+
 #Creating tables
 class User(UserMixin, database.Model):
     __tablename__ = "user"
@@ -87,19 +91,30 @@ class Comment(database.Model):
     id : Mapped[int] = mapped_column(Integer, primary_key=True)
     upvote : Mapped[int] = mapped_column(Integer, nullable=True) #make it false later
     downvote : Mapped[int] = mapped_column(Integer, nullable=True)
-    body : Mapped[str] = mapped_column(String(5000))
+    body : Mapped[str] = mapped_column(String)
     head : Mapped[str] = mapped_column(String(150))
     bg_image : Mapped[str] = mapped_column(String(900), nullable=True) 
-    userId : Mapped[int] = mapped_column(Integer, database.ForeignKey("user.id"))
+    date : Mapped[str] = mapped_column(String(150),nullable=True)
     anonymous : Mapped[int] = mapped_column(Integer, nullable=False) 
+    
+    userId : Mapped[int] = mapped_column(Integer, database.ForeignKey("user.id"))
     comment_author = relationship("User", back_populates="comments")
+    replies = relationship("Subcomment", back_populates="comment")
     
 class Subcomment(database.Model):
     __tablename__ = "Subcomment"
     id : Mapped[int] = mapped_column(Integer, primary_key=True)
-    body : Mapped[str] = mapped_column(String(5000))
+    upvote : Mapped[int] = mapped_column(Integer, nullable=True) #make it false later
+    downvote : Mapped[int] = mapped_column(Integer, nullable=True)
+    body : Mapped[str] = mapped_column(String)
+    anonymous : Mapped[int] = mapped_column(Integer, nullable=False)
+    date : Mapped[str] = mapped_column(String(150),nullable=True)
+    
     user_id : Mapped[str] = mapped_column(Integer, database.ForeignKey("user.id"))
+    comment_id = mapped_column(Integer,database.ForeignKey("Comment.id"))
+    
     subcomment_author = relationship("User", back_populates="subcomments")
+    comment = relationship("Comment", back_populates="replies")
     
 class icon(database.Model):
     __tablename__ = "icon"
@@ -155,11 +170,11 @@ def register():
                 created = datetime.now().strftime("%Y-%m-%d"),
                 phoneNo = register_form_object.phoneNo.data
             )
+            database.session.add(new_user)
+            database.session.commit()
             user_obj = new_user
             logged_in = 1
             current_user_id = user_obj.id
-            database.session.add(new_user)
-            database.session.commit()
             login_user(new_user)
             print("user added sucessfully")
             
@@ -182,6 +197,7 @@ def login():
         entred_email = request.form.get('email').lower()
         user = database.session.execute(database.select(User).where(User.email == entred_email)).scalar()
         if user != None:
+            user_obj = user
             entered_password = request.form.get('password')
             if check_password_hash(user.password, entered_password):
                 login_user(user)
@@ -247,6 +263,15 @@ def profile():
     return render_template('profile.html',
                            profile_form = profile_form,
                            current_user_id = current_user_id)
+ 
+@app.route('/comment_profile/<int:user_id>',methods = ['GET','POST'])
+def comment_profile(user_id):
+    global current_page
+    current_page = 'comment_profile'
+    comment_user = database.get_or_404(User,user_id)
+    return render_template('comment_profile.html',
+                           comment_user = comment_user) 
+ 
     
 @app.route('/new_comment',methods = ['GET','POST'])
 def new_comment():
@@ -258,6 +283,7 @@ def new_comment():
             head = comment_form.head.data,
             body = comment_form.body.data,
             bg_image = comment_form.bg_image.data,
+            date = format_time_and_date(datetime.now()),
             userId = current_user.id ,
             anonymous = anonymous_mode if anonymous_mode else anonymous_mode
         )
@@ -267,42 +293,64 @@ def new_comment():
     current_page = 'new_comment'
     return render_template('new_comment.html',comment_form = comment_form) 
 
-@app.route('/comment/<int:comment_id>')
+@app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
-    global current_page,user_obj
+    global current_page,anonymous_mode
     current_page = 'index'
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
-    print(chosen_comment.bg_image)
-    return render_template('show_comment.html',comment = chosen_comment,user_obj = user_obj)
+    reply_form = ReplyForm()
+    
+    if reply_form.validate_on_submit():
+        new_reply = Subcomment(
+        body = reply_form.body.data,
+        user_id = current_user_id,
+        comment_id = comment_id,
+        date = format_time_and_date(datetime.now()),
+        anonymous = anonymous_mode if anonymous_mode else anonymous_mode
+        )
+        
+        database.session.add(new_reply)
+        database.session.commit()
+        return redirect(url_for('show_comment',comment_id = comment_id))
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment_id)).scalars().all()
+    print(all_replies)
+    return render_template('show_comment.html',
+                           comment = chosen_comment,
+                           reply_form = reply_form,
+                           all_replies = all_replies
+                           )
   
 
 @app.route('/change_password',methods = ['GET','POST'])
 def change_password():
-    global otp_send,current_user_email,current_user_id,user_otp,user_obj,logged_in
+    global otp_send,current_user_email,current_user_id,user_otp,user_obj,logged_in,from_email,app_pass
     otp_form = OtpForm()
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
+    print(f"value of otp sent is {otp_send}")
     if otp_send == 0:
         otp_send = 1
         user_otp = random_otp
-        msg = f"NOTE THIS TOP IS VALID FOR ONLY ONE TIME ....YOUR OTP ---->{random_otp}"
-        from twilio.rest import Client
-        AuthToken  = "363fc7c36532b1ac2c0b863b8208782c"
-        account_sid = 'AC1f76444ae72a4365665fb95d3157bd29'
-        auth_token = f'{AuthToken}'
-        client = Client(account_sid, auth_token)
-        message = client.messages.create(body = msg,from_= "+16237772097",to='+918291147114')
-        return render_template('index.html',otp_form = otp_form,error = 1)
+        body = f"NOTE THIS TOP IS VALID FOR ONLY ONE TIME ....YOUR OTP ---->{random_otp}"
+        import smtplib
+        
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(user=from_email, password=app_pass)
     
+        to_email = f"{user_obj.email}"
+        server.sendmail(from_addr=from_email, to_addrs=to_email, msg=body)
+        server.quit()
+        return render_template('index.html',otp_form = otp_form,error = 1)
+    print(current_user_email)
     print(f"USER ENTERED OTP = {otp_form.OTP.data}")
     print(f"OTP = {user_otp}")
     if otp_form.OTP.data == user_otp:
         otp_send = 0
         logged_in = 1
-        user = database.session.execute(database.select(User).where(User.email == current_user_email)).scalar()
-        user_obj = user
-        print(f"this is the user {user}")
-        login_user(user)
-        current_user_id = user.id
+        
+        print(f"this is the user {user_obj}")
+        login_user(user_obj)
+        current_user_id = user_obj.id
         return redirect(url_for('index'))
     else:
         error = "Entered Wrong OTP"
@@ -344,11 +392,20 @@ def sidenav():
     else:
         sidenav = 0
     return redirect(url_for(f'{current_page}'))
+ 
+@app.route('/delete_reply/<int:reply_id>',methods = ['POST','GET'])   
+def delete_reply(reply_id):
+    reply_to_delete = database.get_or_404(Subcomment,reply_id)
+    comment_id = reply_to_delete.comment_id
+    database.session.delete(reply_to_delete)
+    database.session.commit()
+    return redirect(url_for('show_comment',comment_id = comment_id))
     
 
-@app.route('/db',methods = ['POST','GET'])
+
+@app.route('/admin_panel',methods = ['POST','GET'])   
 @admin_only
-def database_control():
+def for_admin():
     database_form = DatabaseForm()
     if database_form.validate_on_submit():
         new_icon = icon(link = database_form.icon_link.data)

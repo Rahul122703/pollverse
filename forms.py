@@ -26,7 +26,7 @@ class DatabaseForm(FlaskForm):
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
 class OtpForm(FlaskForm):
-    OTP = StringField( validators=[DataRequired()], render_kw={"placeholder": "Enter OTP"})
+    OTP = StringField( validators=[DataRequired()], render_kw={"placeholder": "Enter OTP sent at your mail"})
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
 class EditProfileForm(FlaskForm):
@@ -36,9 +36,12 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
 
 class ReplyForm(FlaskForm):
-    body = StringField( validators=[DataRequired()], render_kw={"placeholder": "Your reply"}, label= False)
+    body = CKEditorField(validators=[DataRequired()], label= False)
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
 class SearchForm(FlaskForm):
     text = StringField(validators=[DataRequired()], render_kw={"class": "form-control search-input me-2", "type": "search", "placeholder": "Search", "aria-label": "Search"})
     submit = SubmitField('Submit', render_kw={"class": "btn btn-outline-primary", "type": "submit"})
+    
+    
+    

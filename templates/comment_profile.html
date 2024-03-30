@@ -1,0 +1,25 @@
+{% include "headers.html" %}
+<header class="masthead" 
+style="background-image: url('https://img.freepik.com/free-vector/alien-planet-landscape-cosmic-background-deserted-coastline-with-mountains-view-glowing-cleft-stars-shining-spheres-space-extraterrestrial-pc-game-backdrop-cartoon-vector-illustration_107791-8012.jpg?t=st=1710166061~exp=1710169661~hmac=e5f30cfff4c6d45a617074f6385acae70b9f3853d1961c607c8491daa18385b7&w=1380')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h3>{{comment_user.username}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="container_987">
+  <img src="{{comment_user.icon}}" alt="Profile Picture" class="profile-picture_456">
+
+  <div class="personal-info_789">
+    <h2>Personal Information</h2>
+    <p><strong>Username:</strong> {{comment_user.username}}</p>
+    <p><strong>Email:</strong> {{comment_user.email}}</p>
+    <!-- Move the Edit Profile button here -->
+  </div>
+</div>
+
+{% include "footer.html" %}

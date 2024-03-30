@@ -287,7 +287,9 @@ header.masthead .post-heading .meta a {
 
 
 /*This blow css is for comments and all its element*/
+
 .comment-container {
+  position: relative;
   border: 2px solid #ddd;
   border-radius: 16px;
   padding: 20px;
@@ -295,8 +297,17 @@ header.masthead .post-heading .meta a {
   background-color: #f9f9f9;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
-  max-width: 1200px; /* Increased max-width */
+  max-width: 1200px;
 }
+
+.datetime {
+  position: absolute;
+  top: 10px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  font-size: 14px; /* Adjust as needed */
+  color: #777; /* Adjust as needed */
+}
+
 
 .comment-container:hover {
   transform: translateY(-5px);
@@ -389,6 +400,24 @@ header.masthead .post-heading .meta a {
   background-color: #fff; /* White background */
   animation: fadeIn 0.8s ease; /* Slower fade-in animation */
 }
+
+.user-info123 {
+  display: flex;
+  align-items: center; /* Optional: Align the items vertically */
+}
+
+.user-icon123 {
+  width: 40px; /* Adjust as needed */
+  height: 40px; /* Adjust as needed */
+  border-radius: 50%; /* Optional: Round the image */
+  margin-right: 10px; /* Optional: Add space between the icon and username */
+}
+
+.username123 {
+  font-size: 16px; /* Adjust as needed */
+  font-weight: bold; /* Optional: Make the username bold */
+}
+
 
 @keyframes fadeIn {
   from {
@@ -688,7 +717,7 @@ header.masthead .post-heading .meta a {
 
 
 
-/* Below code is for commnting form */
+/* Below code is for comemnting form */
 .center-wrapper {
   display: flex;
   justify-content: center;
@@ -1282,3 +1311,167 @@ transform: scale(1.05); /* Scale up slightly on hover */
     width: 0; /* Width at the end of animation */
   }
 }
+
+
+
+
+/*This below code is for tabs on show comment*/
+/*
+ CSS for the main interaction
+*/
+.tabset > input[type="radio"] {
+  position: absolute;
+  left: -200vw;
+}
+
+.tabset .tab-panel {
+  display: none;
+}
+
+.tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+.tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+.tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+.tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+.tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+.tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+  display: block;
+}
+
+.tabset > label {
+  position: relative;
+  display: inline-block;
+  padding: 15px 15px 25px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.tabset > label::after {
+  content: "";
+  position: absolute;
+  left: 15px;
+  bottom: 10px;
+  width: 22px;
+  height: 4px;
+  background: #8d8d8d;
+}
+
+input:focus-visible + label {
+  outline: 2px solid rgba(0,102,204,1);
+  border-radius: 3px;
+}
+
+.tabset > label:hover,
+.tabset > input:focus + label,
+.tabset > input:checked + label {
+  color: #06c;
+}
+
+.tabset > label:hover::after,
+.tabset > input:focus + label::after,
+.tabset > input:checked + label::after {
+  background: #06c;
+}
+
+.tabset > input:checked + label {
+  border-color: #ccc;
+  border-bottom: 1px solid #fff;
+  margin-bottom: -1px;
+}
+
+.tab-panel {
+  padding: 30px 0;
+  border-top: 1px solid #ccc;
+}
+
+/*
+ Demo purposes only
+*/
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+
+.tabset {
+  max-width: 65em;
+}
+
+
+
+
+
+
+
+/*This below code is for popup delete and cross button too */
+/* Styling for delete button */
+.delete-button321 {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.cross321 {
+  font-size: 20px;
+  color: #ccc;
+  transition: color 0.3s ease;
+}
+
+/* Styling for popup */
+.popup321 {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+.popup-content321 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  text-align: center;
+}
+
+.message321 {
+  margin-bottom: 20px;
+}
+
+.button-container321 {
+  display: flex;
+  justify-content: center;
+}
+
+.yes-button321,
+.no-button321 {
+  margin-left: 20px;
+  background-color: #ffc107;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 25px;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+
+.yes-button321:hover,
+.no-button321:hover {
+  background-color: #ffae42;
+}
+

@@ -16,6 +16,9 @@ import requests
 from datetime import datetime
 import os
 from functools import wraps
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import random
 
 logged_in = 0
 not_registering = 1
@@ -334,19 +337,42 @@ def change_password():
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
     print(f"value of otp sent is {otp_send}")
     if otp_send == 0:
+        import smtplib
         otp_send = 1
         user_otp = random_otp
-        body = f"NOTE THIS TOP IS VALID FOR ONLY ONE TIME ....YOUR OTP ---->{random_otp}"
-        import smtplib
-        
+        body = f"""
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>OTP Email</title>
+            </head>
+            <body style="font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px;">
+                <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
+                    <p style="font-size: 18px; color: #666;">NOTE: This OTP is valid for only one time.</p>
+                    <h1 style="font-size: 36px; color: #333; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);">YOUR OTP: <span style="color: #009688;">{random_otp}</span></h1>
+                    <img src="https://img.freepik.com/premium-vector/secure-email-otp-authentication-verification-method_258153-468.jpg" alt="OTP Image" style="display: block; margin: 20px auto; max-width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                </div>
+            </body>
+            </html>
+            """
         server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(user=from_email, password=app_pass)
-    
-        to_email = f"{user_obj.email}"
-        server.sendmail(from_addr=from_email, to_addrs=to_email, msg=body)
+
+        msg = MIMEMultipart()
+        msg['From'] = from_email
+        msg['To'] = user_obj.email
+        msg['Subject'] = "Your OTP"
+
+        msg.attach(MIMEText(body, 'html'))
+
+        server.sendmail(from_email, user_obj.email, msg.as_string())
         server.quit()
-        return render_template('index.html',otp_form = otp_form,error = 1)
+
+        # Render template with OTP form and error flag
+        return render_template('index.html', otp_form=otp_form, error=1)
     print(current_user_email)
     print(f"USER ENTERED OTP = {otp_form.OTP.data}")
     print(f"OTP = {user_otp}")

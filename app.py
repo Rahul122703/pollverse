@@ -227,6 +227,7 @@ def index():
         print(user_obj.username,user_obj.icon)
     login_form = LoginForm()
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
+
     api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
     QUOTE_API_KEY = 'oBCu1eDCEZdDYk6oHgIokQ==kjmShcGj3Tcbu34B'
     quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
@@ -257,10 +258,15 @@ def profile():
         user_obj.icon = profile_form.ProfilePic.data
         user_obj.username = profile_form.username.data
         user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)
-        database.session.commit()
-        
+        database.session.commit()   
         return redirect(url_for('profile'))
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
+    print(all_replies)
+    comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
+    print(comments)
     return render_template('profile.html',
+                           all_replies  = all_replies ,
+                           comments = comments,
                            profile_form = profile_form,
                            current_user_id = current_user_id)
  
@@ -380,8 +386,9 @@ def search():
     searched = search_form.text.data
     comments = Comment.query
     comments = comments.filter(Comment.head.like('%' + searched +'%'))
-    print(comments)
-    return render_template('search.html',comments = comments)
+    users = User.query
+    users = users.filter(User.username.like('%' + searched +'%'))
+    return render_template('search.html',comments = comments,users = users)
 
 
 @app.route('/sidenav',methods = ['POST','GET'])
@@ -395,10 +402,13 @@ def sidenav():
  
 @app.route('/delete_reply/<int:reply_id>',methods = ['POST','GET'])   
 def delete_reply(reply_id):
+    global current_page
     reply_to_delete = database.get_or_404(Subcomment,reply_id)
     comment_id = reply_to_delete.comment_id
     database.session.delete(reply_to_delete)
     database.session.commit()
+    if current_page == "profile":
+        return redirect(url_for('profile'))
     return redirect(url_for('show_comment',comment_id = comment_id))
     
 

@@ -62,8 +62,10 @@
                                 <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
                                 <div class="username">{{random_username}}</div>
                             {% else %}
-                                <img src="{{reply.subcomment_author.icon}}" class="user-icon" />
-                                <div class="username">{{reply.subcomment_author.username}}</div>
+                                <a href="{{ url_for('comment_profile', user_id=reply.subcomment_author.id) }}">
+                                    <img src="{{reply.subcomment_author.icon}}" class="user-icon" />
+                                    <div class="username">{{reply.subcomment_author.username}}</div>
+                                </a>
                             {% endif %}
                         </div>
                         <div class="datetime">{{reply.date}}</div>
@@ -110,7 +112,7 @@
       </section>
     </div>
     
-  </div>
+</div>
 
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

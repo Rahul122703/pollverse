@@ -16,7 +16,4 @@ Overall, our project serves as a valuable tool for facilitating discussions and 
 
 
 https://chitchat-7p6l.onrender.com
-{% comment %} <div class="reply-input" style="display:none;">
-                    <textarea placeholder="Your reply" class="minimal-input"></textarea>
-                    <button onclick="saveReply(this)">Save</button>
-                </div> {% endcomment %}
+

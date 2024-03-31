@@ -25,41 +25,38 @@ style="background-image: url('https://plus.unsplash.com/premium_photo-1697730201
         <div class="col-md-10 col-lg-8 col-xl-7">
             {% for comment in comments %}
             
-            <a href = "{{ url_for('show_comment',comment_id = comment.id) }}">
-                <div class="comment-container">
-                    <div class="user-info">
-                        {% if comment.anonymous %}
-                            <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
-                            <div class="username">{{ random_username }}</div>
-                        {% else %}
-                            <img src="{{ comment.comment_author.icon }}" class="user-icon" />
-                            <div class="username">{{ comment.comment_author.username }}</div>
-                        {% endif %}
-                    </div>
-                    <div class="datetime">{{ comment.date }}</div> <!-- Move this line up -->
-                    <div class="comment-content">
-                        <b><h4>{{ comment.head }}</h4></b>
-                        {{ comment.body[:250]|safe }}.....
-                    </div>
-                    <div class="votes">
-                        <span class="upvote" onclick="vote(this)">▲ {{ comment.upvote }}</span>
-                        <span class="vote-count">0</span>
-                        <span class="downvote" onclick="vote(this)">▼</span>
-                        <span class="reply-button">↩</span>
-                        <span class="save-button"><img src="https://cdn-icons-png.flaticon.com/128/9834/9834913.png" height="19" /></span>
-                    </div>
-                </div>
-                
-            </a>
+                <a href = "{{ url_for('show_comment',comment_id = comment.id) }}">
+                    <div class="comment-container">
+                        <div class="user-info">
+                            {% if comment.anonymous %}
+                                <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                                <div class="username">{{ random_username }}</div>
+                            {% else %}
+                                <img src="{{ comment.comment_author.icon }}" class="user-icon" />
+                                <div class="username">{{ comment.comment_author.username }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="datetime">{{ comment.date }}</div> <!-- Move this line up -->
+                        <div class="comment-content">
+                            <b><h4>{{ comment.head }}</h4></b>
+                            {{ comment.body[:250]|safe }}.....
+                        </div>
+                        <div class="votes">
+                            <span class="upvote" onclick="vote(this)">▲ {{ comment.upvote }}</span>
+                            <span class="vote-count">0</span>
+                            <span class="downvote" onclick="vote(this)">▼</span>
+                            <span class="reply-button">↩</span>
+                            <span class="save-button"><img src="https://cdn-icons-png.flaticon.com/128/9834/9834913.png" height="19" /></span>
+                        </div>
+                    </div>   
+                </a>
             <hr class="animated-line">
             {% endfor %}
-            <!-- Divider-->
-            <!-- Pager-->
-        </div>
-        
-    </div>
-    
+
+        </div> 
+    </div>   
 </div>
+
 <div class="sticky-circle-container">
     <a href="{{ url_for('new_comment') }}">
         <div class="plus-symbol"><b>+</b></div>

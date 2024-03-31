@@ -1,1 +1,2 @@
-e
+
+    comments = Comment.query

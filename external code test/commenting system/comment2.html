@@ -3,158 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Delete Button</title>
+<title>User Profile Card</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
 <style>
-  .delete-button {
-    width: 40px;
-    height: 40px;
-    background-color: rgba(255, 0, 0, 0);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f0f0f0;
   }
-  
-  .cross {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 20px;
-    color: rgb(0, 0, 0);
+
+  .tabs-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 50px;
   }
-  
-  .popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 9999;
-  }
-  
-  .popup-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  .message {
+
+  .nav-tabs {
     margin-bottom: 20px;
-    color: black;
-  }
-  
-  .button-container {
-    text-align: center;
-  }
-  
-  .popup button {
+    display: flex;
+    overflow-x: auto; /* Horizontal scroll for tabs */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome */
+}
+
+  .nav-link {
     padding: 10px 20px;
-    margin: 0 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
-  
-  .popup button.yes-button {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
+
+  .nav-link.active {
+    background-color: #fff;
   }
-  
-  .popup button.no-button {
-    background-color: white;
-    color: black;
-    border: 1px solid black;
+
+  .tab-content {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
   }
-  
+
+  .tab-pane {
+    padding: 20px 0;
+  }
+
+  .fade {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .fade.show {
+    opacity: 1;
+  }
 </style>
 </head>
 <body>
 
-<button class="delete-button" data-target="deletePopup1">
-  <div class="cross">&#10006;</div>
-</button>
-
-<div class="popup" id="deletePopup1">
-  <div class="popup-content">
-    <div class="message">Are you sure you want to delete this reply?</div>
-    <div class="button-container">
-      <button class="yes-button">YES</button>
-      <button class="no-button">NO</button>
+<div class="tabs-container">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" id="polls-tab" data-toggle="tab" href="#polls-content">Polls</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="participated-tab" data-toggle="tab" href="#participated-content">Participated</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="emotions-tab" data-toggle="tab" href="#emotions-content">Emotions</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="polls-content">
+            <!-- Content for Polls tab -->
+            <h1>Polls Tab</h1>
+            <p>This is the content for the Polls tab.</p>
+        </div>
+        <div class="tab-pane fade" id="participated-content">
+            <!-- Content for Participated tab -->
+            <h1>Participated Tab</h1>
+            <p>This is the content for the Participated tab.</p>
+        </div>
+        <div class="tab-pane fade" id="emotions-content">
+            <!-- Content for Emotions tab -->
+            <h1>Emotions Tab</h1>
+            <p>This is the content for the Emotions tab.</p>
+        </div>
     </div>
-  </div>
 </div>
 
-
-
-
-<button class="delete-button-6452"  data-target="deletePopup1" style="position: absolute; bottom: 0; right: 0;">
-  <div class="cross-1243">&#10005;</div>
-</button>
-<div class="popup-5326" id="deletePopup1">
-  <div class="popup-content-3754">
-      <div class="message-8765">Are you sure you want to delete this reply?</div>
-      <div class="button-container-9342">
-          <button class="popup-button-2354 yes-button-7854">YES</button>
-          <button class="popup-button-2354 no-button-3671">NO</button>
-      </div>
-  </div>
-</div>
-
-
-
-<button class="delete-button" data-target="deletePopup2">
-  <div class="cross">&#10006;</div>
-</button>
-
-<div class="popup" id="deletePopup2">
-  <div class="popup-content">
-    <div class="message">Are you sure you want to delete this reply?</div>
-    <div class="button-container">
-      <button class="yes-button">YES</button>
-      <button class="no-button">NO</button>
-    </div>
-  </div>
-</div>
-
-<!-- Repeat this pattern for each delete button and its corresponding popup -->
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 <script>
-  document.querySelectorAll('.delete-button').forEach(deleteButton => {
-    deleteButton.addEventListener('click', () => {
-        const targetPopupId = deleteButton.getAttribute('data-target');
-        const deletePopup = document.getElementById(targetPopupId);
-        deletePopup.style.display = 'block';
+$(document).ready(function(){
+    $(".nav-tabs a").click(function(){
+        $(this).tab('show');
     });
 });
-
-document.querySelectorAll('.yes-button').forEach(yesButton => {
-    yesButton.addEventListener('click', () => {
-        const targetPopupId = yesButton.closest('.popup').id;
-        const deletePopup = document.getElementById(targetPopupId);
-        // Add your delete logic here
-        alert('Reply deleted!');
-        deletePopup.style.display = 'none';
-    });
-});
-
-document.querySelectorAll('.no-button').forEach(noButton => {
-    noButton.addEventListener('click', () => {
-        const targetPopupId = noButton.closest('.popup').id;
-        const deletePopup = document.getElementById(targetPopupId);
-        deletePopup.style.display = 'none';
-    });
-});
-
 </script>
+
 </body>
 </html>

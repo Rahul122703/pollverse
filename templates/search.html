@@ -10,12 +10,12 @@
         </div>
     </div>
 </header>
-{% for comment in comments %}
-    <div class="container px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                {% for comment in comments %}
-                
+
+
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            {% for comment in comments %}
                 <a href = "{{ url_for('show_comment',comment_id = comment.id) }}">
                     <div class="comment-container ">
                         <div class="user-info">
@@ -39,13 +39,45 @@
                     </div>
                     <hr class="animated-line">
                 </a>
-                {% endfor %}
-                <!-- Divider-->
-                <!-- Pager-->
-            </div>
+            {% endfor %}
         </div>
     </div>
-    
-{% endfor %}
+</div>
+
+<div class="container px-4 px-lg-5 profile-card-container">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        {% for user in users %}
+        <div class="profile-card1234" onclick="this.classList.toggle('flipped')">
+            <div class="card1234">
+                <div class="front123">
+                    <img class="profile-pic123" src="{{user.icon}}" alt="User Profile Picture">
+                    <div class="user-name123">{{user.username}}</div>
+                </div>
+                <div class="back123" style="padding: 20px; text-align: center;">
+                    <p style="margin-bottom: 10px;"><b>Polls: 12</b></p>
+                    <p style="margin-bottom: 10px;"><b>Participation: 12</b></p>
+                        <form action = "{{ url_for('comment_profile', user_id=user.id) }}" method = "POST">
+                            <button class="view-profile-btn" 
+                            style="width: 80px; 
+                            padding: 5px 10px; 
+                            background-color: #ffc107; 
+                            color: #fff; 
+                            border: none; 
+                            border-radius: 50px; 
+                            font-size: 16px; 
+                            text-transform: uppercase; 
+                            transition: background-color 0.3s ease, 
+                            transform 0.3s ease, 
+                            box-shadow 0.3s ease;">
+                            Profile</button>
+                        </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
 </body>
 {% include "footer.html" %}

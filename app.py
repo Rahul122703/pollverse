@@ -254,7 +254,7 @@ def index():
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
 
     api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
-    QUOTE_API_KEY = 'oBCu1eDCEZdDYk6oHgIokQ==kjmShcGj3Tcbu34B'
+    QUOTE_API_KEY = '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'
     quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
     quote_text = f"'{quote['quote']}' - {quote['author']}"
     print(f"current user id is ---> {current_user_id}")

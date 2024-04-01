@@ -105,16 +105,58 @@
             {{ render_form(reply_form) }}
         </form>
       </section>
-      <section id="dunkles" class="tab-panel">
-        <h2>Emotions</h2>
-        <p><strong>Overall Impression:</strong> A dark, strong, malty German lager beer that emphasizes the malty-rich and somewhat toasty qualities of continental malts without being sweet in the finish.</p>
-        <p><strong>History:</strong> Originated in the Northern German city of Einbeck, which was a brewing center and popular exporter in the days of the Hanseatic League (14th to 17th century). Recreated in Munich starting in the 17th century. The name “bock” is based on a corruption of the name “Einbeck” in the Bavarian dialect, and was thus only used after the beer came to Munich. “Bock” also means “Ram” in German, and is often used in logos and advertisements.</p>
-      </section>
-    </div>
-    
-</div>
+        <section id="dunkles" class="tab-panel">
+            <h2>Emotions</h2>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+            <script>
+                window.onload = function() {
 
-</body>
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    data: [{
+                        type: "pie",
+                        startAngle: 240,
+                        yValueFormatString: "##0.00\"%\"",
+                        indexLabel: "{label} {y}",
+                        dataPoints: [
+                            {y: 1.45, label: "POSITIVE"},
+                            {y: 7.31, label: "NEGATIVE"},
+                            {y: 7.06, label: "NEAUTRAL"}
+                        ]
+                    }]
+                });
+
+                chart.render();
+
+                var clickedSliceIndex = -1;
+
+                // Add click event handler to each slice
+                chart.options.data[0].click = function(e) {
+                    var sliceIndex = e.dataPointIndex;
+                    
+                    // Check if the same slice is clicked again
+                    if (sliceIndex === clickedSliceIndex) {
+                        // Reset the clicked slice
+                        chart.data[0].dataPoints[sliceIndex].exploded = false;
+                        chart.data[0].dataPoints[sliceIndex].explodeOffset = 0;
+                        clickedSliceIndex = -1;
+                    } else {
+                        // Explode the clicked slice
+                        chart.data[0].dataPoints[sliceIndex].exploded = true;
+                        chart.data[0].dataPoints[sliceIndex].explodeOffset = 10;
+                        clickedSliceIndex = sliceIndex;
+                    }
+                    
+                    chart.render();
+                };
+
+                }
+            </script>
+            </head>
+            <body>
+            <div id="chartContainer" style="height: 370px; width: 100%;"></div></body>
+        </section>
+        </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function(){

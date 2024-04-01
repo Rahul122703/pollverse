@@ -22,6 +22,7 @@ response = requests.get(api_url, headers={'X-Api-Key': '9No6wnmZqzRC/NRH0VvxHA==
 # Check if the request was successful
 if response.status_code == requests.codes.ok:
     data = response.json()
+    print(data)
     polarity = data['score']
 
     # Format current date and time

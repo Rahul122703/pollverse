@@ -666,7 +666,7 @@ header.masthead .post-heading .meta a {
     .modal_789 {
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
-      z-index: 1; /* Sit on top */
+      z-index: 1000; /* Sit on top */
       left: 0;
       top: 0;
       width: 100%;
@@ -674,8 +674,8 @@ header.masthead .post-heading .meta a {
       overflow: auto; /* Enable scroll if needed */
       background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
     }
-
     .modal-content_654 {
+      width: auto;
       background-color: #fefefe;
       margin: 10% auto; /* 10% from the top and centered */
       padding: 20px;
@@ -1585,3 +1585,8 @@ input:focus-visible + label {
   background-color: #ffae42;
 }
 
+/* Sentimant color  */
+
+.neutral123 {
+  background-color: white;
+}

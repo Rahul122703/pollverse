@@ -30,9 +30,9 @@ class OtpForm(FlaskForm):
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
 class EditProfileForm(FlaskForm):
-    ProfilePic = URLField( validators=[DataRequired(),URL()], render_kw={"placeholder": "Enter Profile pic link"}, label= False)
-    username = StringField( validators=[DataRequired()], render_kw={"placeholder": "Choose new username"}, label= False)
-    password = PasswordField( validators=[DataRequired()], render_kw={"placeholder": "Create a new password"}, label= False)
+    ProfilePic = URLField( render_kw={"placeholder": "Enter a valid Profile pic link"}, label= False)
+    username = StringField( render_kw={"placeholder": "Choose new username"}, label= False)
+    password = PasswordField( render_kw={"placeholder": "Create a new password"}, label= False)
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
 
 class ReplyForm(FlaskForm):

@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy.orm import relationship,DeclarativeBase,Mapped,mapped_column
-from sqlalchemy import Integer, String, Boolean,func
+from sqlalchemy import Integer, String, Boolean,func,Float
 
 import random
 import requests
@@ -19,6 +19,8 @@ from functools import wraps
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import random
+from textblob import TextBlob
+
 
 logged_in = 0
 not_registering = 1
@@ -70,9 +72,21 @@ database.init_app(app)
 
 bootstrap_app = Bootstrap5(app)
 
+# Functions
+def analyze_sentiment(comment):
+    blob = TextBlob(comment)
+    polarity = blob.sentiment.polarity
+    return polarity
 
 def format_time_and_date(date_time):
     return date_time.strftime("%H:%M %d/%m/%Y")
+
+def map_polarity_to_color(polarity):
+    normalized_polarity = (polarity + 1) / 2  
+    red = int(255 * (1 - normalized_polarity))
+    green = int(255 * normalized_polarity)
+    return f'rgb({red}, {green}, 0)'
+
 
 #Creating tables
 class User(UserMixin, database.Model):
@@ -112,6 +126,7 @@ class Subcomment(database.Model):
     body : Mapped[str] = mapped_column(String)
     anonymous : Mapped[int] = mapped_column(Integer, nullable=False)
     date : Mapped[str] = mapped_column(String(150),nullable=True)
+    intensity: Mapped[str] = mapped_column(String(150), nullable=True)
     
     user_id : Mapped[str] = mapped_column(Integer, database.ForeignKey("user.id"))
     comment_id = mapped_column(Integer,database.ForeignKey("Comment.id"))
@@ -125,6 +140,8 @@ class icon(database.Model):
     link: Mapped[str] = mapped_column(String(500))
 
 
+    
+    
 with app.app_context():
     database.create_all()
 
@@ -258,9 +275,12 @@ def profile():
     user_obj = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
     profile_form = EditProfileForm()
     if profile_form.validate_on_submit():
-        user_obj.icon = profile_form.ProfilePic.data
-        user_obj.username = profile_form.username.data
-        user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)
+        if len(profile_form.ProfilePic.data)!=0:
+            user_obj.icon = profile_form.ProfilePic.data 
+        if  len(profile_form.username.data)!=0:    
+            user_obj.username = profile_form.username.data
+        if len(profile_form.password.data)!=0:    
+            user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)
         database.session.commit()   
         return redirect(url_for('profile'))
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
@@ -275,11 +295,18 @@ def profile():
  
 @app.route('/comment_profile/<int:user_id>',methods = ['GET','POST'])
 def comment_profile(user_id):
+    print(f"the user id is {user_id}")
     global current_page
     current_page = 'comment_profile'
     comment_user = database.get_or_404(User,user_id)
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
+    print(all_replies)
+    comments = database.session.execute(database.select(Comment).where(Comment.userId == user_id)).scalars().all()
+    print(comments)
     return render_template('comment_profile.html',
-                           comment_user = comment_user) 
+                           comment_user = comment_user,
+                           all_replies  = all_replies ,
+                           comments = comments) 
  
     
 @app.route('/new_comment',methods = ['GET','POST'])
@@ -305,17 +332,18 @@ def new_comment():
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
     global current_page,anonymous_mode
-    current_page = 'index'
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
-    
+    body = str(reply_form.body.data)
+    polarity = analyze_sentiment(body)
     if reply_form.validate_on_submit():
         new_reply = Subcomment(
-        body = reply_form.body.data,
+        body = body,
         user_id = current_user_id,
         comment_id = comment_id,
         date = format_time_and_date(datetime.now()),
-        anonymous = anonymous_mode if anonymous_mode else anonymous_mode
+        anonymous = anonymous_mode if anonymous_mode else anonymous_mode,
+        intensity =  map_polarity_to_color(polarity)
         )
         
         database.session.add(new_reply)
@@ -326,8 +354,7 @@ def show_comment(comment_id):
     return render_template('show_comment.html',
                            comment = chosen_comment,
                            reply_form = reply_form,
-                           all_replies = all_replies
-                           )
+                           all_replies = all_replies)
   
 
 @app.route('/change_password',methods = ['GET','POST'])
@@ -348,8 +375,8 @@ def change_password():
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>OTP Email</title>
             </head>
-            <body style="font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px;">
-                <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
+            <body style="font-family: Arial, sans-serif; background-image: linear-gradient(to bottom right, #ffffcc, #ffcc66); padding: 20px;">
+                <div style="max-width: 600px; margin: auto; background-image: linear-gradient(to bottom right, #FFD700, #FFFF00); border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
                     <p style="font-size: 18px; color: #666;">NOTE: This OTP is valid for only one time.</p>
                     <h1 style="font-size: 36px; color: #333; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);">YOUR OTP: <span style="color: #009688;">{random_otp}</span></h1>
                     <img src="https://img.freepik.com/premium-vector/secure-email-otp-authentication-verification-method_258153-468.jpg" alt="OTP Image" style="display: block; margin: 20px auto; max-width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
@@ -403,7 +430,7 @@ def anonymous():
         user_obj.username = username
         user_obj.icon = user_icon
         anonymous_mode = 0
-    return redirect(url_for('index'))
+    return redirect(url_for(f'{current_page}'))
 
 
 @app.route('/search',methods = ['POST','GET'])

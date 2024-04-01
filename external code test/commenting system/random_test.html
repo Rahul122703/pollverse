@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script>
+window.onload = function() {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,
+    title: {
+        text: "Desktop Search Engine Market Share - 2016"
+    },
+    data: [{
+        type: "pie",
+        startAngle: 240,
+        yValueFormatString: "##0.00\"%\"",
+        indexLabel: "{label} {y}",
+        dataPoints: [
+            {y: 1.45, label: "POSITIVE"},
+            {y: 7.31, label: "NEGATIVE"},
+            {y: 7.06, label: "NEAUTRAL"}
+        ]
+    }]
+});
+
+chart.render();
+
+var clickedSliceIndex = -1;
+
+// Add click event handler to each slice
+chart.options.data[0].click = function(e) {
+    var sliceIndex = e.dataPointIndex;
+    
+    // Check if the same slice is clicked again
+    if (sliceIndex === clickedSliceIndex) {
+        // Reset the clicked slice
+        chart.data[0].dataPoints[sliceIndex].exploded = false;
+        chart.data[0].dataPoints[sliceIndex].explodeOffset = 0;
+        clickedSliceIndex = -1;
+    } else {
+        // Explode the clicked slice
+        chart.data[0].dataPoints[sliceIndex].exploded = true;
+        chart.data[0].dataPoints[sliceIndex].explodeOffset = 10;
+        clickedSliceIndex = sliceIndex;
+    }
+    
+    chart.render();
+};
+
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+</body>
+</html>

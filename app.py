@@ -18,7 +18,6 @@ import os
 from functools import wraps
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import random
 from textblob import TextBlob
 
 
@@ -74,9 +73,15 @@ bootstrap_app = Bootstrap5(app)
 
 # Functions
 def analyze_sentiment(comment):
-    blob = TextBlob(comment)
-    polarity = blob.sentiment.polarity
-    return polarity
+    api_url = 'https://api.api-ninjas.com/v1/sentiment?text={}'.format(comment)
+    response = requests.get(api_url, headers={'X-Api-Key': '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'})
+    
+    if response.status_code == requests.codes.ok:
+        data = response.json()
+        polarity = data['score']
+        return polarity 
+    else:
+        return None, None, None
 
 def format_time_and_date(date_time):
     return date_time.strftime("%H:%M %d/%m/%Y")

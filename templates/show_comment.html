@@ -30,7 +30,7 @@
         
         <div class="tab-panels">
             <section id="marzen" class="tab-panel">
-                <h2>Comments</h2>
+                <h2><center>Comments</center></h2>
                 <div class="comment-thread">
                     <div class="comment-container">
                         <div class="user-info">
@@ -97,7 +97,7 @@
                 {% endfor %}
             </section>
             <section id="rauchbier" class="tab-panel">
-                <h2>Your comment</h2>
+                <h2><center>Your comment</center></h2>
                 {{ ckeditor.load() }}
                 {{ ckeditor.config(name='body') }}
                 <form method="POST" action="{{url_for('show_comment',comment_id = comment.id)}}">
@@ -105,7 +105,7 @@
                 </form>
             </section>
             <section id="dunkles" class="tab-panel">
-                <h2>Sentimant</h2>
+                <h2><center>Sentimant</center></h2>
                 {% if length > 0 %}
                 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
                 <script type="text/javascript">
@@ -119,7 +119,7 @@
                         ['Negative',{{minus}}],
                     ]);
                     var options = {
-                        width: 450,
+                        width: 480,
                         height: 250,
                         colors: ['#d3d3d3', '#90ee90', '#e64522'],
                         is3D: true

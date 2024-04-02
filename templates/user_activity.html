@@ -86,17 +86,44 @@
                                 </div>
                             </div>
                         {% endif %}
-                        <div class="green-strip" style="position: absolute; border-radius: 16px; top: 0; left: 45%; width: 10%; height: 10px; background-color: {{ reply.intensity }}; cursor: pointer;"></div>
+                        <div class="green-strip" style="position: absolute; border-radius: 16px; top: 0; left: 45%; width: 10%; height: 10px; background-color: {{ reply.color }}; cursor: pointer;"></div>
                     </div>
             {% endif %}
         {% endfor %}
     
       </section>
       <section id="dunkles" class="tab-panel">
-        <h2>EMOTIONS</h2>
-        <p><strong>Overall Impression:</strong> A dark, strong, malty German lager beer that emphasizes the malty-rich and somewhat toasty qualities of continental malts without being sweet in the finish.</p>
-        <p><strong>History:</strong> Originated in the Northern German city of Einbeck, which was a brewing center and popular exporter in the days of the Hanseatic League (14th to 17th century). Recreated in Munich starting in the 17th century. The name “bock” is based on a corruption of the name “Einbeck” in the Bavarian dialect, and was thus only used after the beer came to Munich. “Bock” also means “Ram” in German, and is often used in logos and advertisements.</p>
-      </section>
+        <h2><center>SENTIMANT</center></h2>
+        {% if length > 0 %}
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+        google.setOnLoadCallback(drawPieChart);
+        function drawPieChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Platform','Reach'],
+                ['Neutral',{{neutral}}],
+                ['Positive',{{plus}}],
+                ['Negative',{{minus}}],
+            ]);
+            var options = {
+                width: 480,
+                height: 250,
+                colors: ['#d3d3d3', '#90ee90', '#e64522'],
+                is3D: true
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chart.draw(data, options);
+        }
+        </script>
+    </head>
+    <body>
+        <div id="piechart"></div>
+        {% else %}
+            <h3> NO REPLIES FOR ANALYSIS </h3>
+        {% endif %}
+        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+    </section>
     </div>
     
 </div>

@@ -88,11 +88,11 @@ def format_time_and_date(date_time):
 
 def map_polarity_to_color(polarity):
     if polarity < -0.1:   # negative
-        return f'#f77878'  
+        return f'#f21800'  
     elif polarity > 0.1:  # positive
-        return f'#bef7be'  
-    else:                 # neautral
-        return f'#808080' 
+        return f'#00f200'  
+    else:                 # neutral
+        return f'#596061' 
 
 
 
@@ -106,7 +106,6 @@ class User(UserMixin, database.Model):
     password : Mapped[str]= mapped_column(String(50))
     created: Mapped[str] = mapped_column(String(50), nullable=True)
     phoneNo : Mapped[str] = mapped_column(String(15))
-    
     comments = relationship("Comment",back_populates = "comment_author")
     subcomments = relationship("Subcomment",back_populates = "subcomment_author")
 
@@ -174,7 +173,9 @@ def common_variable():
                 username = username,
                 user_icon = user_icon,
                 sidenav = sidenav,
-                random_username = random_username,)
+                random_username = random_username)
+    
+
 
     
 
@@ -296,11 +297,31 @@ def profile():
     print(all_replies)
     comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
     print(comments)
+    
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_obj.id)).scalars().all()
+    intensities = [i.intensity for i in all_replies]
+    print(intensities)
+    if len(intensities):
+        gt_01_count = sum(1 for num in intensities if num > 0.1)
+        lt_minus01_count = sum(1 for num in intensities if num < -0.1)
+        between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
+        total_numbers = len(intensities)
+        percent_gt_01 = (gt_01_count / total_numbers) * 100
+        percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
+        percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
+        return render_template('profile.html',
+                           comments = comments,
+                           profile_form = profile_form,
+                           length = len(intensities),
+                           plus = percent_gt_01,
+                           minus = percent_lt_minus01 ,
+                           neutral = percent_between_minus01_to_01,
+                           all_replies = all_replies)
+    
     return render_template('profile.html',
                            all_replies  = all_replies ,
                            comments = comments,
-                           profile_form = profile_form,
-                           current_user_id = current_user_id)
+                           profile_form = profile_form)
  
 @app.route('/comment_profile/<int:user_id>',methods = ['GET','POST'])
 def comment_profile(user_id):
@@ -312,7 +333,29 @@ def comment_profile(user_id):
     print(all_replies)
     comments = database.session.execute(database.select(Comment).where(Comment.userId == user_id)).scalars().all()
     print(comments)
+    
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
+    intensities = [i.intensity for i in all_replies]
+    print(intensities)
+    if len(intensities):
+        gt_01_count = sum(1 for num in intensities if num > 0.1)
+        lt_minus01_count = sum(1 for num in intensities if num < -0.1)
+        between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
+        total_numbers = len(intensities)
+        percent_gt_01 = (gt_01_count / total_numbers) * 100
+        percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
+        percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
+        return render_template('comment_profile.html',
+                           comment_user = comment_user,
+                           comments = comments,
+                           length = len(intensities),
+                           plus = percent_gt_01,
+                           minus = percent_lt_minus01 ,
+                           neutral = percent_between_minus01_to_01,
+                           all_replies = all_replies)
+    
     return render_template('comment_profile.html',
+                           length = len(intensities),
                            comment_user = comment_user,
                            all_replies  = all_replies ,
                            comments = comments) 

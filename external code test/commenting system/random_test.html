@@ -1,26 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flipping Card</title>
+<style>
+.card-container {
+    perspective: 1000px;
+    width: 200px; /* Reduced size */
+    height: 200px; /* Reduced size */
+    margin: 50px auto;
+}
 
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-        <script type="text/javascript">
-        google.load("visualization", "1", {packages:["corechart"]});
-        google.setOnLoadCallback(drawPieChart);
-        function drawPieChart() {
-            var data = google.visualization.arrayToDataTable([
-                ['Platform','Reach'],
-                ['Neutral',13],
-                ['Positive',8],
-                ['Negative',10],
-            ]);
-            var options = {
-                title: 'Social Media Engagement',
-                width: 470,
-                height: 500,
-                colors: ['#d3d3d3', '#90ee90', '#e64522'],
-                is3D: true
-            };
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-            chart.draw(data, options);
-        }
-        </script>
-    </head>
-    <body>
-        <div id="piechart"></div>
+.card {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+    position: relative;
+    border-radius: 15px; /* Curve the edges */
+}
+
+.card:hover {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 15px; /* Curve the edges */
+}
+
+.front {
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align content at the top */
+    align-items: center;
+    padding-top: 20px; /* Add padding to the top */
+}
+
+.back {
+    background-color: #ddd;
+    transform: rotateY(180deg);
+}
+
+.view-profile-btn {
+    width: 80px;
+    padding: 5px 10px;
+    background-color: #ffc107;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    animation: pulse 1.5s infinite; /* Apply animation */
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.view-profile-btn:hover {
+    background-color: #ff9800;
+}
+
+.user-icon {
+    width: 100%;
+    height: auto; /* Set height to auto to maintain aspect ratio */
+    object-fit: cover; /* Cover the container while maintaining aspect ratio */
+    border-top-left-radius: 15px; /* Curve the top-left corner */
+    border-top-right-radius: 15px; /* Curve the top-right corner */
+    margin-top: 0px;
+    margin-bottom: auto; /* Push image to the top */
+}
+
+.user-name {
+    font-size: 18px; /* Increase font size */
+    font-weight: bold; /* Make the name bold */
+    margin-top: 10px; /* Add margin to separate from the image */
+}
+</style>
+</head>
+<body>
+
+<div class="card-container">
+  <div class="card">
+    <div class="card-face front">
+      <img src="https://www.shutterstock.com/image-photo/headshot-cute-asian-woman-professional-260nw-518624602.jpg" alt="User Icon" class="user-icon">
+      <div class="user-name">User Name</div>
+    </div>
+    <div class="card-face back">
+      <p>Some 3 lines text</p>
+      <button class="view-profile-btn">Profile</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

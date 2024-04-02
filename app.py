@@ -73,7 +73,7 @@ bootstrap_app = Bootstrap5(app)
 
 # Functions
 def analyze_sentiment(comment):
-    api_url = 'https://api.api-ninjas.com/v1/sentiment?text={}'.format(comment)
+    api_url = f'https://api.api-ninjas.com/v1/sentiment?text={comment}'
     response = requests.get(api_url, headers={'X-Api-Key': '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'})
     
     if response.status_code == requests.codes.ok:
@@ -87,10 +87,13 @@ def format_time_and_date(date_time):
     return date_time.strftime("%H:%M %d/%m/%Y")
 
 def map_polarity_to_color(polarity):
-    normalized_polarity = (polarity + 1) / 2  
-    red = int(255 * (1 - normalized_polarity))
-    green = int(255 * normalized_polarity)
-    return f'rgb({red}, {green}, 0)'
+    if polarity < -0.1:  # If polarity is negative
+        return f'#f77878'  # Pure red with no green and blue components
+    elif polarity > 0.1:  # If polarity is positive
+        return f'#bef7be'  
+    else:  # If polarity is near zero
+        return f'#808080'  # Grey color
+
 
 
 #Creating tables
@@ -131,7 +134,8 @@ class Subcomment(database.Model):
     body : Mapped[str] = mapped_column(String)
     anonymous : Mapped[int] = mapped_column(Integer, nullable=False)
     date : Mapped[str] = mapped_column(String(150),nullable=True)
-    intensity: Mapped[str] = mapped_column(String(150), nullable=True)
+    color: Mapped[str] = mapped_column(String(150), nullable=True)
+    intensity: Mapped[float] = mapped_column(Float ,nullable=False)
     
     user_id : Mapped[str] = mapped_column(Integer, database.ForeignKey("user.id"))
     comment_id = mapped_column(Integer,database.ForeignKey("Comment.id"))
@@ -342,13 +346,15 @@ def show_comment(comment_id):
     body = str(reply_form.body.data)
     polarity = analyze_sentiment(body)
     if reply_form.validate_on_submit():
+        print(f"THE POLARITY IS {polarity} and the color is { map_polarity_to_color(polarity)}")
         new_reply = Subcomment(
         body = body,
         user_id = current_user_id,
         comment_id = comment_id,
         date = format_time_and_date(datetime.now()),
         anonymous = anonymous_mode if anonymous_mode else anonymous_mode,
-        intensity =  map_polarity_to_color(polarity)
+        color =  map_polarity_to_color(polarity),
+        intensity = polarity
         )
         
         database.session.add(new_reply)

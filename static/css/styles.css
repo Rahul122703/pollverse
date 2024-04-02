@@ -1430,7 +1430,7 @@ transform: scale(1.05); /* Scale up slightly on hover */
  CSS for the main interaction
 */
 .tabset > input[type="radio"] {
-  position: absolute;
+  position:absolute;
   left: -200vw;
 }
 

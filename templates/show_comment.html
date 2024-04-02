@@ -107,44 +107,30 @@
             <section id="dunkles" class="tab-panel">
                 <h2>Sentimant</h2>
                 {% if length > 0 %}
-                    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-                    <script>
-                        window.onload = function() {
-                            var chart = new CanvasJS.Chart("chartContainer", {
-                                animationEnabled: true,
-                                data: [{
-                                    type: "pie",
-                                    startAngle: 0,
-                                    yValueFormatString: "##0.00\"%\"",
-                                    indexLabel: "{label} {y}",
-                                    dataPoints: [
-                                        {y: {{neutral}}, label: "neutral"}, //grey
-                                        {y: {{minus}}, label: "negative"}, //red
-                                        {y: {{plus}}, label: "positive"} //green
-                                    ]
-                                }]
-                            });
-                            chart.render();
-                            var clickedSliceIndex = -1;
-                            // Add click event handler to each slice
-                            chart.options.data[0].click = function(e) {
-                                var sliceIndex = e.dataPointIndex;
-                                // Check if the same slice is clicked again
-                                if (sliceIndex === clickedSliceIndex) {
-                                    // Reset the clicked slice
-                                    chart.data[0].dataPoints[sliceIndex].exploded = false;
-                                    chart.data[0].dataPoints[sliceIndex].explodeOffset = 0;
-                                    clickedSliceIndex = -1;
-                                } else {
-                                    // Explode the clicked slice
-                                    chart.data[0].dataPoints[sliceIndex].exploded = true;
-                                    chart.data[0].dataPoints[sliceIndex].explodeOffset = 10;
-                                    clickedSliceIndex = sliceIndex;
-                                }
-                                chart.render();
-                            };
-                        }
-                    </script>
+                <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                <script type="text/javascript">
+                google.load("visualization", "1", {packages:["corechart"]});
+                google.setOnLoadCallback(drawPieChart);
+                function drawPieChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Platform','Reach'],
+                        ['Neutral',13],
+                        ['Positive',8],
+                        ['Negative',10],
+                    ]);
+                    var options = {
+                        width: 400,
+                        height: 250,
+                        colors: ['#d3d3d3', '#90ee90', '#e64522'],
+                        is3D: true
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                    chart.draw(data, options);
+                }
+                </script>
+            </head>
+            <body>
+                <div id="piechart"></div>
                 {% else %}
                     <h3> NO REPLIES FOR ANALYSIS </h3>
                 {% endif %}

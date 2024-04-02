@@ -363,6 +363,7 @@ def show_comment(comment_id):
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment_id)).scalars().all()
     
     intensities = [i.intensity for i in all_replies]
+    print(intensities)
     if len(intensities):
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)

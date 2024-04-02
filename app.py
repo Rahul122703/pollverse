@@ -106,6 +106,9 @@ class User(UserMixin, database.Model):
     password : Mapped[str]= mapped_column(String(50))
     created: Mapped[str] = mapped_column(String(50), nullable=True)
     phoneNo : Mapped[str] = mapped_column(String(15))
+    poll: Mapped[int] = mapped_column(Integer)
+    reply: Mapped[int] = mapped_column(Integer)
+        
     comments = relationship("Comment",back_populates = "comment_author")
     subcomments = relationship("Subcomment",back_populates = "subcomment_author")
 
@@ -198,7 +201,9 @@ def register():
                 email = register_form_object.email.data.lower(),
                 password = hashed_password,
                 created = datetime.now().strftime("%Y-%m-%d"),
-                phoneNo = register_form_object.phoneNo.data
+                phoneNo = register_form_object.phoneNo.data,
+                poll = 0,
+                reply = 0
             )
             database.session.add(new_user)
             database.session.commit()
@@ -293,14 +298,14 @@ def profile():
             user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)
         database.session.commit()   
         return redirect(url_for('profile'))
-    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
-    print(all_replies)
-    comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
-    print(comments)
     
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
+
+    comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
+
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_obj.id)).scalars().all()
     intensities = [i.intensity for i in all_replies]
-    print(intensities)
+
     if len(intensities):
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
@@ -319,6 +324,7 @@ def profile():
                            all_replies = all_replies)
     
     return render_template('profile.html',
+                           length = len(intensities),
                            all_replies  = all_replies ,
                            comments = comments,
                            profile_form = profile_form)
@@ -330,13 +336,12 @@ def comment_profile(user_id):
     current_page = 'comment_profile'
     comment_user = database.get_or_404(User,user_id)
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
-    print(all_replies)
+
     comments = database.session.execute(database.select(Comment).where(Comment.userId == user_id)).scalars().all()
-    print(comments)
-    
+
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
     intensities = [i.intensity for i in all_replies]
-    print(intensities)
+
     if len(intensities):
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
@@ -365,7 +370,7 @@ def comment_profile(user_id):
 def new_comment():
     global current_page,anonymous_mode
     comment_form = CommentForm()
-    print(user_obj.username,user_obj.icon)
+
     if comment_form.validate_on_submit():
         new_comment = Comment(
             head = comment_form.head.data,
@@ -375,6 +380,7 @@ def new_comment():
             userId = current_user.id ,
             anonymous = anonymous_mode if anonymous_mode else anonymous_mode
         )
+        current_user.poll += 1
         database.session.add(new_comment)
         database.session.commit()
         return redirect(url_for("index"))
@@ -399,7 +405,7 @@ def show_comment(comment_id):
         color =  map_polarity_to_color(polarity),
         intensity = polarity
         )
-        
+        current_user.reply += 1
         database.session.add(new_reply)
         database.session.commit()
         return redirect(url_for('show_comment',comment_id = comment_id))

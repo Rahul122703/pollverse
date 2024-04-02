@@ -47,33 +47,21 @@
 <div class="container px-4 px-lg-5 profile-card-container">
     <div class="row gx-4 gx-lg-5 justify-content-center">
         {% for user in users %}
-        <div class="profile-card1234" onclick="this.classList.toggle('flipped')">
-            <div class="card1234">
-                <div class="front123">
-                    <img class="profile-pic123" src="{{user.icon}}" alt="User Profile Picture">
-                    <div class="user-name123">{{user.username}}</div>
+            <div class="Wercgwergc">
+                <div class="Ewrgcewrgc">
+                <div class="Hbrrtikj Abnsslgf">
+                    <img src="{{user.icon}}" alt="User Icon" class="Fgsdfweg">
+                    <div class="Versfgrt">{{user.username}}</div>
                 </div>
-                <div class="back123" style="padding: 20px; text-align: center;">
-                    <p style="margin-bottom: 10px;"><b>Polls: 12</b></p>
-                    <p style="margin-bottom: 10px;"><b>Participation: 12</b></p>
-                        <form action = "{{ url_for('comment_profile', user_id=user.id) }}" method = "POST">
-                            <button class="view-profile-btn" 
-                            style="width: 80px; 
-                            padding: 5px 10px; 
-                            background-color: #ffc107; 
-                            color: #fff; 
-                            border: none; 
-                            border-radius: 50px; 
-                            font-size: 16px; 
-                            text-transform: uppercase; 
-                            transition: background-color 0.3s ease, 
-                            transform 0.3s ease, 
-                            box-shadow 0.3s ease;">
-                            Profile</button>
-                        </form>
+                <div class="Hbrrtikj Oipjhgfs">
+                    <p>Polls created : {{ user.poll }} </p>
+                    <p>Replies : {{ user.reply }} </p>
+                    <form action = "{{ url_for('comment_profile', user_id=user.id) }}" method = "POST">
+                        <button class="Jhglkijo">VIEW</button>
+                    </form>
+                </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
     </div>
 </div>

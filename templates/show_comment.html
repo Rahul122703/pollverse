@@ -117,9 +117,9 @@
                                 yValueFormatString: "##0.00\"%\"",
                                 indexLabel: "{label} {y}",
                                 dataPoints: [
-                                    {y: 1.45, label: "POS."},
-                                    {y: 7.31, label: "NEG"},
-                                    {y: 7.06, label: "NEAUT"}
+                                    {y: {{neutral}}, label: "+"}, //grey
+                                    {y: {{minus}}, label: "-"}, //red
+                                    {y: {{plus}}, label: "="} //green
                                 ]
                             }]
                         });

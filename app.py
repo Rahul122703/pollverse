@@ -87,12 +87,12 @@ def format_time_and_date(date_time):
     return date_time.strftime("%H:%M %d/%m/%Y")
 
 def map_polarity_to_color(polarity):
-    if polarity < -0.1:  # If polarity is negative
-        return f'#f77878'  # Pure red with no green and blue components
-    elif polarity > 0.1:  # If polarity is positive
+    if polarity < -0.1:   # negative
+        return f'#f77878'  
+    elif polarity > 0.1:  # positive
         return f'#bef7be'  
-    else:  # If polarity is near zero
-        return f'#808080'  # Grey color
+    else:                 # neautral
+        return f'#808080' 
 
 
 
@@ -361,8 +361,21 @@ def show_comment(comment_id):
         database.session.commit()
         return redirect(url_for('show_comment',comment_id = comment_id))
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment_id)).scalars().all()
-    print(all_replies)
+    
+    intensities = [i.intensity for i in all_replies]
+    gt_01_count = sum(1 for num in intensities if num > 0.1)
+    lt_minus01_count = sum(1 for num in intensities if num < -0.1)
+    between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
+    total_numbers = len(intensities)
+    percent_gt_01 = (gt_01_count / total_numbers) * 100
+    percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
+    percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
+    
+    
     return render_template('show_comment.html',
+                           plus = percent_gt_01,
+                           minus = percent_lt_minus01 ,
+                           neutral = percent_between_minus01_to_01,
                            comment = chosen_comment,
                            reply_form = reply_form,
                            all_replies = all_replies)

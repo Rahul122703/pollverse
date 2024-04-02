@@ -114,12 +114,12 @@
                 function drawPieChart() {
                     var data = google.visualization.arrayToDataTable([
                         ['Platform','Reach'],
-                        ['Neutral',13],
-                        ['Positive',8],
-                        ['Negative',10],
+                        ['Neutral',{{neutral}}],
+                        ['Positive',{{plus}}],
+                        ['Negative',{{minus}}],
                     ]);
                     var options = {
-                        width: 400,
+                        width: 450,
                         height: 250,
                         colors: ['#d3d3d3', '#90ee90', '#e64522'],
                         is3D: true

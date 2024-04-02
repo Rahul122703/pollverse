@@ -92,7 +92,7 @@
                                 </div>
                             </div>
                         {% endif %}
-                        <div class="green-strip" style="position: absolute; border-radius: 16px; top: 0; left: 40%; width: 20%; height: 10px; background-color: {{ reply.color }}; cursor: pointer;"></div>
+                        <div class="green-strip" style="position: absolute; border-radius: 16px; top: 0; left: 0%; width: 100%; height: 10px; background-color: {{ reply.color }}; cursor: pointer;"></div>
                     </div>
                 {% endfor %}
             </section>
@@ -106,44 +106,48 @@
             </section>
             <section id="dunkles" class="tab-panel">
                 <h2>Sentimant</h2>
-                <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-                <script>
-                    window.onload = function() {
-                        var chart = new CanvasJS.Chart("chartContainer", {
-                            animationEnabled: true,
-                            data: [{
-                                type: "pie",
-                                startAngle: 0,
-                                yValueFormatString: "##0.00\"%\"",
-                                indexLabel: "{label} {y}",
-                                dataPoints: [
-                                    {y: {{neutral}}, label: "+"}, //grey
-                                    {y: {{minus}}, label: "-"}, //red
-                                    {y: {{plus}}, label: "="} //green
-                                ]
-                            }]
-                        });
-                        chart.render();
-                        var clickedSliceIndex = -1;
-                        // Add click event handler to each slice
-                        chart.options.data[0].click = function(e) {
-                            var sliceIndex = e.dataPointIndex;
-                            // Check if the same slice is clicked again
-                            if (sliceIndex === clickedSliceIndex) {
-                                // Reset the clicked slice
-                                chart.data[0].dataPoints[sliceIndex].exploded = false;
-                                chart.data[0].dataPoints[sliceIndex].explodeOffset = 0;
-                                clickedSliceIndex = -1;
-                            } else {
-                                // Explode the clicked slice
-                                chart.data[0].dataPoints[sliceIndex].exploded = true;
-                                chart.data[0].dataPoints[sliceIndex].explodeOffset = 10;
-                                clickedSliceIndex = sliceIndex;
-                            }
+                {% if length > 0 %}
+                    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+                    <script>
+                        window.onload = function() {
+                            var chart = new CanvasJS.Chart("chartContainer", {
+                                animationEnabled: true,
+                                data: [{
+                                    type: "pie",
+                                    startAngle: 0,
+                                    yValueFormatString: "##0.00\"%\"",
+                                    indexLabel: "{label} {y}",
+                                    dataPoints: [
+                                        {y: {{neutral}}, label: "neutral"}, //grey
+                                        {y: {{minus}}, label: "negative"}, //red
+                                        {y: {{plus}}, label: "positive"} //green
+                                    ]
+                                }]
+                            });
                             chart.render();
-                        };
-                    }
-                </script>
+                            var clickedSliceIndex = -1;
+                            // Add click event handler to each slice
+                            chart.options.data[0].click = function(e) {
+                                var sliceIndex = e.dataPointIndex;
+                                // Check if the same slice is clicked again
+                                if (sliceIndex === clickedSliceIndex) {
+                                    // Reset the clicked slice
+                                    chart.data[0].dataPoints[sliceIndex].exploded = false;
+                                    chart.data[0].dataPoints[sliceIndex].explodeOffset = 0;
+                                    clickedSliceIndex = -1;
+                                } else {
+                                    // Explode the clicked slice
+                                    chart.data[0].dataPoints[sliceIndex].exploded = true;
+                                    chart.data[0].dataPoints[sliceIndex].explodeOffset = 10;
+                                    clickedSliceIndex = sliceIndex;
+                                }
+                                chart.render();
+                            };
+                        }
+                    </script>
+                {% else %}
+                    <h3> NO REPLIES FOR ANALYSIS </h3>
+                {% endif %}
                 <div id="chartContainer" style="height: 370px; width: 100%;"></div>
             </section>
         </div>

@@ -43,5 +43,9 @@ class SearchForm(FlaskForm):
     text = StringField(validators=[DataRequired()], render_kw={"class": "form-control search-input me-2", "type": "search", "placeholder": "Search", "aria-label": "Search"})
     submit = SubmitField('Submit', render_kw={"class": "btn btn-outline-primary", "type": "submit"})
     
+class ContactForm(FlaskForm):
+    body = CKEditorField(validators=[DataRequired()], label= False)
+    submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
-    
+#contact us
+#sentimant

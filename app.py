@@ -1,6 +1,6 @@
 from flask import Flask,render_template,redirect,url_for,abort,request
 from flask_bootstrap import Bootstrap5
-from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm
+from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm,ContactForm
 from flask_ckeditor import CKEditor
 
 from flask_login import LoginManager,UserMixin,login_user,logout_user,current_user
@@ -19,7 +19,7 @@ from functools import wraps
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from textblob import TextBlob
-
+import smtplib
 
 logged_in = 0
 not_registering = 1
@@ -393,7 +393,6 @@ def change_password():
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
     print(f"value of otp sent is {otp_send}")
     if otp_send == 0:
-        import smtplib
         otp_send = 1
         user_otp = random_otp
         body = f"""
@@ -505,9 +504,29 @@ def for_admin():
         database.session.commit()
     return render_template('database_control.html',database_form = database_form)
 
-@app.route('/contact')
-def contact(): 
-    return render_template('contact.html')
+@app.route('/contact/<int:user_id>',methods = ['POST','GET'])
+def contact(user_id): 
+    global current_page,from_email,current_user_id
+    current_page = "contact"
+    contact_form = ContactForm()
+    if contact_form.validate_on_submit():
+        user = database.get_or_404(User,user_id)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+        server.login(user=from_email, password=app_pass)
+
+        msg = MIMEMultipart()
+        msg['From'] = user.email
+        msg['To'] = from_email
+        msg['Subject'] = "contacting us"
+
+        body = contact_form.body.data
+        msg.attach(MIMEText(body, 'html'))
+
+        server.sendmail(user.email, from_email, msg.as_string())
+        server.quit()
+        return redirect(url_for('contact',user_id = current_user_id))
+    return render_template('contact.html',contact_form = contact_form)
 
 @app.route('/about')
 def about():

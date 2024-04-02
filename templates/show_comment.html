@@ -20,17 +20,17 @@
     <div class="tabset">
         <!-- Tab 1 -->
         <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
-        <label for="tab1">Comments</label>
+        <label for="tab1">POLL</label>
         <!-- Tab 2 -->
         <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
-        <label for="tab2">Your comment</label>
+        <label for="tab2">REPLY</label>
         <!-- Tab 3 -->
         <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
-        <label for="tab3">Sentimant</label>
+        <label for="tab3">SENTIMANT</label>
         
         <div class="tab-panels">
             <section id="marzen" class="tab-panel">
-                <h2><center>Comments</center></h2>
+                <h2><center>POLL</center></h2>
                 <div class="comment-thread">
                     <div class="comment-container">
                         <div class="user-info">
@@ -97,7 +97,7 @@
                 {% endfor %}
             </section>
             <section id="rauchbier" class="tab-panel">
-                <h2><center>Your comment</center></h2>
+                <h2><center>REPLY</center></h2>
                 {{ ckeditor.load() }}
                 {{ ckeditor.config(name='body') }}
                 <form method="POST" action="{{url_for('show_comment',comment_id = comment.id)}}">
@@ -105,7 +105,7 @@
                 </form>
             </section>
             <section id="dunkles" class="tab-panel">
-                <h2><center>Sentimant</center></h2>
+                <h2><center>SENTIMANT</center></h2>
                 {% if length > 0 %}
                 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
                 <script type="text/javascript">

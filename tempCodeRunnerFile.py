@@ -9,7 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy.orm import relationship,DeclarativeBase,Mapped,mapped_column
-from sqlalchemy import Integer, String, Boolean,func,Float
+from sqlalchemy import Integer, String, Boolean,func,Float,LargeBinary
 
 import random
 import requests
@@ -20,6 +20,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from textblob import TextBlob
 import smtplib
+import base64
 
 logged_in = 0
 not_registering = 1
@@ -35,7 +36,6 @@ username = None
 user_icon = None
 sidenav = 0
 current_page = None
-
 from_email = "xieminiproject@gmail.com"
 app_pass = "omni tvxy oelb dctl"
 
@@ -88,25 +88,33 @@ def format_time_and_date(date_time):
 
 def map_polarity_to_color(polarity):
     if polarity < -0.1:   # negative
-        return f'#f77878'  
+        return f'#f21800'  
     elif polarity > 0.1:  # positive
-        return f'#bef7be'  
-    else:                 # neautral
-        return f'#808080' 
+        return f'#00f200'  
+    else:                 # neutral
+        return f'#596061' 
 
+def encode_image(image_data):
+    print(f"this is {encode_image.__name__}")
+    encoded_image = base64.b64encode(image_data).decode('utf-8')
+    return encoded_image
 
+app.jinja_env.filters['encode_image'] = encode_image
 
 #Creating tables
 class User(UserMixin, database.Model):
     __tablename__ = "user"
     id : Mapped[int] = mapped_column(Integer, primary_key=True)
     icon : Mapped[str]= mapped_column(String(500))
+    uicon  = mapped_column(LargeBinary)
     username : Mapped[str]= mapped_column(String(50))
     email : Mapped[str]= mapped_column(String(50))
     password : Mapped[str]= mapped_column(String(50))
     created: Mapped[str] = mapped_column(String(50), nullable=True)
     phoneNo : Mapped[str] = mapped_column(String(15))
-    
+    poll: Mapped[int] = mapped_column(Integer)
+    reply: Mapped[int] = mapped_column(Integer)
+        
     comments = relationship("Comment",back_populates = "comment_author")
     subcomments = relationship("Subcomment",back_populates = "subcomment_author")
 
@@ -156,11 +164,17 @@ with app.app_context():
 
 @app.context_processor
 def common_variable():
-    global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,sidenav,current_page
+    global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,sidenav,current_page,encoded_image
     global current_user_email, user_otp, user_obj, username, user_icon,random_username
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
+    if current_user_id:
+        user_obj = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
+        encoded_image = base64.b64encode(user_obj.uicon).decode('utf-8')
+    else:
+        encoded_image = None
     return dict(logged_in = logged_in,
+                encoded_image = encoded_image,
                 current_page = current_page,
                 login_form = LoginForm(),               
                 search_form = SearchForm(),
@@ -174,10 +188,8 @@ def common_variable():
                 username = username,
                 user_icon = user_icon,
                 sidenav = sidenav,
-                random_username = random_username,)
-
+                random_username = random_username)
     
-
 @app.route('/register',methods = ['GET','POST'])
 def register():
     global not_registering,current_user_id,user_obj,logged_in
@@ -197,7 +209,9 @@ def register():
                 email = register_form_object.email.data.lower(),
                 password = hashed_password,
                 created = datetime.now().strftime("%Y-%m-%d"),
-                phoneNo = register_form_object.phoneNo.data
+                phoneNo = register_form_object.phoneNo.data,
+                poll = 0,
+                reply = 0
             )
             database.session.add(new_user)
             database.session.commit()
@@ -289,18 +303,44 @@ def profile():
         if  len(profile_form.username.data)!=0:    
             user_obj.username = profile_form.username.data
         if len(profile_form.password.data)!=0:    
-            user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)
+            user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
+        if profile_form.SelectPic.data is not None:   
+            print("done!!") 
+            user_obj.uicon =  profile_form.SelectPic.data
         database.session.commit()   
         return redirect(url_for('profile'))
+    
+    
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
-    print(all_replies)
+
     comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
-    print(comments)
-    return render_template('profile.html',
-                           all_replies  = all_replies ,
+
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_obj.id)).scalars().all()
+    intensities = [i.intensity for i in all_replies]
+
+    if len(intensities):
+        gt_01_count = sum(1 for num in intensities if num > 0.1)
+        lt_minus01_count = sum(1 for num in intensities if num < -0.1)
+        between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
+        total_numbers = len(intensities)
+        percent_gt_01 = (gt_01_count / total_numbers) * 100
+        percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
+        percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
+        
+        return render_template('profile.html',
                            comments = comments,
                            profile_form = profile_form,
-                           current_user_id = current_user_id)
+                           length = len(intensities),
+                           plus = percent_gt_01,
+                           minus = percent_lt_minus01 ,
+                           neutral = percent_between_minus01_to_01,
+                           all_replies = all_replies)
+    
+    return render_template('profile.html',
+                           length = len(intensities),
+                           all_replies  = all_replies ,
+                           comments = comments,
+                           profile_form = profile_form)
  
 @app.route('/comment_profile/<int:user_id>',methods = ['GET','POST'])
 def comment_profile(user_id):
@@ -309,10 +349,31 @@ def comment_profile(user_id):
     current_page = 'comment_profile'
     comment_user = database.get_or_404(User,user_id)
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
-    print(all_replies)
+
     comments = database.session.execute(database.select(Comment).where(Comment.userId == user_id)).scalars().all()
-    print(comments)
+
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
+    intensities = [i.intensity for i in all_replies]
+
+    if len(intensities):
+        gt_01_count = sum(1 for num in intensities if num > 0.1)
+        lt_minus01_count = sum(1 for num in intensities if num < -0.1)
+        between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
+        total_numbers = len(intensities)
+        percent_gt_01 = (gt_01_count / total_numbers) * 100
+        percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
+        percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
+        return render_template('comment_profile.html',
+                           comment_user = comment_user,
+                           comments = comments,
+                           length = len(intensities),
+                           plus = percent_gt_01,
+                           minus = percent_lt_minus01 ,
+                           neutral = percent_between_minus01_to_01,
+                           all_replies = all_replies)
+    
     return render_template('comment_profile.html',
+                           length = len(intensities),
                            comment_user = comment_user,
                            all_replies  = all_replies ,
                            comments = comments) 
@@ -322,7 +383,7 @@ def comment_profile(user_id):
 def new_comment():
     global current_page,anonymous_mode
     comment_form = CommentForm()
-    print(user_obj.username,user_obj.icon)
+
     if comment_form.validate_on_submit():
         new_comment = Comment(
             head = comment_form.head.data,
@@ -332,6 +393,7 @@ def new_comment():
             userId = current_user.id ,
             anonymous = anonymous_mode if anonymous_mode else anonymous_mode
         )
+        current_user.poll += 1
         database.session.add(new_comment)
         database.session.commit()
         return redirect(url_for("index"))
@@ -356,7 +418,7 @@ def show_comment(comment_id):
         color =  map_polarity_to_color(polarity),
         intensity = polarity
         )
-        
+        current_user.reply += 1
         database.session.add(new_reply)
         database.session.commit()
         return redirect(url_for('show_comment',comment_id = comment_id))
@@ -506,7 +568,7 @@ def for_admin():
 
 @app.route('/contact/<int:user_id>',methods = ['POST','GET'])
 def contact(user_id): 
-    global current_page,from_email
+    global current_page,from_email,current_user_id
     current_page = "contact"
     contact_form = ContactForm()
     if contact_form.validate_on_submit():
@@ -525,7 +587,7 @@ def contact(user_id):
 
         server.sendmail(user.email, from_email, msg.as_string())
         server.quit()
-        return redirect(url_for('contact'))
+        return redirect(url_for('contact',user_id = current_user_id))
     return render_template('contact.html',contact_form = contact_form)
 
 @app.route('/about')

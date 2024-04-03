@@ -29,9 +29,19 @@ style="background-image: url('https://lp-cms-production.imgix.net/2021-01/GettyR
                                 <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
                                 <div class="username">{{ random_username }}</div>
                             {% else %}
-                                <img src="{{ comment.comment_author.icon }}" class="user-icon" />
+
+                                {% if comment.comment_author.uicon %}
+                                    <img src="data:image/jpeg;base64,{{ comment.comment_author.uicon|b64encode_image }}"  class="user-icon">
+                                {% else %}
+                                    <img src="{{ comment.comment_author.icon }}" class="user-icon" />
+                                {% endif %}
+                                    
                                 <div class="username">{{ comment.comment_author.username }}</div>
+
+
                             {% endif %}
+
+
                         </div>
                         <div class="datetime">{{ comment.date }}</div> <!-- Move this line up -->
                         <div class="comment-content">

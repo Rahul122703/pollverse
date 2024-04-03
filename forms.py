@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
-from wtforms import StringField, EmailField, PasswordField, SubmitField,URLField
+from wtforms import StringField, EmailField, PasswordField, SubmitField,URLField,FileField
 from wtforms.validators import DataRequired, Email, URL,Length
 
 class LoginForm(FlaskForm):
@@ -18,7 +18,7 @@ class RegisterForm(FlaskForm):
 class CommentForm(FlaskForm):
     head = StringField( validators=[DataRequired()], render_kw={"placeholder": "Enter heading"})
     body = CKEditorField('Body', validators=[DataRequired()])
-    bg_image = URLField('Enter background image URL',render_kw={"placeholder": "Enter background image URL"})
+    bg_image = URLField('Enter background image URL',render_kw={"placeholder": "Enter background image URL (optional)"})
     submit = SubmitField('Post poll',render_kw={"class": "btn btn-success"})
     
 class DatabaseForm(FlaskForm):
@@ -30,10 +30,11 @@ class OtpForm(FlaskForm):
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
 class EditProfileForm(FlaskForm):
-    ProfilePic = URLField( render_kw={"placeholder": "Enter a valid Profile pic link"}, label= False)
-    username = StringField( render_kw={"placeholder": "Choose new username"}, label= False)
-    password = PasswordField( render_kw={"placeholder": "Create a new password"}, label= False)
-    submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
+    ProfilePic = URLField( render_kw={"placeholder": "Enter a valid Profile pic link (optional)"}, label= False)
+    username = StringField( render_kw={"placeholder": "Choose new username (optional)"}, label= False)
+    password = PasswordField( render_kw={"placeholder": "Create a new password (optional) "}, label= False)
+    SelectPic = FileField( render_kw={"placeholder": "Select photo (optional) "}, label= False)
+    submit = SubmitField('Submit',render_kw={"class ": "btn btn-primary"})
 
 class ReplyForm(FlaskForm):
     body = CKEditorField(validators=[DataRequired()], label= False)

@@ -50,12 +50,18 @@
             <div class="Wercgwergc">
                 <div class="Ewrgcewrgc">
                 <div class="Hbrrtikj Abnsslgf">
-                    <img src="{{user.icon}}" alt="User Icon" class="Fgsdfweg">
+
+                    {% if user_obj.uicon %}
+                        <img src="data:image/jpeg;base64,{{ user_obj.uicon|b64encode_image }}" alt="User Icon" class="Fgsdfweg">
+                    {% else %}
+                        <img src="{{user.icon}}" alt="User Icon" class="Fgsdfweg">
+                    {% endif %}
+                   
                     <div class="Versfgrt">{{user.username}}</div>
                 </div>
                 <div class="Hbrrtikj Oipjhgfs">
-                    <p>Polls created : {{ user.poll }} </p>
-                    <p>Replies : {{ user.reply }} </p>
+                    <b><p>Polls created : {{ user.poll }} </p></b>
+                    <b><p>Replies : {{ user.reply }} </p></b>
                     <form action = "{{ url_for('comment_profile', user_id=user.id) }}" method = "POST">
                         <button class="Jhglkijo">VIEW</button>
                     </form>

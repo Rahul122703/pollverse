@@ -52,7 +52,13 @@
                 
                 {% if logged_in %}
                     <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{user_obj.icon}}" height="50" width="50" class="rounded-circle" alt="User Icon"/>
+
+                        {% if user_obj.uicon %}
+                            <img src="data:image/jpeg;base64,{{ user_obj.uicon|b64encode_image }}" height="50" width="50" class="rounded-circle" alt="User Icon">
+                        {% else %}
+                            <img src="{{user_obj.icon}}" alt="Profile Picture" height="50" width="50" class="rounded-circle" alt="User Icon">
+                        {% endif %}
+                        
                     </a>
                 {% else %}
                     <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

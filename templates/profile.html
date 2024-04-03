@@ -12,8 +12,11 @@ style="background-image: url('https://images.unsplash.com/photo-1444703686981-a3
     </div>
 </header>
 <div class="container_987">
-  <img src="{{user_obj.icon}}" alt="Profile Picture" class="profile-picture_456">
-
+  {% if user_obj.uicon %}
+    <img src="data:image/jpeg;base64,{{ user_obj.uicon|b64encode_image }}" alt="Profile Picture" class="profile-picture_456">
+  {% else %}
+    <img src="{{user_obj.icon}}" alt="Profile Picture" class="profile-picture_456">
+  {% endif %}
   <div class="personal-info_789">
     <p><strong>Username:</strong> {{user_obj.username}}</p>
     <p><strong>Email:</strong> {{user_obj.email}}</p>
@@ -32,8 +35,9 @@ style="background-image: url('https://images.unsplash.com/photo-1444703686981-a3
   <div class="modal-content_654">
     <span class="close_321">&times;</span>
     <h2>Edit Profile</h2>
-    <form method = "POST" action = "{{url_for('profile')}}">
+    <form method = "POST" action = "{{url_for('profile')}}" enctype="multipart/form-data">
       {{ render_form(profile_form) }}
+      
     </form>
   </div>
 </div>

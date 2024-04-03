@@ -9,17 +9,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy.orm import relationship,DeclarativeBase,Mapped,mapped_column
-from sqlalchemy import Integer, String, Boolean,func,Float
+from sqlalchemy import Integer, String, Boolean,func,Float,LargeBinary
 
 import random
 import requests
 from datetime import datetime
-import os
+
 from functools import wraps
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from textblob import TextBlob
+
 import smtplib
+import base64
 
 logged_in = 0
 not_registering = 1
@@ -35,7 +36,6 @@ username = None
 user_icon = None
 sidenav = 0
 current_page = None
-
 from_email = "xieminiproject@gmail.com"
 app_pass = "omni tvxy oelb dctl"
 
@@ -67,6 +67,7 @@ def admin_only(function):
 app.config['SECRET_KEY']="mrpvproject"
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///polling.db"
 
+
 database.init_app(app) 
 
 bootstrap_app = Bootstrap5(app)
@@ -94,13 +95,17 @@ def map_polarity_to_color(polarity):
     else:                 # neutral
         return f'#596061' 
 
-
+def b64encode_image(image_data):
+    encoded_image = base64.b64encode(image_data).decode('utf-8')
+    return encoded_image
+app.jinja_env.filters['b64encode_image'] = b64encode_image
 
 #Creating tables
 class User(UserMixin, database.Model):
     __tablename__ = "user"
     id : Mapped[int] = mapped_column(Integer, primary_key=True)
     icon : Mapped[str]= mapped_column(String(500))
+    uicon  = mapped_column(LargeBinary)
     username : Mapped[str]= mapped_column(String(50))
     email : Mapped[str]= mapped_column(String(50))
     password : Mapped[str]= mapped_column(String(50))
@@ -162,6 +167,7 @@ def common_variable():
     global current_user_email, user_otp, user_obj, username, user_icon,random_username
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
+
     return dict(logged_in = logged_in,
                 current_page = current_page,
                 login_form = LoginForm(),               
@@ -178,10 +184,6 @@ def common_variable():
                 sidenav = sidenav,
                 random_username = random_username)
     
-
-
-    
-
 @app.route('/register',methods = ['GET','POST'])
 def register():
     global not_registering,current_user_id,user_obj,logged_in
@@ -295,9 +297,13 @@ def profile():
         if  len(profile_form.username.data)!=0:    
             user_obj.username = profile_form.username.data
         if len(profile_form.password.data)!=0:    
-            user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)
+            user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
+        if profile_form.SelectPic.data is not None:   
+            print("done!!") 
+            user_obj.uicon = profile_form.SelectPic.data.read()
         database.session.commit()   
         return redirect(url_for('profile'))
+    
     
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
 
@@ -314,6 +320,7 @@ def profile():
         percent_gt_01 = (gt_01_count / total_numbers) * 100
         percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
         percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
+        
         return render_template('profile.html',
                            comments = comments,
                            profile_form = profile_form,

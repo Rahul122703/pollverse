@@ -40,7 +40,11 @@
                             {% else %}
                                 <a href="{{ url_for('comment_profile', user_id=comment.comment_author.id) }}">
                                     <div class="user-info123">
-                                        <img src="{{ comment.comment_author.icon }}" class="user-icon123" />
+                                        {% if comment.comment_author.uicon %}
+                                            <img src="data:image/jpeg;base64,{{ comment.comment_author.uicon|b64encode_image }}"  class="user-icon">
+                                        {% else %}
+                                            <img src="{{ comment.comment_author.icon }}" class="user-icon" />
+                                        {% endif %}
                                         <div class="username123">{{ comment.comment_author.username }}</div>
                                     </div>
                                 </a>
@@ -63,7 +67,13 @@
                                 <div class="username">{{random_username}}</div>
                             {% else %}
                                 <a href="{{ url_for('comment_profile', user_id=reply.subcomment_author.id) }}">
-                                    <img src="{{reply.subcomment_author.icon}}" class="user-icon" />
+
+                                        {% if reply.subcomment_author.uicon %}
+                                            <img src="data:image/jpeg;base64,{{ reply.subcomment_author.uicon|b64encode_image }}"  class="user-icon">
+                                        {% else %}
+                                            <img src="{{ reply.subcomment_author.icon }}" class="user-icon" />
+                                        {% endif %}
+
                                     <div class="username">{{reply.subcomment_author.username}}</div>
                                 </a>
                             {% endif %}

@@ -23,6 +23,18 @@
                             {{ ckeditor.load() }}
                             {{ ckeditor.config(name='body') }}
                             <form method="POST" action="{{url_for('contact',user_id = current_user_id)}}">
+                                {% if mail_flash %}
+                                    <p style="color: #008000; /* Green color for success message */
+                                    font-size: 16px; /* Larger font size */
+                                    font-weight: bold; /* Bold text */
+                                    background-color: #e6ffe6; /* Light green background color */
+                                    padding: 10px; /* Padding around the success message */
+                                    border-radius: 5px; /* Rounded corners */
+                                    border: 1px solid #99ff99; /* Border around the success message */
+                                    margin-bottom: 10px; /* Margin below the success message */">
+                                        {{ mail_flash }}
+                                    </p>
+                                {% endif %}
                                 {{ render_form(contact_form) }}
                             </form>
                         </div>

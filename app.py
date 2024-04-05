@@ -16,10 +16,6 @@ import requests
 from datetime import datetime
 
 from functools import wraps
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
-import smtplib
 import base64
 
 logged_in = 0
@@ -71,8 +67,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///polling.db"
 database.init_app(app) 
 
 bootstrap_app = Bootstrap5(app)
-
-# Functions
+#abcde
 def analyze_sentiment(comment):
     api_url = f'https://api.api-ninjas.com/v1/sentiment?text={comment}'
     response = requests.get(api_url, headers={'X-Api-Key': '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'})
@@ -99,6 +94,25 @@ def b64encode_image(image_data):
     encoded_image = base64.b64encode(image_data).decode('utf-8')
     return encoded_image
 app.jinja_env.filters['b64encode_image'] = b64encode_image
+
+def send_mail(from_user,to_user,body):
+    import smtplib
+    from email.mime.multipart import MIMEMultipart
+    from email.mime.text import MIMEText
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login(user="xieminiproject@gmail.com", password=app_pass)
+
+    msg = MIMEMultipart()
+    msg['From'] = from_user
+    msg['To'] = to_user
+    msg['Subject'] = "SUBJECT"
+
+    msg.attach(MIMEText(body, 'html'))
+
+    server.sendmail(from_user, to_user, msg.as_string())
+    server.quit()
+
 
 #Creating tables
 class User(UserMixin, database.Model):
@@ -396,25 +410,53 @@ def new_comment():
 
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
-    global current_page,anonymous_mode
+    global current_page,anonymous_mode,user_obj
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
     body = str(reply_form.body.data)
     polarity = analyze_sentiment(body)
     if reply_form.validate_on_submit():
         print(f"THE POLARITY IS {polarity} and the color is { map_polarity_to_color(polarity)}")
+        parent_user = database.session.execute(database.select(User).where(User.id == chosen_comment.userId)).scalar()
+        date = format_time_and_date(datetime.now())
+        print(polarity)
         new_reply = Subcomment(
-        body = body,
-        user_id = current_user_id,
-        comment_id = comment_id,
-        date = format_time_and_date(datetime.now()),
-        anonymous = anonymous_mode if anonymous_mode else anonymous_mode,
-        color =  map_polarity_to_color(polarity),
-        intensity = polarity
+            body = body,
+            user_id = current_user_id,
+            comment_id = comment_id,
+            date = date,
+            anonymous = anonymous_mode if anonymous_mode else anonymous_mode,
+            color =  map_polarity_to_color(polarity),
+            intensity = polarity
         )
         current_user.reply += 1
         database.session.add(new_reply)
         database.session.commit()
+    
+        email_body = f'''<!DOCTYPE html>
+                    <html lang="en">
+                    <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
+                    <p style="font-size: 20px; color: #444;">{user_obj.username} replied on your poll click to have a look</p><br/>
+                    <hr>
+                    <a href="pollverse-fqol.onrender.com" style="text-decoration: none; color: inherit;">
+                        <div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; background-color: #fff;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div style="display: flex; align-items: center;">
+                                    <img src="{user_obj.icon}" alt="User Icon" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
+                                    <span style="font-weight: bold; margin-right: 10px;">{user_obj.username}</span>
+                                </div>
+                                <span style="color: #666;">        {date}</span>
+                            </div>
+                            <div style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+                                <p>{body}</p>
+                            </div>
+                        </div>
+                    </a>
+                    <hr>
+                    </body>
+                    </html>
+                    '''
+        send_mail("xieminiproject@gmail.com",parent_user.email,email_body)
         return redirect(url_for('show_comment',comment_id = comment_id))
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment_id)).scalars().all()
     
@@ -452,6 +494,7 @@ def change_password():
         otp_send = 1
         user_otp = random_otp
         body = f"""
+            <!DOCTYPE html>
             <html>
             <head>
                 <meta charset="UTF-8">
@@ -459,30 +502,22 @@ def change_password():
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>OTP Email</title>
             </head>
-            <body style="font-family: Arial, sans-serif; background-image: linear-gradient(to bottom right, #ffffcc, #ffcc66); padding: 20px;">
-                <div style="max-width: 600px; margin: auto; background-image: linear-gradient(to bottom right, #FFD700, #FFFF00); border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px;">
-                    <p style="font-size: 18px; color: #666;">NOTE: This OTP is valid for only one time.</p>
-                    <h1 style="font-size: 36px; color: #333; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);">YOUR OTP: <span style="color: #009688;">{random_otp}</span></h1>
-                    <img src="https://img.freepik.com/premium-vector/secure-email-otp-authentication-verification-method_258153-468.jpg" alt="OTP Image" style="display: block; margin: 20px auto; max-width: 100%; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+            <body style="font-family: Arial, sans-serif; background-image: linear-gradient(to bottom right, #ffffcc, #ffcc66); padding: 20px; margin: 0;">
+                <div style="max-width: 600px; margin: auto; background-image: linear-gradient(to bottom right, #FFD700, #FFFF00); border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); padding: 40px; text-align: center;">
+                    <p style="font-size: 18px; color: #666; margin-bottom: 20px;">Dear User,</p>
+                    <p style="font-size: 20px;">Your One-Time Password (OTP) is:</p>
+                    <h1 style="font-size: 36px; color: #333; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); margin-bottom: 30px;"><span style="color: #009688; font-weight: bold;">{random_otp}</span></h1>
+                    <p style="font-size: 20px; color: #444;">Please use this OTP to proceed with your action. Remember, this OTP is valid for a single use only.</p>
+                    <div style="position: relative; display: inline-block; overflow: hidden; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); margin-top: 40px;">
+                        <img src="https://media.istockphoto.com/id/1314193433/vector/envelope-with-approved-document-email-confirmation-document-with-check-mark-in-open-letter.jpg?s=612x612&w=0&k=20&c=yWcI4GIf9brTe5RtCZNPjkKggd7bsDpBNcQfP6vTUtk=" alt="OTP Image" style="display: block; width: 100%; transition: transform 0.5s ease-in-out;">
+                    
+                    </div>
                 </div>
             </body>
             </html>
             """
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(user=from_email, password=app_pass)
+        send_mail(from_email,user_obj.email,body)
 
-        msg = MIMEMultipart()
-        msg['From'] = from_email
-        msg['To'] = user_obj.email
-        msg['Subject'] = "Your OTP"
-
-        msg.attach(MIMEText(body, 'html'))
-
-        server.sendmail(from_email, user_obj.email, msg.as_string())
-        server.quit()
-
-        # Render template with OTP form and error flag
         return render_template('index.html', otp_form=otp_form, error=1)
     print(current_user_email)
     print(f"USER ENTERED OTP = {otp_form.OTP.data}")
@@ -498,8 +533,7 @@ def change_password():
     else:
         error = "Entered Wrong OTP"
         otp_send = 0
-        return render_template('index.html',                       
-                           error = error) 
+        return render_template('index.html',error = error) 
    
 @app.route('/anonymous')  
 def anonymous():
@@ -560,29 +594,21 @@ def for_admin():
         database.session.commit()
     return render_template('database_control.html',database_form = database_form)
 
+mail_flash = None
 @app.route('/contact/<int:user_id>',methods = ['POST','GET'])
 def contact(user_id): 
-    global current_page,from_email,current_user_id
+    global current_page,from_email,current_user_id,mail_flash
     current_page = "contact"
     contact_form = ContactForm()
     if contact_form.validate_on_submit():
         user = database.get_or_404(User,user_id)
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(user=from_email, password=app_pass)
-
-        msg = MIMEMultipart()
-        msg['From'] = user.email
-        msg['To'] = from_email
-        msg['Subject'] = "contacting us"
-
+        mail_flash = "Email sent sucessfully"
         body = contact_form.body.data
-        msg.attach(MIMEText(body, 'html'))
-
-        server.sendmail(user.email, from_email, msg.as_string())
-        server.quit()
-        return redirect(url_for('contact',user_id = current_user_id))
-    return render_template('contact.html',contact_form = contact_form)
+        send_mail(user.email,from_email,body)
+        print("here !!")
+        return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
+    mail_flash = None
+    return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
 
 @app.route('/about')
 def about():

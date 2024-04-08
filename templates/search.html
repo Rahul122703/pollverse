@@ -1,10 +1,11 @@
 {% include "headers.html" %}
-<header class="masthead" style="background-image: url('https://as1.ftcdn.net/v2/jpg/04/51/13/70/1000_F_451137058_AxK9G8q8ApdMoj2lnkRhJeeTs0YONi4v.jpg')">
+<header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1421930866250-aa0594cea05c?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
     <div class="container position-relative px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="page-heading">
-                    <h3>{{ user_obj.username}} is adding a new poll</h3>
+                    <h2>{{ comment_count }} search results for Polls</h2>
+                    <h2>{{ user_count }} search results for Users</h2>
                 </div>
             </div>
         </div>
@@ -51,8 +52,8 @@
                 <div class="Ewrgcewrgc">
                 <div class="Hbrrtikj Abnsslgf">
 
-                    {% if user_obj.uicon %}
-                        <img src="data:image/jpeg;base64,{{ user_obj.uicon|b64encode_image }}" alt="User Icon" class="Fgsdfweg">
+                    {% if user.uicon %}
+                        <img src="data:image/jpeg;base64,{{ user.uicon|b64encode_image }}" alt="User Icon" class="Fgsdfweg">
                     {% else %}
                         <img src="{{user.icon}}" alt="User Icon" class="Fgsdfweg">
                     {% endif %}

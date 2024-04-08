@@ -27,7 +27,7 @@ anonymous_mode = 0
 random_username = None
 current_user_email = None
 user_otp = None
-user_obj = None
+current_user = None
 username = None
 user_icon = None
 sidenav = 0
@@ -170,19 +170,18 @@ class icon(database.Model):
     link: Mapped[str] = mapped_column(String(500))
 
 
-    
-    
 with app.app_context():
     database.create_all()
 
 @app.context_processor
 def common_variable():
     global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,sidenav,current_page
-    global current_user_email, user_otp, user_obj, username, user_icon,random_username
+    global current_user_email, user_otp, current_user, username, user_icon,random_username
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
 
     return dict(logged_in = logged_in,
+                current_user = current_user,
                 current_page = current_page,
                 login_form = LoginForm(),               
                 search_form = SearchForm(),
@@ -192,7 +191,6 @@ def common_variable():
                 anonymous_mode = anonymous_mode,
                 current_user_email = current_user_email,
                 user_otp = user_otp,
-                user_obj = user_obj,
                 username = username,
                 user_icon = user_icon,
                 sidenav = sidenav,
@@ -200,7 +198,7 @@ def common_variable():
     
 @app.route('/register',methods = ['GET','POST'])
 def register():
-    global not_registering,current_user_id,user_obj,logged_in
+    global not_registering,current_user_id,current_user,logged_in
     not_registering = 0
     register_form_object = RegisterForm()
     if register_form_object.validate_on_submit():
@@ -223,9 +221,9 @@ def register():
             )
             database.session.add(new_user)
             database.session.commit()
-            user_obj = new_user
+            current_user = new_user
             logged_in = 1
-            current_user_id = user_obj.id
+            current_user_id = current_user.id
             login_user(new_user)
             print("user added sucessfully")
             
@@ -242,20 +240,20 @@ def register():
 
 @app.route('/login_user',methods = ['GET','POST'])
 def login():
-    global logged_in,user_obj,current_user_id,current_user_email
+    global logged_in,current_user,current_user_id,current_user_email
     form_instance = LoginForm()
     if form_instance.validate_on_submit():
         entred_email = request.form.get('email').lower()
         user = database.session.execute(database.select(User).where(User.email == entred_email)).scalar()
         if user != None:
-            user_obj = user
+            current_user = user
             entered_password = request.form.get('password')
             if check_password_hash(user.password, entered_password):
                 login_user(user)
                 logged_in = 1
                 current_user_id = user.id
                 print(f"here!!!!!!!!! {current_user_id}")
-                user_obj = user
+                current_user = user
                 current_user_email = entred_email
                 return redirect(url_for('index'))
             else:
@@ -272,10 +270,10 @@ def login():
 
 @app.route('/') 
 def index():
-    global current_user_id,user_obj,login_form,current_page,sidenav
+    global current_user_id,current_user,login_form,current_page,sidenav
     current_page = 'index'
-    if user_obj != None:
-        print(user_obj.username,user_obj.icon)
+    if current_user != None:
+        print(current_user.username,current_user.icon)
     login_form = LoginForm()
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
 
@@ -303,18 +301,20 @@ def logout():
 def profile():
     global current_page
     current_page = 'profile'
-    user_obj = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
+    current_user = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
     profile_form = EditProfileForm()
     if profile_form.validate_on_submit():
         if len(profile_form.ProfilePic.data)!=0:
-            user_obj.icon = profile_form.ProfilePic.data 
+            current_user.icon = profile_form.ProfilePic.data 
         if  len(profile_form.username.data)!=0:    
-            user_obj.username = profile_form.username.data
+            current_user.username = profile_form.username.data
         if len(profile_form.password.data)!=0:    
-            user_obj.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
+            current_user.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
         if profile_form.SelectPic.data is not None:   
             print("done!!") 
-            user_obj.uicon = profile_form.SelectPic.data.read()
+            current_user.uicon = profile_form.SelectPic.data.read()
+            print(profile_form.SelectPic.data.read())
+            print("this is being printed and this is here")
         database.session.commit()   
         return redirect(url_for('profile'))
     
@@ -323,7 +323,7 @@ def profile():
 
     comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
 
-    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_obj.id)).scalars().all()
+    all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user.id)).scalars().all()
     intensities = [i.intensity for i in all_replies]
 
     if len(intensities):
@@ -410,7 +410,7 @@ def new_comment():
 
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
-    global current_page,anonymous_mode,user_obj
+    global current_page,anonymous_mode,current_user
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
     body = str(reply_form.body.data)
@@ -436,14 +436,14 @@ def show_comment(comment_id):
         email_body = f'''<!DOCTYPE html>
                     <html lang="en">
                     <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
-                    <p style="font-size: 20px; color: #444;">{user_obj.username} replied on your poll click to have a look</p><br/>
+                    <p style="font-size: 20px; color: #444;">{current_user.username} replied on your poll click to have a look</p><br/>
                     <hr>
                     <a href="pollverse-fqol.onrender.com" style="text-decoration: none; color: inherit;">
                         <div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; background-color: #fff;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center;">
-                                    <img src="{user_obj.icon}" alt="User Icon" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
-                                    <span style="font-weight: bold; margin-right: 10px;">{user_obj.username}</span>
+                                    <img src="{current_user.icon}" alt="User Icon" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
+                                    <span style="font-weight: bold; margin-right: 10px;">{current_user.username}</span>
                                 </div>
                                 <span style="color: #666;">        {date}</span>
                             </div>
@@ -486,7 +486,7 @@ def show_comment(comment_id):
 
 @app.route('/change_password',methods = ['GET','POST'])
 def change_password():
-    global otp_send,current_user_email,current_user_id,user_otp,user_obj,logged_in,from_email,app_pass
+    global otp_send,current_user_email,current_user_id,user_otp,current_user,logged_in,from_email,app_pass
     otp_form = OtpForm()
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
     print(f"value of otp sent is {otp_send}")
@@ -516,7 +516,7 @@ def change_password():
             </body>
             </html>
             """
-        send_mail(from_email,user_obj.email,body)
+        send_mail(from_email,current_user.email,body)
 
         return render_template('index.html', otp_form=otp_form, error=1)
     print(current_user_email)
@@ -526,9 +526,9 @@ def change_password():
         otp_send = 0
         logged_in = 1
         
-        print(f"this is the user {user_obj}")
-        login_user(user_obj)
-        current_user_id = user_obj.id
+        print(f"this is the user {current_user}")
+        login_user(current_user)
+        current_user_id = current_user.id
         return redirect(url_for('index'))
     else:
         error = "Entered Wrong OTP"
@@ -537,16 +537,16 @@ def change_password():
    
 @app.route('/anonymous')  
 def anonymous():
-    global username,user_icon,user_obj,anonymous_mode,random_username
+    global username,user_icon,current_user,anonymous_mode,random_username
     if anonymous_mode == 0:
-        username = user_obj.username
-        user_icon = user_obj.icon
-        user_obj.username = random_username
-        user_obj.icon= "https://cdn-icons-png.flaticon.com/512/4123/4123763.png"
+        username = current_user.username
+        user_icon = current_user.icon
+        current_user.username = random_username
+        current_user.icon= "https://cdn-icons-png.flaticon.com/512/4123/4123763.png"
         anonymous_mode = 1
     else:
-        user_obj.username = username
-        user_obj.icon = user_icon
+        current_user.username = username
+        current_user.icon = user_icon
         anonymous_mode = 0
     return redirect(url_for(f'{current_page}'))
 
@@ -556,10 +556,12 @@ def search():
     search_form = SearchForm()
     searched = search_form.text.data
     comments = Comment.query
-    comments = comments.filter(Comment.head.like('%' + searched +'%'))
     users = User.query
+    comments = comments.filter(Comment.head.like('%' + searched +'%'))
     users = users.filter(User.username.like('%' + searched +'%'))
-    return render_template('search.html',comments = comments,users = users)
+    comment_count = comments.filter(Comment.head.like('%' + searched +'%')).count()
+    user_count = users.filter(User.username.like('%' + searched +'%')).count()
+    return render_template('search.html',comments = comments,users = users,comment_count = comment_count,user_count = user_count)
 
 
 @app.route('/sidenav',methods = ['POST','GET'])
@@ -573,9 +575,10 @@ def sidenav():
  
 @app.route('/delete_reply/<int:reply_id>',methods = ['POST','GET'])   
 def delete_reply(reply_id):
-    global current_page
+    global current_page,current_user
     reply_to_delete = database.get_or_404(Subcomment,reply_id)
     comment_id = reply_to_delete.comment_id
+    current_user.reply -= 1
     database.session.delete(reply_to_delete)
     database.session.commit()
     if current_page == "profile":

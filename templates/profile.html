@@ -5,43 +5,48 @@ style="background-image: url('https://images.unsplash.com/photo-1444703686981-a3
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="site-heading">
-                    <h3>Have a great day {{user_obj.username}}</h3>
+                    <h3>Have a great day {{current_user.username}}</h3>
                 </div>
             </div>
         </div>
     </div>
 </header>
 <div class="container_987">
-  {% if user_obj.uicon %}
-    <img src="data:image/jpeg;base64,{{ user_obj.uicon|b64encode_image }}" alt="Profile Picture" class="profile-picture_456">
+  {% if anonymous_mode %}
+    <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" alt="Profile Picture" class="profile-picture_456" />
+  {% elif current_user.uicon %}
+    <img src="data:image/jpeg;base64,{{ current_user.uicon|b64encode_image }}" alt="Profile Picture" class="profile-picture_456">
   {% else %}
-    <img src="{{user_obj.icon}}" alt="Profile Picture" class="profile-picture_456">
+    <img src="{{current_user.icon}}" alt="Profile Picture" class="profile-picture_456">
   {% endif %}
   <div class="personal-info_789">
-    <p><strong>Username:</strong> {{user_obj.username}}</p>
-    <p><strong>Email:</strong> {{user_obj.email}}</p>
-    <p><strong>Polls:</strong> {{user_obj.poll}}</p>
-    <p><strong>Replies:</strong> {{user_obj.reply}}</p>
+    <p><strong>Username:</strong> {{current_user.username}}</p>
+    <p><strong>Email:</strong> {{current_user.email}}</p>
+    <p><strong>Polls:</strong> {{current_user.poll}}</p>
+    <p><strong>Replies:</strong> {{current_user.reply}}</p>
     <!-- Move the Edit Profile button here -->
-    <div class="edit-profile_654">
-      <button id="edit-profile-btn_234" class="button_edit-profile_234">Edit</button>
-    </div>
+    {% if anonymous_mode == 0%}
+      <div class="edit-profile_654">
+        <button id="edit-profile-btn_234" class="button_edit-profile_234">Edit</button>
+      </div>
+    {% endif %}
   </div>
 </div>
 
 <!-- Modal for Edit Profile form -->
-{% from "bootstrap5/form.html" import render_form %}
-<div id="edit-profile-modal_789" class="modal_789">
-  <div class="modal-content_654">
-    <span class="close_321">&times;</span>
-    <h2>Edit Profile</h2>
-    <form method = "POST" action = "{{url_for('profile')}}" enctype="multipart/form-data">
-      {{ render_form(profile_form) }}
-      
-    </form>
+{% if anonymous_mode == 0 %}
+  {% from "bootstrap5/form.html" import render_form %}
+  <div id="edit-profile-modal_789" class="modal_789">
+    <div class="modal-content_654">
+      <span class="close_321">&times;</span>
+      <h2>Edit Profile</h2>
+      <form method = "POST" action = "{{url_for('profile')}}" enctype="multipart/form-data">
+        {{ render_form(profile_form) }}
+        
+      </form>
+    </div>
   </div>
-</div>
-
+{% endif %}
 {% include "user_activity.html" %}
 
 

@@ -12,7 +12,12 @@ style="background-image: url('https://images.unsplash.com/photo-1508138142660-30
     </div>
 </header>
 <div class="container_987">
-  <img src="{{comment_user.icon}}" alt="Profile Picture" class="profile-picture_456">
+
+    {% if comment_user.uicon %}
+    <img src="data:image/jpeg;base64,{{ comment_user.uicon|b64encode_image }}" alt="Profile Picture" class="profile-picture_456">
+    {% else %}
+    <img src="{{comment_user.icon}}" alt="Profile Picture" class="profile-picture_456">
+    {% endif %}
 
   <div class="personal-info_789">
     <p><strong>Username:</strong> {{comment_user.username}}</p>

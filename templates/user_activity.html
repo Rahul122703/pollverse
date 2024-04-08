@@ -74,7 +74,9 @@
                             {% endif %}
                         </div>
                         <div class="datetime">{{reply.date}}</div>
-                        <div class="comment-content">{{ reply.body | safe}}</div>
+                            <a href = "{{ url_for('show_comment',comment_id = reply.comment_id) }}">
+                                <div class="comment-content">{{ reply.body | safe}}</div>
+                            </a>
                         <div class="votes">
                             <span class="upvote" onclick="vote(this)">▲</span>
                             <span class="vote-count">0</span>

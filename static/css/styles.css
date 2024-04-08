@@ -1366,8 +1366,8 @@ transform: scale(1.05); /* Scale up slightly on hover */
 
 /*THIS BELOW CODE IS FOR ANIMATED LINE*/
 .animated-line {
-  height: 2px; /* Height of the line */
-  background-color: #3498db; /* Color of the line */
+  height: 4px; /* Height of the line */
+  background-color: #0099ff; /* Color of the line */
   border: none;
   margin: 20px 0; /* Margin above and below the line */
   position: relative;
@@ -1381,8 +1381,8 @@ transform: scale(1.05); /* Scale up slightly on hover */
   left: 0;
   width: 100%; /* Width of the line */
   height: 100%;
-  background-color: #f39c12; /* Color of the animated part */
-  animation: expand 2s ease-in-out infinite; /* Animation properties */
+  background-color: #ff9d00; /* Color of the animated part */
+  animation: expand 5s ease-in-out infinite; /* Animation properties */
 }
 
 @keyframes expand {

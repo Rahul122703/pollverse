@@ -52,13 +52,13 @@
                 
                 {% if logged_in %}
                     <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-                        {% if user_obj.uicon %}
-                            <img src="data:image/jpeg;base64,{{ user_obj.uicon|b64encode_image }}" height="50" width="50" class="rounded-circle" alt="User Icon">
+                        {% if anonymous_mode %}
+                            <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                        {% elif current_user.uicon %}
+                            <img src="data:image/jpeg;base64,{{ current_user.uicon|b64encode_image }}" height="50" width="50" class="rounded-circle" alt="User Icon">
                         {% else %}
-                            <img src="{{user_obj.icon}}" alt="Profile Picture" height="50" width="50" class="rounded-circle" alt="User Icon">
+                            <img src="{{current_user.icon}}" alt="Profile Picture" height="50" width="50" class="rounded-circle" alt="User Icon">
                         {% endif %}
-                        
                     </a>
                 {% else %}
                     <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,7 +70,7 @@
                     {% if logged_in %}
                         <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
                         <li><a href="{{ url_for('register') }}" class="register-link dropdown-item">Register here</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">View {{user_obj.username}}</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">View {{current_user.username}}</a></li>
                         {% if anonymous_mode == 0  %}
                             <li><a class="dropdown-item" href="{{ url_for('anonymous') }}">Go Incognito</a></li>
                         {% endif %}

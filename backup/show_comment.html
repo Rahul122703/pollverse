@@ -1,0 +1,174 @@
+{% include "headers.html" %}
+{% from "bootstrap5/form.html" import render_form %}
+{% if comment.bg_image %}
+<header class="masthead" style="background-image: url('{{comment.bg_image}}')">
+{% else %}
+<header class="masthead" style="background-image: url('https://plus.unsplash.com/premium_photo-1673276865034-a92ddb23b370?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+{% endif %}
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <span class="subheading"><h2><b>{{comment.head}}</b></h2></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="center-wrapper">
+    <div class="tabset">
+        <!-- Tab 1 -->
+        <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
+        <label for="tab1">POLL</label>
+        <!-- Tab 2 -->
+        <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
+        <label for="tab2">REPLY</label>
+        <!-- Tab 3 -->
+        <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
+        <label for="tab3">SENTIMANT</label>
+        
+        <div class="tab-panels">
+            <section id="marzen" class="tab-panel">
+                <h2><center>POLL</center></h2>
+                <div class="comment-thread">
+                    <div class="comment-container">
+                        <div class="user-info">
+                            {% if comment.anonymous %}
+                                <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                                <div class="username">{{random_username}}</div>
+                            {% else %}
+                                <a href="{{ url_for('comment_profile', user_id=comment.comment_author.id) }}">
+                                    <div class="user-info123">
+                                        {% if comment.comment_author.uicon %}
+                                            <img src="data:image/jpeg;base64,{{ comment.comment_author.uicon|b64encode_image }}"  class="user-icon">
+                                        {% else %}
+                                            <img src="{{ comment.comment_author.icon }}" class="user-icon" />
+                                        {% endif %}
+                                        <div class="username123">{{ comment.comment_author.username }}</div>
+                                    </div>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="datetime">{{comment.date}}</div>
+                        <div class="comment-content">{{ comment.body | safe}}</div>
+                        <div class="votes">
+                            <span class="upvote" onclick="vote(this)">▲</span>
+                            <span class="vote-count">0</span>
+                            <span class="downvote" onclick="vote(this)">▼</span>
+                        </div>
+                    </div>
+                </div>
+                {% for reply in all_replies %}
+                    <div class="comment-container" style="position: relative;">
+                        <div class="user-info">
+                            {% if reply.anonymous %}
+                                <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                                <div class="username">{{random_username}}</div>
+                            {% else %}
+                                <a href="{{ url_for('comment_profile', user_id=reply.subcomment_author.id) }}">
+
+                                        {% if reply.subcomment_author.uicon %}
+                                            <img src="data:image/jpeg;base64,{{ reply.subcomment_author.uicon|b64encode_image }}"  class="user-icon">
+                                        {% else %}
+                                            <img src="{{ reply.subcomment_author.icon }}" class="user-icon" />
+                                        {% endif %}
+
+                                    <div class="username">{{reply.subcomment_author.username}}</div>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="datetime">{{reply.date}}</div>
+                        <div class="comment-content">{{ reply.body | safe}}</div>
+                        <div class="votes">
+                            <span class="upvote" onclick="vote(this)">▲</span>
+                            <span class="vote-count">0</span>
+                            <span class="downvote" onclick="vote(this)">▼</span>
+                        </div>
+                        {% if current_user_id == reply.subcomment_author.id or  current_user_id == 1 %}
+                            <button class="delete-button321" data-target="deletePopup{{reply.id}}" style="position: absolute; bottom: 0; right: 0;">
+                                <div class="cross321">&#10005;</div>
+                            </button>
+                            
+                            <div class="popup321" id="deletePopup{{reply.id}}">
+                                <div class="popup-content321">
+                                    <div class="message321">Are you sure you want to delete this reply?</div>
+                                    <div class="button-container321">
+                                        <form method="POST" action="{{ url_for('delete_reply',reply_id = reply.id) }}">
+                                            <button class="yes-button321">YES</button>
+                                        </form>
+                                        <button class="no-button321">NO</button>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="green-strip" style="position: absolute; border-radius: 16px; top: 0; left: 0%; width: 100%; height: 10px; background-color: {{ reply.color }}; cursor: pointer;"></div>
+                    </div>
+                {% endfor %}
+            </section>
+            <section id="rauchbier" class="tab-panel">
+                <h2><center>REPLY</center></h2>
+                {{ ckeditor.load() }}
+                {{ ckeditor.config(name='body') }}
+                <form method="POST" action="{{url_for('show_comment',comment_id = comment.id)}}">
+                    {{ render_form(reply_form) }}
+                </form>
+            </section>
+            <section id="dunkles" class="tab-panel">
+                <h2><center>SENTIMANT</center></h2>
+                {% if length > 0 %}
+                <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                <script type="text/javascript">
+                google.load("visualization", "1", {packages:["corechart"]});
+                google.setOnLoadCallback(drawPieChart);
+                function drawPieChart() {
+                    var data = google.visualization.arrayToDataTable([
+                        ['Platform','Reach'],
+                        ['Neutral',{{neutral}}],
+                        ['Positive',{{plus}}],
+                        ['Negative',{{minus}}],
+                    ]);
+                    var options = {
+                        width: 480,
+                        height: 250,
+                        colors: ['#d3d3d3', '#90ee90', '#e64522'],
+                        is3D: true
+                    };
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                    chart.draw(data, options);
+                }
+                </script>
+            </head>
+            <body>
+                <div id="piechart"></div>
+                {% else %}
+                    <h3> NO REPLIES FOR ANALYSIS </h3>
+                {% endif %}
+                <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function(){
+    $('.green-strip').hover(function(){
+        // Mouse enter
+        $('.popup-message').css('display', 'block');
+    }, function(){
+        // Mouse leave
+        $('.popup-message').css('display', 'none');
+    });
+});
+</script>
+</footer>
+
+</body>
+
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+
+</html>
+</html>

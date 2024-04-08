@@ -1,41 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Select Image</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Comment Email</title>
 </head>
-<body>
+<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
 
-<h2>Select an Image</h2>
-
-<form id="imageForm" enctype="multipart/form-data">
-  <input type="file" id="imageInput" accept="image/*">
-</form>
-
-<div id="preview"></div>
-
-<script>
-// Get the input element
-var input = document.getElementById('imageInput');
-
-// Add a listener to handle when a file is selected
-input.addEventListener('change', function(event) {
-  var file = event.target.files[0];
-  var reader = new FileReader();
-
-  reader.onload = function(e) {
-    var image = document.createElement('img');
-    image.src = e.target.result;
-    image.style.maxWidth = '100%';
-    document.getElementById('preview').innerHTML = '';
-    document.getElementById('preview').appendChild(image);
-  };
-
-  // Read the selected file as a data URL
-  reader.readAsDataURL(file);
-});
-</script>
+<a href="https://example.com/comment-page" style="text-decoration: none; color: inherit;">
+    <div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; background-color: #fff;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center;">
+                <img src="user-icon.jpg" alt="User Icon" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
+                <span style="font-weight: bold; margin-right: 10px;">Username</span>
+            </div>
+            <span style="color: #666;">Date</span>
+        </div>
+        <div style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum nisl nec libero fringilla, et posuere est tincidunt. In hac habitasse platea dictumst.</p>
+            <p>Nullam ullamcorper mi vel tellus ullamcorper, id interdum ipsum volutpat. Integer non ullamcorper eros. Fusce ultrices maximus tellus, ut ultricies tortor bibendum id. Donec dignissim massa vel libero auctor, in consequat sapien pharetra. Sed auctor ante eget nunc dignissim, a pretium velit dapibus.</p>
+        </div>
+    </div>
+</a>
 
 </body>
 </html>

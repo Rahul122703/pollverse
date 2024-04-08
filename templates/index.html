@@ -25,7 +25,7 @@ style="background-image: url('https://lp-cms-production.imgix.net/2021-01/GettyR
                 <a href = "{{ url_for('show_comment',comment_id = comment.id) }}">
                     <div class="comment-container">
                         <div class="user-info">
-                            {% if comment.anonymous %}
+                            {% if comment.comment_author.anonymous %}
                                 <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
                                 <div class="username">{{ random_username }}</div>
                             {% else %}

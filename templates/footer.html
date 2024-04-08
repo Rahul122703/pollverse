@@ -1,5 +1,5 @@
-<div class="sticky-circle-container">
-    <a href="{{ url_for('new_comment') }}">
+<div class="sticky-circle-container" draggable="true">
+    <a href="{{ url_for('new_comment') }}" >
         <div class="plus-symbol"><b>+</b></div>
         <div class="add-post-label"> <b>POST</b> </div>
     </a>
@@ -11,7 +11,5 @@
 
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-
 </html>
   

@@ -16,21 +16,18 @@
     </div>
 </header>
 
-<div class="center-wrapper">
-    <div class="tabset">
-        <!-- Tab 1 -->
-        <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
-        <label for="tab1">POLL</label>
-        <!-- Tab 2 -->
-        <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
-        <label for="tab2">REPLY</label>
-        <!-- Tab 3 -->
-        <input type="radio" name="tabset" id="tab3" aria-controls="dunkles">
-        <label for="tab3">SENTIMANT</label>
+
+<nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+        <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">POLL</button>
+        <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">REPLY</button>
+        <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">SENTIMENT</button>
+    </div>
+</nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
         
-        <div class="tab-panels">
-            <section id="marzen" class="tab-panel">
-                <h2><center>POLL</center></h2>
+        <h2><center>POLL</center></h2>
                 <div class="comment-thread">
                     <div class="comment-container">
                         <div class="user-info">
@@ -60,7 +57,7 @@
                     </div>
                 </div>
                 {% for reply in all_replies %}
-                    <div class="comment-container" style="position: relative;">
+                    <div class="comment-container justify-content-center" style="position: relative;">
                         <div class="user-info">
                             {% if reply.anonymous %}
                                 <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
@@ -105,63 +102,55 @@
                         <div class="green-strip" style="position: absolute; border-radius: 16px; top: 0; left: 0%; width: 100%; height: 10px; background-color: {{ reply.color }}; cursor: pointer;"></div>
                     </div>
                 {% endfor %}
-            </section>
-            <section id="rauchbier" class="tab-panel">
-                <h2><center>REPLY</center></h2>
-                {{ ckeditor.load() }}
-                {{ ckeditor.config(name='body') }}
-                <form method="POST" action="{{url_for('show_comment',comment_id = comment.id)}}">
-                    {{ render_form(reply_form) }}
-                </form>
-            </section>
-            <section id="dunkles" class="tab-panel">
-                <h2><center>SENTIMANT</center></h2>
-                {% if length > 0 %}
-                <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-                <script type="text/javascript">
-                google.load("visualization", "1", {packages:["corechart"]});
-                google.setOnLoadCallback(drawPieChart);
-                function drawPieChart() {
-                    var data = google.visualization.arrayToDataTable([
-                        ['Platform','Reach'],
-                        ['Neutral',{{neutral}}],
-                        ['Positive',{{plus}}],
-                        ['Negative',{{minus}}],
-                    ]);
-                    var options = {
-                        width: 480,
-                        height: 250,
-                        colors: ['#d3d3d3', '#90ee90', '#e64522'],
-                        is3D: true
-                    };
-                    var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                    chart.draw(data, options);
-                }
-                </script>
-            </head>
-            <body>
-                <div id="piechart"></div>
-                {% else %}
-                    <h3> NO REPLIES FOR ANALYSIS </h3>
-                {% endif %}
-                <div id="chartContainer" style="height: 370px; width: 100%;"></div>
-            </section>
-        </div>
+
     </div>
-</div>
-</body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function(){
-    $('.green-strip').hover(function(){
-        // Mouse enter
-        $('.popup-message').css('display', 'block');
-    }, function(){
-        // Mouse leave
-        $('.popup-message').css('display', 'none');
-    });
-});
-</script>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+
+            <h2><center>REPLY</center></h2>
+                    {{ ckeditor.load() }}
+                    {{ ckeditor.config(name='body') }}
+                    <form method="POST" action="{{url_for('show_comment',comment_id = comment.id)}} style:margin-left:20%;margin-right:20%;">
+                        {{ render_form(reply_form) }}
+                    </form>
+
+    </div>
+    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
+            <h2><center>SENTIMENT</center></h2>
+                    {% if length > 0 %}
+                    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                    <script type="text/javascript">
+                    google.load("visualization", "1", {packages:["corechart"]});
+                    google.setOnLoadCallback(drawPieChart);
+                    function drawPieChart() {
+                        var data = google.visualization.arrayToDataTable([
+                            ['Platform','Reach'],
+                            ['Neutral',{{neutral}}],
+                            ['Positive',{{plus}}],
+                            ['Negative',{{minus}}],
+                        ]);
+                        var options = {
+                            width: 380,
+                            height: 250,
+                            colors: ['#d3d3d3', '#90ee90', '#e64522'],
+                            is3D: true
+                        };
+                        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                        chart.draw(data, options);
+                    }
+                    </script>
+                </head>
+                <body>
+                    <div id="piechart"></div>
+                    {% else %}
+                        <h3> NO REPLIES FOR ANALYSIS </h3>
+                    {% endif %}
+                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+    </div>
+
+  </div>
+
+
 </footer>
 
 </body>

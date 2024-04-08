@@ -440,6 +440,19 @@ header.masthead .post-heading .meta a {
   transition: all 0.4s ease; /* Smoother transition */
 }
 
+.comment-containerabc {
+  border: 2px solid #ddd; /* Light gray border */
+  border-radius: 10px; /* Reduced border radius */
+  padding: 10px; /* Reduced padding */
+  margin: 10px; /* Reduced margin */
+  background-color: #f9f9f9; /* Light gray background */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+  transition: all 0.4s ease; /* Smoother transition */
+  margin-left:20%;
+  margin-right:20%;
+}
+
+
 .comment-container:hover {
   transform: translateY(-3px); /* Lift effect on hover */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
@@ -1499,7 +1512,7 @@ input:focus-visible + label {
   background: none;
   border: none;
   cursor: pointer;
-  z-index: 1;
+  z-index: 995;
 }
 
 .cross321 {
@@ -1517,7 +1530,7 @@ input:focus-visible + label {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  z-index: 995;
 }
 
 .popup-content321 {
@@ -1564,4 +1577,11 @@ input:focus-visible + label {
 
 .neutral123 {
   background-color: white;
+}
+
+/*This below code is for reply_form*/
+.move_to_center{
+  margin-left:20%;
+  margin-right:20%;
+  height: 50%;
 }

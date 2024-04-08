@@ -25,7 +25,82 @@ style="background-image: url('https://images.unsplash.com/photo-1508138142660-30
     <p><strong>Polls:</strong> {{comment_user.poll}}</p>
     <p><strong>Replies:</strong> {{comment_user.reply}}</p>
     <!-- Move the Edit Profile button here -->
+    {% if current_user.admin %}
+      <div class="edit-profile_654">
+        <button id="edit-profile-btn_234" class="button_edit-profile_234">Edit</button>
+      </div>
+    {% endif %}
+    {% if current_user.id == 1 %}
+    <form action = "{{url_for('addremove',user_id = comment_user.id)}}" method = "POST">
+        {% if comment_user.admin %}
+            <div class="edit-profile_654">
+                <button class="button_edit-profile_234">Remove subadmin</button>
+            </div>
+        {% else %}
+            <div class="edit-profile_654">
+                <button class="button_edit-profile_234 style:margin:5%;">Make subadmin</button>
+            </div>
+        {% endif %}
+    </form>
+    {% endif %}
+    {% if admin_flash %}
+        <p style="color: #666666; /* Grey color for text */
+        font-size: 16px; /* Larger font size */
+        font-weight: bold; /* Bold text */
+        background-color: #f2f2f2; /* Light grey background color */
+        padding: 10px; /* Padding around the message */
+        border-radius: 5px; /* Rounded corners */
+        border: 1px solid #cccccc; /* Border around the message */
+        margin-bottom: 10px; /* Margin below the message */">
+        {{ admin_flash }}
+        </p>
+    {% endif %}
   </div>
 </div>
+
+
+{% if current_user.admin %}
+  {% from "bootstrap5/form.html" import render_form %}
+  <div id="edit-profile-modal_789" class="modal_789">
+    <div class="modal-content_654">
+      <span class="close_321">&times;</span>
+      <h2>Edit Profile</h2>
+      <form method = "POST" action = "{{ url_for('comment_profile', user_id=comment_user.id) }}" enctype="multipart/form-data">
+        {{ render_form(profile_form) }}
+        
+      </form>
+    </div>
+  </div>
+{% endif %}
 {% include "user_activity.html" %}
+<script>document.addEventListener('DOMContentLoaded', function() {
+    // JavaScript to handle the click event for opening the edit profile form
+    document.getElementById('edit-profile-btn_234').addEventListener('click', function() {
+      // Get the modal element
+      var modal = document.getElementById('edit-profile-modal_789');
+      
+      // Display the modal
+      modal.style.display = 'block';
+    });
+  
+    // Close the modal when the user clicks on the close button (X)
+    document.getElementsByClassName('close_321')[0].addEventListener('click', function() {
+      // Get the modal element
+      var modal = document.getElementById('edit-profile-modal_789');
+      
+      // Hide the modal
+      modal.style.display = 'none';
+    });
+  
+    // Close the modal when the user clicks outside of it
+    window.addEventListener('click', function(event) {
+      // Get the modal element
+      var modal = document.getElementById('edit-profile-modal_789');
+      
+      // If the clicked element is the modal, close it
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    });
+  });</script>
 {% include "footer.html" %}

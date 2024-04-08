@@ -30,7 +30,6 @@ user_otp = None
 current_user = None
 username = None
 user_icon = None
-sidenav = 0
 current_page = None
 from_email = "xieminiproject@gmail.com"
 app_pass = "omni tvxy oelb dctl"
@@ -50,15 +49,6 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     return database.session.get(User,user_id)
-
-def admin_only(function):
-    @wraps(function)
-    def wrapper(*args,**kwargs):
-        if current_user.id != 1:
-            return abort(404,"You must be admin to access this page")
-        return function(*args,**kwargs)
-    return wrapper
-
 
 app.config['SECRET_KEY']="mrpvproject"
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///polling.db"
@@ -127,7 +117,7 @@ class User(UserMixin, database.Model):
     phoneNo : Mapped[str] = mapped_column(String(15))
     poll: Mapped[int] = mapped_column(Integer)
     reply: Mapped[int] = mapped_column(Integer)
-        
+    admin : Mapped[int] = mapped_column(Integer, nullable=False)
     comments = relationship("Comment",back_populates = "comment_author")
     subcomments = relationship("Subcomment",back_populates = "subcomment_author")
 
@@ -175,12 +165,13 @@ with app.app_context():
 
 @app.context_processor
 def common_variable():
-    global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,sidenav,current_page
+    global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash
     global current_user_email, user_otp, current_user, username, user_icon,random_username
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
 
     return dict(logged_in = logged_in,
+                admin_flash = admin_flash,
                 current_user = current_user,
                 current_page = current_page,
                 login_form = LoginForm(),               
@@ -193,7 +184,6 @@ def common_variable():
                 user_otp = user_otp,
                 username = username,
                 user_icon = user_icon,
-                sidenav = sidenav,
                 random_username = random_username)
     
 @app.route('/register',methods = ['GET','POST'])
@@ -270,8 +260,7 @@ def login():
 
 @app.route('/') 
 def index():
-    global current_user_id,current_user,login_form,current_page,sidenav
-    current_page = 'index'
+    global current_user_id,current_user,login_form,current_page
     if current_user != None:
         print(current_user.username,current_user.icon)
     login_form = LoginForm()
@@ -282,7 +271,6 @@ def index():
     quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
     quote_text = f"'{quote['quote']}' - {quote['author']}"
     print(f"current user id is ---> {current_user_id}")
-    print(f"side nav is ---> {sidenav}")
     return render_template('index.html',
                            quote = quote_text,
                            comments = all_comments)
@@ -354,7 +342,6 @@ def profile():
 def comment_profile(user_id):
     print(f"the user id is {user_id}")
     global current_page
-    current_page = 'comment_profile'
     comment_user = database.get_or_404(User,user_id)
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
 
@@ -362,7 +349,20 @@ def comment_profile(user_id):
 
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
     intensities = [i.intensity for i in all_replies]
-
+    
+    profile_form = EditProfileForm()
+    if profile_form.validate_on_submit():
+        if len(profile_form.ProfilePic.data)!=0:
+            comment_user.icon = profile_form.ProfilePic.data 
+        if  len(profile_form.username.data)!=0:    
+            comment_user.username = profile_form.username.data
+        if len(profile_form.password.data)!=0:    
+            comment_user.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
+        if profile_form.SelectPic.data is not None:   
+            print("done!!") 
+            comment_user.uicon = profile_form.SelectPic.data.read()
+        database.session.commit()  
+        return redirect(url_for('comment_profile', user_id=user_id)) 
     if len(intensities):
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
@@ -378,13 +378,15 @@ def comment_profile(user_id):
                            plus = percent_gt_01,
                            minus = percent_lt_minus01 ,
                            neutral = percent_between_minus01_to_01,
-                           all_replies = all_replies)
+                           all_replies = all_replies,
+                           profile_form = profile_form)
     
     return render_template('comment_profile.html',
                            length = len(intensities),
                            comment_user = comment_user,
                            all_replies  = all_replies ,
-                           comments = comments) 
+                           comments = comments,
+                           profile_form = profile_form) 
  
     
 @app.route('/new_comment',methods = ['GET','POST'])
@@ -563,16 +565,6 @@ def search():
     user_count = users.filter(User.username.like('%' + searched +'%')).count()
     return render_template('search.html',comments = comments,users = users,comment_count = comment_count,user_count = user_count)
 
-
-@app.route('/sidenav',methods = ['POST','GET'])
-def sidenav():
-    global sidenav,current_page
-    if sidenav == 0:
-        sidenav = 1
-    else:
-        sidenav = 0
-    return redirect(url_for(f'{current_page}'))
- 
 @app.route('/delete_reply/<int:reply_id>',methods = ['POST','GET'])   
 def delete_reply(reply_id):
     global current_page,current_user
@@ -586,16 +578,16 @@ def delete_reply(reply_id):
     return redirect(url_for('show_comment',comment_id = comment_id))
     
 
-
 @app.route('/admin_panel',methods = ['POST','GET'])   
-@admin_only
 def for_admin():
     database_form = DatabaseForm()
     if database_form.validate_on_submit():
         new_icon = icon(link = database_form.icon_link.data)
         database.session.add(new_icon)
         database.session.commit()
-    return render_template('database_control.html',database_form = database_form)
+    users = database.session.execute(database.select(User)).scalars().all()
+    print(users)
+    return render_template('database_control.html',database_form = database_form,users = users)
 
 mail_flash = None
 @app.route('/contact/<int:user_id>',methods = ['POST','GET'])
@@ -612,6 +604,20 @@ def contact(user_id):
         return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
     mail_flash = None
     return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
+
+admin_flash = None
+@app.route('/addremove/<int:user_id>',methods = ['POST','GET'])
+def addremove(user_id): 
+    global current_page,admin_flash
+    user = database.get_or_404(User,user_id)
+    if user.admin == 1:
+        user.admin = 0
+        admin_flash = f"{user.username} is not subadmin"
+    else:
+        admin_flash = f"{user.username} is now subadmin"
+        user.admin = 1
+    database.session.commit()
+    return redirect(url_for('comment_profile', user_id=user_id))
 
 @app.route('/about')
 def about():

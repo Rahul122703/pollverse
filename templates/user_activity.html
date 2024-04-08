@@ -79,7 +79,7 @@
                                 <span class="vote-count">0</span>
                                 <span class="downvote" onclick="vote(this)">▼</span>
                             </div>
-                            {% if current_user_id == reply.subcomment_author.id or  current_user_id == 1 %}
+                            {% if current_user_id == reply.subcomment_author.id or  current_user_id == 1 or current_user.admin %}
                                 <button class="delete-button321" data-target="deletePopup{{reply.id}}" style="position: absolute; bottom: 0; right: 0;">
                                     <div class="cross321">&#10005;</div>
                                 </button>

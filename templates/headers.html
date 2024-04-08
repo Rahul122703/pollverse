@@ -26,7 +26,6 @@
 
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
-    <form action = "{{ url_for('sidenav') }}" method = "POST">
         <button  style="
             font-size: 20px;
             background-color: Transparent;
@@ -44,8 +43,6 @@
         onclick="w3_open()" 
         onmouseover="this.innerHTML='➤'" 
         onmouseout="this.innerHTML='►'">➤</button>
-    </form>
-        
         <!-- User Dropdown -->
         <div class="navbar-brand">
             <div class="nav-item dropdown">
@@ -105,7 +102,7 @@
                 <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('index') }}">Polls</a></li>
                 <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('about') }}">About Us</a></li>
                 <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('contact',user_id = current_user_id)}}">Contact Us</a></li>
-                {% if current_user_id == 1 %}
+                {% if current_user_id == 1 or current_user.admin%}
                     <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('for_admin') }}">Admin</a></li>
                 {% endif %}
             </ul>
@@ -150,34 +147,4 @@
         </div>
     {% endif %}
 
-{% if sidenav == 1 %}
-    <div class="w3-sidebar w3-bar-block w3-animate-left" 
-    id="mySidebar" 
-    style="
-        background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5)); /* Transparent mirror effect */
-        z-index: 998; /* Ensure sidebar is above other content */
-        width:250px;
-        border-radius: 30px; /* Rounded corners */
-    ">
-    <form action = "{{ url_for('sidenav') }}" method = "POST">
-        <button class="w3-bar-item w3-button w3-large" 
-                onclick="w3_close()" 
-                style="
-                    
-                    color: #fff;
-                    border: none;
-                    padding: 10px 20px;
-                    font-size: 16px;
-                    background-color: #ffc107;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease, transform 0.2s;
-                ">
-            Close &times;
-        </button>
-    </form>
 
-    <a href="#" class="w3-bar-item w3-button" style="color: #fff;">Link 1</a>
-    <a href="#" class="w3-bar-item w3-button" style="color: #fff;">Link 2</a>
-    <a href="#" class="w3-bar-item w3-button" style="color: #fff;">Link 3</a>
-    </div>
-{% endif %}

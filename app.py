@@ -1,4 +1,4 @@
-from flask import Flask,render_template,redirect,url_for,abort,request
+from flask import Flask,render_template,redirect,url_for,abort,request,send_file
 from flask_bootstrap import Bootstrap5
 from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm,ContactForm
 from flask_ckeditor import CKEditor
@@ -14,7 +14,7 @@ from sqlalchemy import Integer, String, Boolean,func,Float,LargeBinary
 import random
 import requests
 from datetime import datetime
-
+import matplotlib.pyplot as plt
 from functools import wraps
 import base64
 
@@ -410,9 +410,13 @@ def new_comment():
     current_page = 'new_comment'
     return render_template('new_comment.html',comment_form = comment_form) 
 
+
+percent_gt_01 = None
+percent_lt_minus01 = None
+percent_between_minus01_to_01 = None
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
-    global current_page,anonymous_mode,current_user
+    global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
     body = str(reply_form.body.data)
@@ -469,9 +473,11 @@ def show_comment(comment_id):
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
         between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
         total_numbers = len(intensities)
+        
         percent_gt_01 = (gt_01_count / total_numbers) * 100
         percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
         percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
+        
         return render_template('show_comment.html',
                            length = len(intensities),
                            plus = percent_gt_01,
@@ -618,6 +624,24 @@ def addremove(user_id):
         user.admin = 1
     database.session.commit()
     return redirect(url_for('comment_profile', user_id=user_id))
+
+
+@app.route('/download/<int:comment_id>', methods=['GET'])
+def download(comment_id):
+    global percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01
+    labels = ['> 0.1', '< -0.1', '-0.1 to 0.1']
+    sizes = [percent_gt_01, percent_lt_minus01, percent_between_minus01_to_01]
+    plt.figure(figsize=(8, 6))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.title('Distribution of Numbers')
+    plt.savefig(f'download/pie-data-{comment_id}.pdf', format='pdf')
+
+    file_path = f"download/pie-data-{comment_id}.pdf" 
+    try:
+        # Send the file to the client for download
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        return str(e)
 
 @app.route('/about')
 def about():

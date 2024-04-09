@@ -144,10 +144,12 @@
                     {% else %}
                         <center><h3> NO REPLIES FOR ANALYSIS </h3><center>
                     {% endif %}
-                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
-                    <div class="edit-profile_654">
-                        <button class="button_edit-profile_234"><a href = "{{url_for('download',comment_id = comment.id)}}" >Download data</a></button>
+                    <div id="chartContainer" style="height: 370px; width: 100%;">
+                        <div class="edit-profile_654">
+                            <button class="button_edit-profile_234"><a href = "{{url_for('download',comment_id = comment.id)}}" >Download data</a></button>
+                        </div>
                     </div>
+                    
     </div>
   </div>
 </footer>

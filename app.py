@@ -411,9 +411,9 @@ def new_comment():
     return render_template('new_comment.html',comment_form = comment_form) 
 
 
-percent_gt_01 = None
-percent_lt_minus01 = None
-percent_between_minus01_to_01 = None
+percent_gt_01 = 0
+percent_lt_minus01 = 0
+percent_between_minus01_to_01 = 0
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
     global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01
@@ -634,9 +634,9 @@ def download(comment_id):
     plt.figure(figsize=(8, 6))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
     plt.title('Distribution of Numbers')
-    plt.savefig(f'download/pie-data-{comment_id}.pdf', format='pdf')
+    plt.savefig(f'pie-data-{comment_id}.pdf', format='pdf')
 
-    file_path = f"download/pie-data-{comment_id}.pdf" 
+    file_path = f"pie-data-{comment_id}.pdf" 
     try:
         # Send the file to the client for download
         return send_file(file_path, as_attachment=True)

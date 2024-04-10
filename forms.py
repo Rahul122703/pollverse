@@ -29,6 +29,12 @@ class OtpForm(FlaskForm):
     OTP = StringField( validators=[DataRequired()], render_kw={"placeholder": "Enter OTP sent at your mail"})
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
+class ChangePasswordForm(FlaskForm):
+    password1 = PasswordField( render_kw={"placeholder": "Choose a new pass "}, label= False)
+    password2 = PasswordField( render_kw={"placeholder": "Confirm pass "}, label= False)
+    submit = SubmitField('Change',render_kw={"class": "btn btn-primary"})
+ 
+    
 class EditProfileForm(FlaskForm):
     ProfilePic = URLField( render_kw={"placeholder": "Enter a valid Profile pic link (optional)"}, label= False)
     username = StringField( render_kw={"placeholder": "Choose new username (optional)"}, label= False)

@@ -1,6 +1,6 @@
 from flask import Flask,render_template,redirect,url_for,abort,request,send_file
 from flask_bootstrap import Bootstrap5
-from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm,ContactForm
+from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm,ContactForm,ChangePasswordForm
 from flask_ckeditor import CKEditor
 
 from flask_login import LoginManager,UserMixin,login_user,logout_user,current_user
@@ -492,8 +492,35 @@ def show_comment(comment_id):
                            reply_form = reply_form,
                            all_replies = all_replies)
 
+
+
+
 @app.route('/change_password',methods = ['GET','POST'])
 def change_password():
+    global logged_in,current_user_id,current_user,current_user_email
+    error = 2
+    change_password_form = ChangePasswordForm()
+    if change_password_form.validate_on_submit():
+        password1 = change_password_form.password1.data
+        password2 = change_password_form.password2.data  
+        print(current_user.email)
+        if password2 == password1:
+            logged_in = 1
+            login_user(current_user)
+            print(f"this is the user {current_user}")
+            current_user1 = database.session.execute(database.select(User).where(User.email ==current_user.email)).scalar()
+            current_user1.password = generate_password_hash(password1,method='pbkdf2:sha256',salt_length=8)
+            database.session.commit()
+            current_user_id = current_user.id
+            return redirect(url_for('index'))
+        else:
+            error2 = "passwords don't match"
+            return render_template('index.html',error2 = error2,change_password_form = change_password_form,error = 2) 
+    return render_template('index.html',error = error,change_password_form = change_password_form) 
+
+
+@app.route('/send_otp',methods = ['GET','POST'])
+def send_otp():
     global otp_send,current_user_email,current_user_id,user_otp,current_user,logged_in,from_email,app_pass
     otp_form = OtpForm()
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
@@ -532,14 +559,14 @@ def change_password():
     print(f"OTP = {user_otp}")
     if otp_form.OTP.data == user_otp:
         otp_send = 0
-        logged_in = 1
-        
-        print(f"this is the user {current_user}")
-        login_user(current_user)
-        current_user_id = current_user.id
-        return redirect(url_for('index'))
+        return redirect(url_for('change_password'))
+        # logged_in = 1
+        # print(f"this is the user {current_user}")
+        # login_user(current_user)
+        # current_user_id = current_user.id
+        # return redirect(url_for('index'))
     else:
-        error = "Entered Wrong OTP"
+        error = "Entered Wrong OTP click to send"
         otp_send = 0
         return render_template('index.html',error = error) 
    

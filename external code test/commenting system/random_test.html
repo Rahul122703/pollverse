@@ -1,27 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Comment Email</title>
-</head>
-<body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
-
-<a href="https://example.com/comment-page" style="text-decoration: none; color: inherit;">
-    <div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; background-color: #fff;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div style="display: flex; align-items: center;">
-                <img src="user-icon.jpg" alt="User Icon" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
-                <span style="font-weight: bold; margin-right: 10px;">Username</span>
-            </div>
-            <span style="color: #666;">Date</span>
-        </div>
-        <div style="font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vestibulum nisl nec libero fringilla, et posuere est tincidunt. In hac habitasse platea dictumst.</p>
-            <p>Nullam ullamcorper mi vel tellus ullamcorper, id interdum ipsum volutpat. Integer non ullamcorper eros. Fusce ultrices maximus tellus, ut ultricies tortor bibendum id. Donec dignissim massa vel libero auctor, in consequat sapien pharetra. Sed auctor ante eget nunc dignissim, a pretium velit dapibus.</p>
-        </div>
+<form action="{{url_for('addremove', user_id=comment_user.id)}}" method="POST">
+    <div style="display: inline-block;">
+        {% if comment_user.admin %}
+            <button style="background-color: #008000; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">Make admin</button>
+        {% else %}
+            <button style="background-color: #008000; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px;">Remove admin</button>
+        {% endif %}
     </div>
-</a>
-
-</body>
-</html>
+</form>

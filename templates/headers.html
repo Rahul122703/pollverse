@@ -119,14 +119,30 @@
                 <h2>Login</h2>
                 
                     {% if error == 1 %}
-                    <form action ="{{  url_for('change_password') }}" method="POST">
-                        <form action ="{{ url_for('change_password') }}"  method="POST">
+                    <form action ="{{  url_for('send_otp') }}" method="POST">
+                        <form action ="{{ url_for('send_otp') }}"  method="POST">
                             {{ render_form(otp_form) }}
                         </form>
-                    
+                    {% elif error == 2 or form_again == 1%}
+                        {% if error2 %}
+                            <p style="color: #ff4d4d; /* Red color for error message */ 
+                            font-size: 16px; /* Larger font size */ 
+                            font-weight: bold; /* Bold text */ 
+                            background-color: #ffe6e6; /* Light red background color */ 
+                            padding: 10px; /* Padding around the error message */ 
+                            border-radius: 5px; /* Rounded corners */ 
+                            border: 1px solid #ff9999; /* Border around the error message */ 
+                            margin-bottom: 10px; /* Margin below the error message */">
+                                {{ error2 }}
+                            </p>
+                        {% endif %}
+                    <form action ="{{  url_for('change_password') }}" method="POST">
+                        <form action ="{{ url_for('change_password') }}" method="POST">
+                            {{ render_form(change_password_form) }}
+                        </form>
                     {% elif error %}
                     <form action ="{{ url_for('login') }}" method="POST">
-                        <a href = "{{ url_for('change_password') }}">
+                        <a href = "{{ url_for('send_otp') }}">
                             <p style="color: #ff4d4d; /* Red color for error message */ 
                                 font-size: 16px; /* Larger font size */ 
                                 font-weight: bold; /* Bold text */ 

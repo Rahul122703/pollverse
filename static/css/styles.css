@@ -1585,3 +1585,21 @@ input:focus-visible + label {
   margin-right:20%;
   height: 50%;
 }
+
+/*  This below css is for index page tabs*/
+.nav-tabs .nav-link123 {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem 0.25rem 0 0;
+  color: #495057;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add shadow */
+  transition: box-shadow 0.3s ease-in-out; /* Add transition */
+}
+
+.nav-tabs .nav-link123.active {
+  border-bottom-color: transparent;
+}
+
+.nav-tabs .nav-link123:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}

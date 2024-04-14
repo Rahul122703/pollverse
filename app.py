@@ -258,22 +258,52 @@ def login():
             return render_template('index.html',error = error)    
     return redirect(url_for('index'))
 
+
+global_comments = None
+start = 1
+
+@app.route('/sort_comment/<int:value>',methods = ['GET','POST'])
+def sort_comment(value):
+    global recent,most_active,oldest,global_comments,start
+    
+    start = 0
+    
+    print(f"start is {start} and value == {value}")
+    if value == 3: #recetn
+        global_comments.reverse()  
+    elif value == 2: #most active
+        global_comments.reverse()
+        active_comment = []#didn't get it!!
+        sorted_comments = sorted(global_comments, key=lambda comment: len(database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment.id)).scalars().all()), reverse=True)
+        active_comment.extend(sorted_comments)
+        global_comments = active_comment
+        print(active_comment)
+    elif value == 1: #oldest
+        start = 1
+    return redirect(url_for('index'))
+
+
 @app.route('/') 
 def index():
-    global current_user_id,current_user,login_form,current_page
-    if current_user != None:
-        print(current_user.username,current_user.icon)
-    login_form = LoginForm()
+    global current_user_id,current_user,login_form,current_page,global_comments,start
+    
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
+    print(f"start ->>>>>>> {start}")
+    if start:
+        comments = [comment for comment in all_comments]
+        global_comments = comments
+    print(global_comments,start)
+    login_form = LoginForm()
 
     api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
     QUOTE_API_KEY = '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'
     quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
     quote_text = f"'{quote['quote']}' - {quote['author']}"
+    
     print(f"current user id is ---> {current_user_id}")
     return render_template('index.html',
                            quote = quote_text,
-                           comments = all_comments)
+                           comments = global_comments)
 
 @app.route('/logout')
 def logout():

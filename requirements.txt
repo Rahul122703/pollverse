@@ -13,4 +13,3 @@ psycopg2-binary==2.9.9
 requests==2.26.0
 email_validator==1.1.3
 matplotlib==3.4.3
-jsonify==3.1.1

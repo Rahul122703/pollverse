@@ -1,3 +1,4 @@
+###########################code1#######################  
 import json
 import requests
 class Subcomment:
@@ -129,28 +130,34 @@ json_data = '''
     ]
 }
 '''
+# website_link = 'https://127.0.0.1:5000'
 website_link = 'https://pollverse-w0d9.onrender.com'
-
 data = json.loads(json_data)
 
 for reply in data['replies']:
-    
-    add_reply_api_end_point = f"{website_link}/add_reply?body={reply['body']}&comment_id={int(reply['comment_id'])}&date={reply['date']}&anonymous={int(reply['anonymous'])}&color={reply['color']}&intensity={int(reply['intensity'])}"
-    response = requests.post(add_reply_api_end_point)
+    print(reply)
+    add_reply_api_end_point = f"{website_link}/add_reply"
+    response = requests.post(add_reply_api_end_point,json = reply)
 
     if response.status_code == 200:
         print("Data posted successfully.")
     else:
         print("Error:", response.status_code)
-    # new_reply = Subcomment(
-    #     body=reply['body'],
-    #     upvote=int(reply['upvote']),
-    #     downvote=int(reply['downvote']),
-    #     user_id=int(reply['user_id']),
-    #     comment_id=int(reply['comment_id']),
-    #     date=reply['date'],
-    #     anonymous=int(reply['anonymous']),
-    #     color=reply['color'],
-    #     intensity=int(reply['intensity'])
-    # )
-    # print(vars(new_reply))  
+
+###########################code2#######################  
+# import requests
+# import json  # Don't forget to import the json module
+
+# def print_json_from_api(api_url):
+#     try:
+#         response = requests.get(api_url)
+#         response.raise_for_status()  # Raise an exception for bad status codes
+
+#         data = response.json()  # Parse JSON response
+#         print(json.dumps(data, indent=4))  # Pretty print JSON data
+#     except requests.exceptions.RequestException as e:
+#         print("Error fetching data:", e)
+
+# # Example usage''
+# api_url = "https://pollverse-w0d9.onrender.com/all_users"
+# print_json_from_api(api_url)

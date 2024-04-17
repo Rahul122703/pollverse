@@ -441,6 +441,9 @@ header.masthead .post-heading .meta a {
 }
 
 .comment-containerabc {
+  padding-left: 10px;
+  padding-right: 10px;
+  justify-content: center;
   border: 2px solid #ddd; /* Light gray border */
   border-radius: 10px; /* Reduced border radius */
   padding: 10px; /* Reduced padding */
@@ -448,8 +451,6 @@ header.masthead .post-heading .meta a {
   background-color: #f9f9f9; /* Light gray background */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
   transition: all 0.4s ease; /* Smoother transition */
-  margin-left:20%;
-  margin-right:20%;
 }
 
 

@@ -31,7 +31,7 @@
                 <div class="comment-thread">
                     <div class="comment-container">
                         <div class="user-info">
-                            {% if comment.comment_author.anonymous %}
+                            {% if comment.anonymous %}
                                 <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
                                 <div class="username">{{random_username}}</div>
                             {% else %}
@@ -56,7 +56,7 @@
                     </div>
                 </div>
                 {% for reply in all_replies %}
-                    <div class="comment-container justify-content-center" style="position: relative;">
+                    <div class="comment-containerabc" style="position: relative;">
                         <div class="user-info">
                             {% if reply.anonymous %}
                                 <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />

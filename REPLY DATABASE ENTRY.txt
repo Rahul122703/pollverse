@@ -1,0 +1,215 @@
+Hey there! Let's chat about phones in class. 🤔 It's a hot topic for sure! Some say they're essential tools for learning, while others worry about distractions. 📝 What do you think? Should phones be allowed in classrooms? 📚 Let's find a balance that works for everyone! 🤝 Share your thoughts and let's spark a friendly debate! #PhonesInClassrooms #TechInEducation #StudentOpinions #ClassroomDebate 🎓 Let's hear what you have to say!
+
+this is a social media post 
+
+i want 5 negative replies on this and 5 positive and 5 neutral replies 
+this is my api routing i want a python json of the subcomment class having all the information as given below
+@app.route('/add_reply',methods=['POST'])
+def add_reply():
+    user = database.get_or_404(User,current_user_id)
+    print("Body:", request.form.get('body'))
+    print("User ID:", request.form.get('user_id'))
+    print("Comment ID:", request.form.get('comment_id'))
+    print("Date:", request.form.get('date'))
+    print("Anonymous:", request.form.get('anonymous'))
+    print("Color:", request.form.get('color'))
+    print("Intensity:", request.form.get('intensity'))
+    if user.ApiKey:
+        new_reply = Subcomment(
+        body = request.form.get('body'),
+        upvote = request.form.get('upvote'),
+        downvote = request.form.get('downvote'),
+        user_id = request.form.get('user_id'),
+        comment_id = request.form.get('comment_id'),
+        date = request.form.get('date'),
+        anonymous = request.form.get('anonymous'),
+        color =  request.form.get('color'),
+        intensity = request.form.get('intensity')
+    )
+        database.session.add(new_reply)
+        database.session.commit()
+        return jsonify(response={"success": "All the replies have been added to the desired poll"})
+    
+    else:
+        return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
+
+
+VERY IMP NOTE:
+THE BODY SHOULD BE WRITTEN IN SIMPLE ENGLISH WORDS AND USE HASHTAGS
+WHEN THE BODY OF THE REPLY IS POSITIVE IN SENTIMENT THEN THE COLOR VALUE SHOULD BE #00f200 --> STRING DATATYPE
+WHEN THE BODY OF THE REPLY IS NEGATIVE IN SENTIMENT THEN THE COLOR VALUE SHOULD BE #f21800 --> STRING DATATYPE
+WHEN THE BODY OF THE REPLY IS NEUTRAL IN SENTIMENT THEN THE COLOR VALUE SHOULD BE #596061 --> STRING DATATYPE
+TAKE ANY NUMBER OF UPVOTE AND DOWNVOTE BUT NOT MORE THAN 100 DATA TYPE SHOULD BE INTEGER --> STRING DATATYPE
+CHOOSE ANY USER_ID ONLY BETWEEN 2-23  --> INTEGER DATATYPE
+COMMENT_ID SHOULD ALWAYS BE 11  --> INTEGER DATATYPE
+DATE SHOULD BE IN THIS FORMAT "15:27 08/04/2024" 
+ANONYMOUS VALUE SHOULD BE RANDOMLY 1 OR 0 ONLY --> INTEGER DATATYPE
+INTENSITY SHOULD ALWAYS BE 0  --> INTEGER DATATYPE
+
+DONT SORT THE REPLIES IN THE JSON AS NEGATIVE ,POSITIVE OR NEUTRAL 
+FORMAT OF THE JSON DATA
+{
+    "replies": [
+        {
+            "body": "Phones are a major distraction in classrooms and hinder the learning process. #Distraction #Learning",
+            "upvote": "10",
+            "downvote": "20",
+            "user_id": "5",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 1,
+            "color": "#f21800",
+            "intensity": 0
+        },
+        {
+            "body": "Allowing phones in classrooms promotes cheating and dishonesty among students. #Cheating #Honesty",
+            "upvote": "8",
+            "downvote": "15",
+            "user_id": "6",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 0,
+            "color": "#f21800",
+            "intensity": 0
+        },
+
+//MORE REPLIES
+]
+}
+
+
+
+
+
+PROMPT 2
+now make a python program to iterate through all the data in this json data
+and make a instance like this
+new_reply = Subcomment(
+        body = json data via iteration,
+        upvote =  json data via iteration,
+        downvote =  json data via iteration,
+        user_id = json data via iteration ,
+        comment_id = json data via iteration,
+        date =  json data via iteration,
+        anonymous =  json data via iteration,
+        color =  json data via iteration ,
+        intensity =  json data via iteration)
+
+
+
+
+DATA SAMPLE
+{
+    "replies": [
+        {
+            "body": "Phones are a major distraction in classrooms and hinder the learning process. #Distraction #Learning",
+            "upvote": "10",
+            "downvote": "20",
+            "user_id": "5",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 1,
+            "color": "#f21800",
+            "intensity": 0
+        },
+        {
+            "body": "Allowing phones in classrooms promotes cheating and dishonesty among students. #Cheating #Honesty",
+            "upvote": "8",
+            "downvote": "15",
+            "user_id": "6",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 0,
+            "color": "#f21800",
+            "intensity": 0
+        },
+        {
+            "body": "Phones can disrupt the classroom environment and decrease student focus. #Disruption #Focus",
+            "upvote": "7",
+            "downvote": "18",
+            "user_id": "7",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 1,
+            "color": "#f21800",
+            "intensity": 0
+        },
+        {
+            "body": "Phones in class can lead to social comparison and feelings of inadequacy among students. #SocialComparison #Inadequacy",
+            "upvote": "5",
+            "downvote": "12",
+            "user_id": "8",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 0,
+            "color": "#f21800",
+            "intensity": 0
+        },
+        {
+            "body": "Phones may disrupt teacher-student interaction and hinder effective communication. #Interaction #Communication",
+            "upvote": "6",
+            "downvote": "10",
+            "user_id": "9",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 1,
+            "color": "#f21800",
+            "intensity": 0
+        },
+        {
+            "body": "Phones can serve as valuable learning tools, providing access to educational apps and resources. #LearningTools #Resources",
+            "upvote": "25",
+            "downvote": "5",
+            "user_id": "10",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 0,
+            "color": "#00f200",
+            "intensity": 0
+        },
+        {
+            "body": "Phones enable quick access to information, facilitating research and enhancing learning efficiency. #AccessToInformation #Efficiency",
+            "upvote": "20",
+            "downvote": "3",
+            "user_id": "11",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 1,
+            "color": "#00f200",
+            "intensity": 0
+        },
+        {
+            "body": "Integrating phones into lessons can make learning more engaging and interactive for students. #Engagement #Interactivity",
+            "upvote": "18",
+            "downvote": "7",
+            "user_id": "12",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 0,
+            "color": "#00f200",
+            "intensity": 0
+        },
+        {
+            "body": "Phones allow for personalized learning experiences tailored to individual student needs. #Personalization #StudentNeeds",
+            "upvote": "15",
+            "downvote": "6",
+            "user_id": "13",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 1,
+            "color": "#00f200",
+            "intensity": 0
+        },
+        {
+            "body": "While phones can be useful, strict guidelines are necessary to prevent misuse and distractions. #Guidelines #Prevention",
+            "upvote": "12",
+            "downvote": "8",
+            "user_id": "14",
+            "comment_id": 11,
+            "date": "15:27 08/04/2024",
+            "anonymous": 0,
+            "color": "#596061",
+            "intensity": 0
+        }
+    ]
+}

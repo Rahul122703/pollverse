@@ -50,9 +50,8 @@
                         <div class="datetime">{{comment.date}}</div>
                         <div class="comment-content">{{ comment.body | safe}}</div>
                         <div class="votes">
-                            <span class="upvote" onclick="vote(this)">▲</span>
-                            <span class="vote-count">0</span>
-                            <span class="downvote" onclick="vote(this)">▼</span>
+                            <span class="upvote" onclick="vote(this)">▲ {{ comment.upvote }}</span>
+                            <span class="downvote" onclick="vote(this)">▼ {{ comment.downvote }}</span>
                         </div>
                     </div>
                 </div>

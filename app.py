@@ -30,7 +30,7 @@ user_otp = None
 current_user = None
 username = None
 user_icon = None
-current_page = None
+current_page = "index"
 from_email = "xieminiproject@gmail.com"
 app_pass = "omni tvxy oelb dctl"
 
@@ -384,7 +384,6 @@ def profile():
 @app.route('/comment_profile/<int:user_id>',methods = ['GET','POST'])
 def comment_profile(user_id):
     print(f"the user id is {user_id}")
-    global current_page
     comment_user = database.get_or_404(User,user_id)
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
 
@@ -470,6 +469,8 @@ def show_comment(comment_id):
         date = format_time_and_date(datetime.now())
         print(polarity)
         new_reply = Subcomment(
+            upvote = 0,
+            downvote = 0,
             body = body,
             user_id = current_user_id,
             comment_id = comment_id,
@@ -667,7 +668,6 @@ mail_flash = None
 @app.route('/contact/<int:user_id>',methods = ['POST','GET'])
 def contact(user_id): 
     global current_page,from_email,current_user_id,mail_flash
-    current_page = "contact"
     contact_form = ContactForm()
     if contact_form.validate_on_submit():
         user = database.get_or_404(User,user_id)
@@ -777,6 +777,34 @@ def get_all_polls():
         return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
 
 
+@app.route('/add_reply',methods=['POST'])
+def add_reply():
+    user = database.get_or_404(User,current_user_id)
+    print("Body:", request.form.get('body'))
+    print("User ID:", request.form.get('user_id'))
+    print("Comment ID:", request.form.get('comment_id'))
+    print("Date:", request.form.get('date'))
+    print("Anonymous:", request.form.get('anonymous'))
+    print("Color:", request.form.get('color'))
+    print("Intensity:", request.form.get('intensity'))
+    if user.ApiKey:
+        new_reply = Subcomment(
+        body = request.form.get('body'),
+        upvote = request.form.get('upvote'),
+        downvote = request.form.get('downvote'),
+        user_id = request.form.get('user_id'),
+        comment_id = request.form.get('comment_id'),
+        date = request.form.get('date'),
+        anonymous = request.form.get('anonymous'),
+        color =  request.form.get('color'),
+        intensity = request.form.get('intensity')
+    )
+        database.session.add(new_reply)
+        database.session.commit()
+        return jsonify(response={"success": "All the replies have been added to the desired poll"})
+    
+    else:
+        return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
     
 if __name__ == "__main__":
     app.run(debug=True)

@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User API Key</title>
+<title>User Information Documentation</title>
 <style>
-  .user-info-container {
+.user-info-container {
     padding: 20px;
     background-color: #f0f0f0;
     border-radius: 20px;
@@ -32,13 +32,16 @@
     font-family: monospace;
     font-size: 16px;
 }
-
+</style>
 </head>
 <body>
-  <div class="api-usage-container">
-    <input type="text" id="api-input" placeholder="Enter API endpoint...">
-    <button id="try-api-btn">Try This API</button>
-  </div>
+
+<div class="user-info-container">
+    <h2>User Information Documentation</h2>
+    <p>To retrieve all user information from the database, you can perform a GET request to the following endpoint:</p>
+    <code>/api/users</code>
+    <p>This endpoint will return a JSON object containing details of all users stored in the database.</p>
+</div>
 
 </body>
 </html>

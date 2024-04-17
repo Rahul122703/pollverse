@@ -30,8 +30,8 @@ class OtpForm(FlaskForm):
     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
 class ChangePasswordForm(FlaskForm):
-    password1 = PasswordField( render_kw={"placeholder": "Choose a new pass "}, label= False)
-    password2 = PasswordField( render_kw={"placeholder": "Confirm pass "}, label= False)
+    password1 = PasswordField( render_kw={"placeholder": "Choose a new password "}, label= False)
+    password2 = PasswordField( render_kw={"placeholder": "Confirm password "}, label= False)
     submit = SubmitField('Change',render_kw={"class": "btn btn-primary"})
  
     

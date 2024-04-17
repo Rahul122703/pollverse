@@ -1,4 +1,4 @@
-from flask import Flask,render_template,redirect,url_for,abort,request,send_file
+from flask import Flask,render_template,redirect,url_for,abort,request,send_file,jsonify
 from flask_bootstrap import Bootstrap5
 from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm,ContactForm,ChangePasswordForm
 from flask_ckeditor import CKEditor
@@ -9,14 +9,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy.orm import relationship,DeclarativeBase,Mapped,mapped_column
-from sqlalchemy import Integer, String, Boolean,func,Float,LargeBinary
+from sqlalchemy import Integer, String,Float,LargeBinary
 
 import random
 import requests
 from datetime import datetime
 import matplotlib.pyplot as plt
-from functools import wraps
 import base64
+import string
 
 logged_in = 0
 not_registering = 1
@@ -103,6 +103,17 @@ def send_mail(from_user,to_user,body):
     server.sendmail(from_user, to_user, msg.as_string())
     server.quit()
 
+def is_logged(function):
+    global logged_in  
+    def wrapper_function():
+        if logged_in:
+            print("You are logged in!")
+            print(f"Function name is {function.__name__}")
+            return function()  
+        else:
+            return '''<h1 style="color: #FF5733; font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #F2F2F2; border-radius: 10px;">You Are Not Logged In</h1>'''
+    return wrapper_function
+
 
 #Creating tables
 class User(UserMixin, database.Model):
@@ -118,6 +129,8 @@ class User(UserMixin, database.Model):
     poll: Mapped[int] = mapped_column(Integer)
     reply: Mapped[int] = mapped_column(Integer)
     admin : Mapped[int] = mapped_column(Integer, nullable=False)
+    ApiKey :  Mapped[str]= mapped_column(String(50))
+    
     comments = relationship("Comment",back_populates = "comment_author")
     subcomments = relationship("Subcomment",back_populates = "subcomment_author")
 
@@ -165,7 +178,7 @@ with app.app_context():
 
 @app.context_processor
 def common_variable():
-    global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash
+    global ged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash
     global current_user_email, user_otp, current_user, username, user_icon,random_username
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
@@ -232,6 +245,7 @@ def register():
 def login():
     global logged_in,current_user,current_user_id,current_user_email
     form_instance = LoginForm()
+    
     if form_instance.validate_on_submit():
         entred_email = request.form.get('email').lower()
         user = database.session.execute(database.select(User).where(User.email == entred_email)).scalar()
@@ -285,8 +299,8 @@ def sort_comment(value):
 
 @app.route('/') 
 def index():
-    global current_user_id,current_user,login_form,current_page,global_comments,start
-    
+    global current_user_id,current_user,login_form,logged_in,current_page,global_comments,start
+    print(f"->>>>>>>>>>>>>>>>>>{logged_in }-<<<<<<<<<<<<<<")
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
     print(f"start ->>>>>>> {start}")
     if start:
@@ -314,7 +328,6 @@ def logout():
     return redirect(url_for('index'))
 
 
-    
 @app.route('/profile',methods = ['GET','POST'])
 def profile():
     global current_page
@@ -523,8 +536,6 @@ def show_comment(comment_id):
                            all_replies = all_replies)
 
 
-
-
 @app.route('/change_password',methods = ['GET','POST'])
 def change_password():
     global logged_in,current_user_id,current_user,current_user_email
@@ -704,6 +715,68 @@ def download(comment_id):
 def about():
     return render_template('about.html')
 
+user_data = None
+def generate_api_key(length=32):
+    characters = string.ascii_letters + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
 
+@app.route('/developer', methods=['POST', 'GET'])
+def developer():    
+    global user_data,current_user_id
+    user = database.get_or_404(User,current_user_id)
+    if request.method == 'POST':     
+        user.ApiKey = generate_api_key(length = 32)
+        database.session.commit()
+    return render_template('developer.html',user = user)
+
+
+#CREATING API
+@app.route('/all_users')
+@is_logged
+def get_all_users():
+    all_data = database.session.execute(database.select(User).order_by(User.id)).scalars().all()
+    users = {"Users" : []}
+    
+    user = database.get_or_404(User,current_user_id)
+    if user.ApiKey:
+        for data in all_data:
+            users['Users'].append({
+            "id" : data.id,
+            "username" : data.username,
+            "icon_link" : data.icon,
+            "email" : data.email,
+            "created_on" : data.created,
+            "total_polls" : data.poll,
+            "total_replies" : data.reply
+            })
+        return jsonify(users) 
+    else:
+        return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
+    
+    
+@is_logged    
+@app.route('/all_polls')
+def get_all_polls():
+    all_data = database.session.execute(database.select(Comment).order_by(Comment.id)).scalars().all()
+    poll= {"polls" : []}
+    print(poll)
+    user = database.get_or_404(User,current_user_id)
+    if user.ApiKey:
+        for data in all_data:
+            poll['polls'].append({
+            "id" : data.id,
+            "upvote" : data.upvote,
+            "downvote" : data.downvote,
+            "head" : data.head,
+            "created_on" : data.date,
+            "body" : data.body,
+            "is_anonymous" : data.anonymous
+            })
+        return jsonify(poll) 
+    else:
+        return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
+
+
+    
 if __name__ == "__main__":
     app.run(debug=True)

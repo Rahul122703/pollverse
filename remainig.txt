@@ -1,0 +1,18 @@
+make API for CRUD of user,comment,replies
+make reporting system 
+notifaitatn
+anynmnome error
+dropdown list not working
+polls and replies info not updating
+
+make the most recent comments on top
+oldest
+most active
+
+remove download button when no sentiment
+
+make the replies to the comment to be in the between 
+and make the cke ewditor and also the sentiment to be in between 
+
+
+sortin clicking backend issue

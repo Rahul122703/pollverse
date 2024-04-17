@@ -1587,7 +1587,7 @@ input:focus-visible + label {
 }
 
 /*  This below css is for index page tabs*/
-.nav-tabs .nav-link123 {
+.nav-tabs .nav-link {
   border: 1px solid #ced4da;
   border-radius: 0.25rem 0.25rem 0 0;
   color: #495057;
@@ -1596,10 +1596,167 @@ input:focus-visible + label {
   transition: box-shadow 0.3s ease-in-out; /* Add transition */
 }
 
-.nav-tabs .nav-link123.active {
+.nav-tabs .nav-link.active {
   border-bottom-color: transparent;
 }
 
-.nav-tabs .nav-link123:hover {
+.nav-tabs .nav-link:hover {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+
+
+
+
+
+
+
+
+/*This below code is for api div*/
+.uywefrgy324 {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for the API key */
+.iuefi324 {
+  font-size: 20px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  margin-bottom: 20px;
+  word-wrap: break-word;
+}
+
+/* Styles for the button */
+.random324 {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Hover effect for the button */
+.random324:hover {
+  background-color: #45a049;
+}
+
+
+
+
+/* Styles for api fetching data */
+.api-usage-container {
+  margin-left :5%;
+  margin-right :5%;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.api-usage-container:hover {
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+.api-input123 {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.tryap1234 {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tryap1234:hover {
+  background-color: #45a049;
+}
+
+
+
+/*THIS BELOW CODE IS FOR DIV OF THE API TRYING*/
+.wuefwie432 {
+  margin-left:5%;
+  margin-right:5%;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.ouirekn43 h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.oirwg3434 p {
+  color: #555;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.pwoefwofw343 code {
+  background-color: #ddd;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: 16px;
+}
+.api-usage-container {
+  padding: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+}
+
+.api-usage-container:hover {
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+}
+
+.api-input123 {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-family: monospace; /* Ensures JSON data is displayed properly */
+  white-space: pre; /* Preserves white space for formatting */
+  overflow: auto; /* Enables scrolling if the content exceeds the input size */
+  min-height: 100px; /* Adjust the minimum height as needed */
+}
+
+.tryap1234 {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.tryap1234:hover {
+  background-color: #45a049;
 }

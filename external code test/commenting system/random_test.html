@@ -3,76 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Custom Tabs</title>
+<title>User API Key</title>
 <style>
-  .dajf78 {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+  .user-info-container {
     padding: 20px;
-  }
-  
-  .tabs-container {
-    display: flex;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-  }
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 0.3s ease-in-out;
+}
 
-  .tab {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    background-color: #ffc107; /* Yellow button color */
-    color: #000000; /* Text color */
-    border: none;
-    border-radius: 10px; /* Adjust border-radius for curved edges */
+.user-info-container h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.user-info-container p {
+    color: #555;
     font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s; /* Smooth transition for background and transform */
-  }
+    line-height: 1.5;
+}
 
-  .tab:hover {
-    background-color: #ffdb58; /* Lighter yellow on hover */
-  }
+.user-info-container code {
+    background-color: #ddd;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 16px;
+}
 
-  .active {
-    background-color: #333;
-    color: #fff;
-  }
-
-  .content {
-    display: none;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  }
-
-  .content.active {
-    display: block;
-  }
-</style>
 </head>
-<body class="7weriu324">
-
-<div class="tabs-container 7weriu325">
-  <div class="tab active 7weriu326" onclick="openTab(event, 'tab1')"><b>Recent</b></div>
-  <div class="tab 7weriu327" onclick="openTab(event, 'tab2')"><b></b>Most Active</b></div>
-  <div class="tab 7weriu328" onclick="openTab(event, 'tab3')"><b></b>Oldest</b></div>
-</div>
-
-<div id="tab1" class="content active 7weriu329">
-  <h2 class="7weriu330">Tab 1 Content</h2>
-  <p class="7weriu331">This is the content of Tab 1.</p>
-</div>
-
-<div id="tab2" class="content 7weriu332">
-  <h2 class="7weriu333">Tab 2 Content</h2>
-  <p class="7weriu334">This is the content of Tab 2.</p>
-</div>
-
-<div id="tab3" class="content 7weriu335">
-  <h2 class="7weriu336">Tab 3 Content</h2>
-  <p class="7weriu337">This is the content of Tab 3.</p>
-</div>
+<body>
+  <div class="api-usage-container">
+    <input type="text" id="api-input" placeholder="Enter API endpoint...">
+    <button id="try-api-btn">Try This API</button>
+  </div>
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 
-make reporting system 
-anynmnome error
+
+
 dropdown list not working on profile page
 polls and replies info not updating
 participation tab

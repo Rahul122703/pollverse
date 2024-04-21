@@ -1,4 +1,4 @@
-from flask import Flask,render_template,redirect,url_for,abort,request,send_file,jsonify
+from flask import Flask,render_template,redirect,url_for,request,send_file,jsonify
 from flask_bootstrap import Bootstrap5
 from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm,ContactForm,ChangePasswordForm
 from flask_ckeditor import CKEditor
@@ -229,7 +229,25 @@ def register():
             current_user_id = current_user.id
             login_user(new_user)
             print("user added sucessfully")
-            
+            body = f'''
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;">
+<div class="notification-container" style="width: 400px; margin: 100px auto; background-color: #f0f0f0; padding: 20px; border-radius: 20px; box-shadow: 20px 20px 50px #b9b9b9, -20px -20px 50px #ffffff;">
+    <img src="https://img.freepik.com/free-vector/floral-welcome-lettering-concept_23-2147903882.jpg?size=626&ext=jpg&ga=GA1.1.658439437.1707051336&semt=ais" alt="Welcome Image" class="notification-image" style="display: block; margin: 0 auto; width: 200px; height: auto;">
+    <h1 style="text-align: center; margin-top: 20px; color: #333;">Welcome to Our Community, {current_user.username}!</h1>
+    <p style="text-align: center; color: #555;">Your account has been successfully created. We're excited to have you join us!</p>
+    <div class="terms" style="margin-top: 20px; text-align: center; color: #777;">
+        <p>By using our platform, you agree to the following terms and conditions:</p>
+        <ul>
+            <li>Users must adhere to the community guidelines and refrain from posting inappropriate content.</li>
+            <li>Any abusive behavior towards other users will not be tolerated.</li>
+            <li>The platform reserves the right to moderate discussions and remove any content that violates these terms.</li>
+            <li>User data will be handled in accordance with our privacy policy.</li>
+        </ul>
+    </div>
+</div>
+</body>
+'''
+            send_mail("xieminiproject@gmail.com",current_user.email,body)
             return redirect(url_for("index"))
         else:
             error = "This account already exists, Please try another one"
@@ -550,7 +568,7 @@ def change_password():
             logged_in = 1
             login_user(current_user)
             print(f"this is the user {current_user}")
-            current_user1 = database.session.execute(database.select(User).where(User.email ==current_user.email)).scalar()
+            current_user1 = database.session.execute(database.select(User).where(User.email == current_user.email)).scalar()
             current_user1.password = generate_password_hash(password1,method='pbkdf2:sha256',salt_length=8)
             database.session.commit()
             current_user_id = current_user.id

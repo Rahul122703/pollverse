@@ -178,12 +178,16 @@ with app.app_context():
 
 @app.context_processor
 def common_variable():
-    global ged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash
+    global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash,sorting,positive_replies,negative_replies,neutral_replies
     global current_user_email, user_otp, current_user, username, user_icon,random_username
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
 
     return dict(logged_in = logged_in,
+                positive_replies = positive_replies,
+                negative_replies = negative_replies,
+                neutral_replies = neutral_replies,
+                sorting  = sorting,
                 admin_flash = admin_flash,
                 current_user = current_user,
                 current_page = current_page,
@@ -229,7 +233,25 @@ def register():
             current_user_id = current_user.id
             login_user(new_user)
             print("user added sucessfully")
-            
+            body = f'''
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;">
+<div class="notification-container" style="width: 400px; margin: 100px auto; background-color: #f0f0f0; padding: 20px; border-radius: 20px; box-shadow: 20px 20px 50px #b9b9b9, -20px -20px 50px #ffffff;">
+    <img src="https://img.freepik.com/free-vector/floral-welcome-lettering-concept_23-2147903882.jpg?size=626&ext=jpg&ga=GA1.1.658439437.1707051336&semt=ais" alt="Welcome Image" class="notification-image" style="display: block; margin: 0 auto; width: 200px; height: auto;">
+    <h1 style="text-align: center; margin-top: 20px; color: #333;">Welcome to Our Community, {current_user.username}!</h1>
+    <p style="text-align: center; color: #555;">Your account has been successfully created. We're excited to have you join us!</p>
+    <div class="terms" style="margin-top: 20px; text-align: center; color: #777;">
+        <p>By using our platform, you agree to the following terms and conditions:</p>
+        <ul>
+            <li>Users must adhere to the community guidelines and refrain from posting inappropriate content.</li>
+            <li>Any abusive behavior towards other users will not be tolerated.</li>
+            <li>The platform reserves the right to moderate discussions and remove any content that violates these terms.</li>
+            <li>User data will be handled in accordance with our privacy policy.</li>
+        </ul>
+    </div>
+</div>
+</body>
+'''
+            send_mail("xieminiproject@gmail.com",current_user.email,body)
             return redirect(url_for("index"))
         else:
             error = "This account already exists, Please try another one"
@@ -275,17 +297,19 @@ def login():
 
 global_comments = None
 start = 1
-
+sorting = "Oldest"
 @app.route('/sort_comment/<int:value>',methods = ['GET','POST'])
 def sort_comment(value):
-    global recent,most_active,oldest,global_comments,start
+    global global_comments,start,sorting
     
     start = 0
     
     print(f"start is {start} and value == {value}")
     if value == 3: #recetn
+        sorting = "Recent"
         global_comments.reverse()  
     elif value == 2: #most active
+        sorting = "Most Active"
         global_comments.reverse()
         active_comment = []#didn't get it!!
         sorted_comments = sorted(global_comments, key=lambda comment: len(database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment.id)).scalars().all()), reverse=True)
@@ -293,6 +317,7 @@ def sort_comment(value):
         global_comments = active_comment
         print(active_comment)
     elif value == 1: #oldest
+        sorting = "Oldest"
         start = 1
     return redirect(url_for('index'))
 
@@ -456,9 +481,12 @@ def new_comment():
 percent_gt_01 = 0
 percent_lt_minus01 = 0
 percent_between_minus01_to_01 = 0
+positive_replies = None
+negative_replies = None
+neutral_replies = None
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
-    global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01
+    global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01,positive_replies,negative_replies,neutral_replies
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
     body = str(reply_form.body.data)
@@ -510,6 +538,12 @@ def show_comment(comment_id):
         return redirect(url_for('show_comment',comment_id = comment_id))
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment_id)).scalars().all()
     
+    positive_replies = [reply for reply in all_replies if reply.color == "#f21800"]
+    negative_replies = [reply for reply in all_replies if reply.color == "#00f200"]
+    neutral_replies = [reply for reply in all_replies if reply.color == "#596061"]
+    
+    print(positive_replies,negative_replies,neutral_replies)
+    
     intensities = [i.intensity for i in all_replies]
     print(intensities)
     if len(intensities):
@@ -550,7 +584,7 @@ def change_password():
             logged_in = 1
             login_user(current_user)
             print(f"this is the user {current_user}")
-            current_user1 = database.session.execute(database.select(User).where(User.email ==current_user.email)).scalar()
+            current_user1 = database.session.execute(database.select(User).where(User.email == current_user.email)).scalar()
             current_user1.password = generate_password_hash(password1,method='pbkdf2:sha256',salt_length=8)
             database.session.commit()
             current_user_id = current_user.id
@@ -638,6 +672,7 @@ def search():
     users = users.filter(User.username.like('%' + searched +'%'))
     comment_count = comments.filter(Comment.head.like('%' + searched +'%')).count()
     user_count = users.filter(User.username.like('%' + searched +'%')).count()
+    print(f"the users uicons are {[user.uicon for user in users]}")
     return render_template('search.html',comments = comments,users = users,comment_count = comment_count,user_count = user_count)
 
 @app.route('/delete_reply/<int:reply_id>',methods = ['POST','GET'])   

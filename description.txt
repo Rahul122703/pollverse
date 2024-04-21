@@ -13,9 +13,4 @@ Database Connectivity: All user data, poll information, and discussion threads a
 College Event Support: The project is designed to facilitate digital events in college settings, providing a platform for discussions and polls that can be utilized for various events and activities.
 Overall, our project serves as a valuable tool for facilitating discussions and gathering insights on various topics within a college community. It aims to enhance engagement and collaboration among students and administrators, ultimately contributing to the betterment of college situations and supporting future digital events.
 
-https://avatars.githubusercontent.com/u/113322940?v=4
-
-
-https://chitchat-7p6l.onrender.com
-
 

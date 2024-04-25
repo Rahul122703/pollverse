@@ -29,26 +29,6 @@ class DatabaseForm(FlaskForm):
 #     OTP = StringField( validators=[DataRequired()], render_kw={"placeholder": "Enter OTP sent at your mail"})
 #     submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
     
-# class OtpForm(FlaskForm):
-#     otp_inputs = []
-#     for i in range(6):
-#         field_name = f"OTP_{i+1}"
-#         setattr(OtpForm, field_name, StringField(validators=[DataRequired()], render_kw={"class": "otp-input", "maxlength": "1"}))
-#         otp_inputs.append(getattr(OtpForm, field_name))
-#     submit = SubmitField('Submit', render_kw={"class": "btn btn-primary"})    
-    
-class OtpForm(FlaskForm):
-    OTP_1 = StringField('OTP 1', validators=[DataRequired()], render_kw={"class": "otp-input", "maxlength": "1"})
-    OTP_2 = StringField('OTP 2', validators=[DataRequired()], render_kw={"class": "otp-input", "maxlength": "1"})
-    OTP_3 = StringField('OTP 3', validators=[DataRequired()], render_kw={"class": "otp-input", "maxlength": "1"})
-    OTP_4 = StringField('OTP 4', validators=[DataRequired()], render_kw={"class": "otp-input", "maxlength": "1"})
-    OTP_5 = StringField('OTP 5', validators=[DataRequired()], render_kw={"class": "otp-input", "maxlength": "1"})
-    OTP_6 = StringField('OTP 6', validators=[DataRequired()], render_kw={"class": "otp-input", "maxlength": "1"})
-
-    otp_inputs = [OTP_1, OTP_2, OTP_3, OTP_4, OTP_5, OTP_6]
-
-    submit = SubmitField('Submit', render_kw={"class": "btn btn-primary"})    
-    
 class ChangePasswordForm(FlaskForm):
     password1 = PasswordField( render_kw={"placeholder": "Choose a new password "}, label= False)
     password2 = PasswordField( render_kw={"placeholder": "Confirm password "}, label= False)

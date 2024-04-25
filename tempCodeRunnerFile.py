@@ -1,6 +1,6 @@
 from flask import Flask,render_template,redirect,url_for,request,send_file,jsonify
 from flask_bootstrap import Bootstrap5
-from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,OtpForm,EditProfileForm,SearchForm,ReplyForm,ContactForm,ChangePasswordForm
+from forms import LoginForm,RegisterForm,CommentForm,DatabaseForm,EditProfileForm,SearchForm,ReplyForm,ContactForm,ChangePasswordForm
 from flask_ckeditor import CKEditor
 
 from flask_login import LoginManager,UserMixin,login_user,logout_user,current_user
@@ -519,7 +519,7 @@ def show_comment(comment_id):
                     <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px;">
                     <p style="font-size: 20px; color: #444;">{current_user.username} replied on your poll click to have a look</p><br/>
                     <hr>
-                    <a href="pollverse-fqol.onrender.com" style="text-decoration: none; color: inherit;">
+                    <a href="pollverse-w0d9.onrender.com" style="text-decoration: none; color: inherit;">
                         <div style="border: 1px solid #ccc; border-radius: 10px; padding: 20px; background-color: #fff;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <div style="display: flex; align-items: center;">

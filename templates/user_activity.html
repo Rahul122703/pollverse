@@ -102,30 +102,65 @@
             {% endfor %}
     </div>
     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">
-
-            <h2><center>SENTIMANT</center></h2>
+        <style>
+            .container123 {
+                width: 400px;
+                height: 500px;
+                border: 1px solid #ccc;
+                overflow: auto;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .content123 {
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 10px;
+                box-sizing: border-box;
+                box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            }
+            
+            h1 {
+                color: #333;
+                margin-top: 0;
+            }
+            
+            p {
+                color: #666;
+                line-height: 1.5;
+            }
+        </style>
+            <h2><center>SENTIMENT</center></h2>
             {% if length > 0 %}
-                <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-                <script type="text/javascript">
-                    google.load("visualization", "1", {packages:["corechart"]});
-                    google.setOnLoadCallback(drawPieChart);
-                    function drawPieChart() {
-                        var data = google.visualization.arrayToDataTable([
-                            ['Platform','Reach'],
-                            ['Neutral',{{neutral}}],
-                            ['Positive',{{plus}}],
-                            ['Negative',{{minus}}],
-                        ]);
-                        var options = {
-                            width: 480,
-                            height: 250,
-                            colors: ['#d3d3d3', '#90ee90', '#e64522'],
-                            is3D: true
-                        };
-                        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
-                        chart.draw(data, options);
-                    }
-                </script>
+            <div class="container123 px-lg-3 py-3 py-lg-4">
+                <div class="content123 px-lg-3 py-3 py-lg-4">  
+                    
+                        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                        <script type="text/javascript">
+                            google.load("visualization", "1", {packages:["corechart"]});
+                            google.setOnLoadCallback(drawPieChart);
+                            function drawPieChart() {
+                                var data = google.visualization.arrayToDataTable([
+                                    ['Platform','Reach'],
+                                    ['Neutral',{{neutral}}],
+                                    ['Positive',{{plus}}],
+                                    ['Negative',{{minus}}],
+                                ]);
+                                var options = {
+                                    width: 600,
+                                    height: 500,
+                                    colors: ['#d3d3d3', '#90ee90', '#e64522'],
+                                    is3D: true
+                                };
+                                var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                                chart.draw(data, options);
+                            }
+                        </script>
+                        <div id="piechart" class="pie px-lg-3 py-3 py-lg-4"></div>
+                        <div id="chartContainer" style="height: 370px; width: 100%;">
+                        </div> 
+                </div>
+            </div>
             {% endif %}
             <body>
                 {% if length %}

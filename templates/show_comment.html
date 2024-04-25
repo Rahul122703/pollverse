@@ -58,11 +58,10 @@
             </div>
         </div>
         {% for reply in all_replies %}
-            <div class="comment-containerabc" style="position: relative;">
+            <div class="comment-container" style="position: relative;">
                 <div class="user-info">
                     {% if reply.anonymous %}
-                        <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
-                        <div class="username">{{random_username}}</div>
+                        <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" /><div class="username">{{random_username}}</div>
                     {% else %}
                         <a href="{{ url_for('comment_profile', user_id=reply.subcomment_author.id) }}">
                             {% if reply.subcomment_author.uicon %}

@@ -627,7 +627,7 @@ def send_otp():
             </body>
             </html>
             """
-        send_mail(from_email,current_user.email,body)
+        send_mail(from_email,current_user_email,body)
 
         return render_template('index.html', error=1)
 

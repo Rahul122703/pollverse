@@ -3,43 +3,68 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Scrollable Content</title>
+<title>Beautiful OTP Input</title>
 <style>
-  .container {
-    width: 700px;
-    height: 500px;
+
+  .otp-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .otp-input {
+    width: 40px;
+    height: 40px;
     border: 1px solid #ccc;
-    overflow: auto;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin: 0 5px;
+    font-size: 18px;
+    text-align: center;
+    transition: all 0.3s ease;
   }
 
-  .content {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-sizing: border-box;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  .otp-input:focus {
+    border-color: #ffcc00; /* changed blue to yellow */
+    box-shadow: 0 0 5px rgba(255, 204, 0, 0.5); /* changed blue to yellow */
+    outline: none;
   }
 
-  h1 {
-    color: #333;
-    margin-top: 0;
-  }
-
-  p {
-    color: #666;
-    line-height: 1.5;
+  .otp-input:hover {
+    background-color: #f0f0f0;
   }
 </style>
 </head>
 <body>
-  <div class="container">
-    <div class="content">
-      <h1>Scrollable Content</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget ligula in enim iaculis dignissim. Sed at justo eu arcu tincidunt aliquet. Nulla facilisi. Integer sagittis lectus vel ex luctus, id eleifend leo sodales. In pulvinar libero vel lectus faucibus consectetur.</p>
-      <p>Phasellus aliquam nunc sit amet ultrices aliquet. Proin eget velit nec nulla faucibus viverra. Ut ut leo magna. Vestibulum quis suscipit mauris. Duis euismod velit non justo suscipit, et suscipit elit ultrices. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nam fermentum nisi nec sapien tincidunt, vitae molestie risus ultrices. In in mauris tellus. Curabitur faucibus velit non eleifend egestas.</p>
-      <p>Donec vehicula tortor nec elit interdum rhoncus. Fusce ut elit at lectus fringilla condimentum a at felis. Vivamus nec quam eget orci sollicitudin ultrices. In hac habitasse platea dictumst. Fusce hendrerit lorem nec leo mattis feugiat. Vivamus sit amet vehicula mi. Fusce ac nulla vel purus viverra elementum.</p>
-      <p>Quisque vehicula eros at felis molestie, nec dignissim ex sodales. Phasellus id suscipit mi. Integer sit amet purus in sem dictum pretium. Ut malesuada suscipit tortor, nec fermentum orci rutrum sed. Curabitur convallis quam ut nulla fermentum, sit amet commodo lacus vestibulum. Proin congue eros eget diam mattis, vitae dignissim odio lacinia.</p>
-      <p>Quisque pharetra pretium sem, ac condimentum purus fringilla et. Duis vitae sollicitudin lorem. Integer bibendum nulla nec purus pellentesque, vel convallis nisl fermentum. Aliquam vel justo euismod, efficitur mi sed, laoreet risus. Fusce quis orci at nunc scelerisque venenatis nec ac justo. Donec malesuada justo eu nulla luctus, sit amet fermentum risus convallis. Duis at orci ut felis lacinia placerat. Aliquam sit amet condimentum lacus. Integer tristique orci id risus maximus, nec efficitur urna fermentum. Mauris feugiat ipsum at sapien tincidunt mollis.</p>
-      <p>Nulla nec elit vel nunc consequat finibus non sit amet odio. Nulla non purus at lorem placerat vestibulum id eget libero. Pellentesque habitant morbi tristique senectus et netus et males
+
+<div class="otp-container">
+  <input type="text" class="otp-input" maxlength="1">
+  <input type="text" class="otp-input" maxlength="1">
+  <input type="text" class="otp-input" maxlength="1">
+  <input type="text" class="otp-input" maxlength="1">
+  <input type="text" class="otp-input" maxlength="1">
+  <input type="text" class="otp-input" maxlength="1">
+</div>
+
+<script>
+const otpInputs = document.querySelectorAll('.otp-input');
+
+otpInputs.forEach(input => {
+  input.addEventListener('input', (e) => {
+    const text = e.target.value;
+    if (text.length === 1) {
+      const nextInput = input.nextElementSibling;
+      if (nextInput) {
+        nextInput.focus(); // Move focus to the next input box
+      }
+    } else if (text.length === 0) {
+      const prevInput = input.previousElementSibling;
+      if (prevInput) {
+        prevInput.focus(); // Move focus to the previous input box
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>

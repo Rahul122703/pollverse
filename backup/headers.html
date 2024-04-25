@@ -117,51 +117,12 @@
     {% if current_user_id == 0 %}
         <div class="overlay" id="loginPopup">
             <div class="popup">
-                <h2><center>Login</center></h2>
+                <h2>Login</h2>
                 
                     {% if error == 1 %}
                     <form action ="{{  url_for('send_otp') }}" method="POST">
                         <form action ="{{ url_for('send_otp') }}"  method="POST">
-                            <div style="background-color: #ffffcc; /* Yellowish background color */
-                                        border: 1px solid #ffcc00; /* Yellow border */
-                                        border-radius: 5px; /* Rounded corners */
-                                        padding: 15px; /* Padding around the box */
-                                        text-align: center; /* Center text within the box */
-                                        margin-bottom: 20px; /* Add margin to the bottom */">
-                                <h4 style="color: #b8860b; /* Dark yellow text color */
-                                            font-family: Arial, sans-serif; /* Font family */
-                                            font-size: 20px; /* Larger font size */
-                                            font-weight: bold; /* Bold text */">
-                                    ENTER OTP SENT AT YOUR MAIL
-                                </h4>
-                            </div>
-                                <div class="otp-container">
-                                    <input name = "1" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
-                                    <input name = "2" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
-                                    <input name = "3" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
-                                    <input name = "4" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
-                                    <input name = "5" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
-                                    <input name = "6" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
-                                </div>
-                                <button type="submit" style="background-color: #ffc107; /* Yellow button color */
-                                color: #ffffff; /* White text color */
-                                border: none;
-                                border-radius: 10px; /* Adjust border-radius for curved edges */
-                                padding: 10px 20px;
-                                font-size: 16px;
-                                font-weight: bold; /* Make text bold */
-                                cursor: pointer;
-                                transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.2s; /* Smooth transitions */
-                                outline: none; /* Remove default outline */
-                                text-decoration: none; /* Remove default underline */
-                                box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Add shadow effect */
-                                "
-                                onmousedown="this.style.transform='scale(0.95)'" 
-                                onmouseup="this.style.transform='scale(1)'"
-                                onmouseout="this.style.transform='scale(1)'"
-                                >
-                                Verify
-                                </button>
+                            {{ render_form(otp_form) }}
                         </form>
                     {% elif error == 2 or form_again == 1%}
                         {% if error2 %}

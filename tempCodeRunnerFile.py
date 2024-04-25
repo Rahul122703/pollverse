@@ -115,7 +115,7 @@ def is_logged(function):
     return wrapper_function
 
 
-#Creating tables
+#Created tables
 class User(UserMixin, database.Model):
     __tablename__ = "user"
     id : Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -178,12 +178,16 @@ with app.app_context():
 
 @app.context_processor
 def common_variable():
-    global ged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash
+    global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash,sorting,positive_replies,negative_replies,neutral_replies
     global current_user_email, user_otp, current_user, username, user_icon,random_username
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
 
     return dict(logged_in = logged_in,
+                positive_replies = positive_replies,
+                negative_replies = negative_replies,
+                neutral_replies = neutral_replies,
+                sorting  = sorting,
                 admin_flash = admin_flash,
                 current_user = current_user,
                 current_page = current_page,
@@ -280,7 +284,7 @@ def login():
                 return redirect(url_for('index'))
             else:
                 print("wrong pass")
-                error = "Wrong password click to change"
+                error = "Forgot password? click to change"
                 return render_template('index.html',error = error)
             
         else:
@@ -293,17 +297,19 @@ def login():
 
 global_comments = None
 start = 1
-
+sorting = "Oldest"
 @app.route('/sort_comment/<int:value>',methods = ['GET','POST'])
 def sort_comment(value):
-    global recent,most_active,oldest,global_comments,start
+    global global_comments,start,sorting
     
     start = 0
     
     print(f"start is {start} and value == {value}")
     if value == 3: #recetn
+        sorting = "Recent"
         global_comments.reverse()  
     elif value == 2: #most active
+        sorting = "Most Active"
         global_comments.reverse()
         active_comment = []#didn't get it!!
         sorted_comments = sorted(global_comments, key=lambda comment: len(database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment.id)).scalars().all()), reverse=True)
@@ -311,6 +317,7 @@ def sort_comment(value):
         global_comments = active_comment
         print(active_comment)
     elif value == 1: #oldest
+        sorting = "Oldest"
         start = 1
     return redirect(url_for('index'))
 
@@ -474,9 +481,12 @@ def new_comment():
 percent_gt_01 = 0
 percent_lt_minus01 = 0
 percent_between_minus01_to_01 = 0
+positive_replies = None
+negative_replies = None
+neutral_replies = None
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
 def show_comment(comment_id):
-    global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01
+    global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01,positive_replies,negative_replies,neutral_replies
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
     body = str(reply_form.body.data)
@@ -527,6 +537,12 @@ def show_comment(comment_id):
         send_mail("xieminiproject@gmail.com",parent_user.email,email_body)
         return redirect(url_for('show_comment',comment_id = comment_id))
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment_id)).scalars().all()
+    
+    positive_replies = [reply for reply in all_replies if reply.color == "#f21800"]
+    negative_replies = [reply for reply in all_replies if reply.color == "#00f200"]
+    neutral_replies = [reply for reply in all_replies if reply.color == "#596061"]
+    
+    print(positive_replies,negative_replies,neutral_replies)
     
     intensities = [i.intensity for i in all_replies]
     print(intensities)
@@ -582,7 +598,7 @@ def change_password():
 @app.route('/send_otp',methods = ['GET','POST'])
 def send_otp():
     global otp_send,current_user_email,current_user_id,user_otp,current_user,logged_in,from_email,app_pass
-    otp_form = OtpForm()
+    # otp_form = OtpForm()
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
     print(f"value of otp sent is {otp_send}")
     if otp_send == 0:
@@ -613,18 +629,17 @@ def send_otp():
             """
         send_mail(from_email,current_user.email,body)
 
-        return render_template('index.html', otp_form=otp_form, error=1)
+        return render_template('index.html', error=1)
+
     print(current_user_email)
-    print(f"USER ENTERED OTP = {otp_form.OTP.data}")
     print(f"OTP = {user_otp}")
-    if otp_form.OTP.data == user_otp:
+    entred_otp = ""
+    for i in range(1,7):
+        entred_otp += request.form.get(f"{i}")
+    print(entred_otp)
+    if entred_otp == user_otp:
         otp_send = 0
         return redirect(url_for('change_password'))
-        # logged_in = 1
-        # print(f"this is the user {current_user}")
-        # login_user(current_user)
-        # current_user_id = current_user.id
-        # return redirect(url_for('index'))
     else:
         error = "Entered Wrong OTP click to send"
         otp_send = 0
@@ -656,6 +671,7 @@ def search():
     users = users.filter(User.username.like('%' + searched +'%'))
     comment_count = comments.filter(Comment.head.like('%' + searched +'%')).count()
     user_count = users.filter(User.username.like('%' + searched +'%')).count()
+    print(f"the users uicons are {[user.uicon for user in users]}")
     return render_template('search.html',comments = comments,users = users,comment_count = comment_count,user_count = user_count)
 
 @app.route('/delete_reply/<int:reply_id>',methods = ['POST','GET'])   

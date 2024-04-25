@@ -115,7 +115,7 @@ def is_logged(function):
     return wrapper_function
 
 
-#Creating tables
+#Created tables
 class User(UserMixin, database.Model):
     __tablename__ = "user"
     id : Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -284,7 +284,7 @@ def login():
                 return redirect(url_for('index'))
             else:
                 print("wrong pass")
-                error = "Wrong password click to change"
+                error = "Forgot password? click to change"
                 return render_template('index.html',error = error)
             
         else:
@@ -598,7 +598,7 @@ def change_password():
 @app.route('/send_otp',methods = ['GET','POST'])
 def send_otp():
     global otp_send,current_user_email,current_user_id,user_otp,current_user,logged_in,from_email,app_pass
-    otp_form = OtpForm()
+    # otp_form = OtpForm()
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
     print(f"value of otp sent is {otp_send}")
     if otp_send == 0:
@@ -629,18 +629,17 @@ def send_otp():
             """
         send_mail(from_email,current_user.email,body)
 
-        return render_template('index.html', otp_form=otp_form, error=1)
+        return render_template('index.html', error=1)
+
     print(current_user_email)
-    print(f"USER ENTERED OTP = {otp_form.OTP.data}")
     print(f"OTP = {user_otp}")
-    if otp_form.OTP.data == user_otp:
+    entred_otp = ""
+    for i in range(1,7):
+        entred_otp += request.form.get(f"{i}")
+    print(entred_otp)
+    if entred_otp == user_otp:
         otp_send = 0
         return redirect(url_for('change_password'))
-        # logged_in = 1
-        # print(f"this is the user {current_user}")
-        # login_user(current_user)
-        # current_user_id = current_user.id
-        # return redirect(url_for('index'))
     else:
         error = "Entered Wrong OTP click to send"
         otp_send = 0

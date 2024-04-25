@@ -1761,3 +1761,32 @@ input:focus-visible + label {
 .tryap1234:hover {
   background-color: #45a049;
 }
+
+
+/*BELOW code is for inputting of otp*/
+.otp-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.otp-input {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 0 5px;
+  font-size: 18px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.otp-input:focus {
+  border-color: #ffcc00; /* changed blue to yellow */
+  box-shadow: 0 0 10px rgba(255, 204, 0, 0.5); /* changed blue to yellow */
+  outline: none;
+}
+
+.otp-input:hover {
+  background-color: #f0f0f0;
+}

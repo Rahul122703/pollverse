@@ -57,4 +57,24 @@ function signIn() {
     console.log('Sign In button clicked');
 }
 
+//below code is for inputting of otp
+const otpInputs = document.querySelectorAll('.otp-input');
+
+otpInputs.forEach(input => {
+  input.addEventListener('input', (e) => {
+    const text = e.target.value;
+    if (text.length === 1) {
+      const nextInput = input.nextElementSibling;
+      if (nextInput) {
+        nextInput.focus(); // Move focus to the next input box
+      }
+    } else if (text.length === 0) {
+      const prevInput = input.previousElementSibling;
+      if (prevInput) {
+        prevInput.focus(); // Move focus to the previous input box
+      }
+    }
+  });
+});
+
 

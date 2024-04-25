@@ -92,7 +92,9 @@ def send_mail(from_user,to_user,body):
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
     server.login(user="xieminiproject@gmail.com", password=app_pass)
-
+    print(body)
+    print(from_user)
+    print(to_user)
     msg = MIMEMultipart()
     msg['From'] = from_user
     msg['To'] = to_user
@@ -284,6 +286,7 @@ def login():
                 return redirect(url_for('index'))
             else:
                 print("wrong pass")
+                current_user_email = entred_email
                 error = "Forgot password? click to change"
                 return render_template('index.html',error = error)
             
@@ -627,7 +630,7 @@ def send_otp():
             </body>
             </html>
             """
-        send_mail(from_email,current_user.email,body)
+        send_mail(from_email,current_user_email,body)
 
         return render_template('index.html', error=1)
 

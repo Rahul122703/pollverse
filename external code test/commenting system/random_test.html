@@ -3,68 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beautiful OTP Input</title>
+<title>Realistic Flip Card</title>
 <style>
-
-  .otp-container {
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-
-  .otp-input {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 0 5px;
-    font-size: 18px;
-    text-align: center;
-    transition: all 0.3s ease;
-  }
-
-  .otp-input:focus {
-    border-color: #ffcc00; /* changed blue to yellow */
-    box-shadow: 0 0 5px rgba(255, 204, 0, 0.5); /* changed blue to yellow */
-    outline: none;
-  }
-
-  .otp-input:hover {
+    height: 100vh;
     background-color: #f0f0f0;
+  }
+
+  .eri324 {
+    width: 200px;
+    height: 300px;
+    perspective: 1000px;
+    margin-bottom: 20px;
+  }
+
+  .oner34 {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+
+  .oeruhb34 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .ajsd45 {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    transform: rotateY(0deg);
+  }
+
+  .sdfw56 {
+    background-color: #ffffff;
+    transform: rotateY(180deg);
+  }
+
+  .dfh42 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .hj34ds {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+
+  .kloi87 {
+    font-family: 'Arial', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .hg76kd {
+    margin: 5px 0;
+  }
+
+  .nmk98 {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .nmk98:hover {
+    background-color: #45a049;
+  }
+
+  .eri324:hover .oner34 {
+    transform: rotateY(180deg);
   }
 </style>
 </head>
 <body>
 
-<div class="otp-container">
-  <input type="text" class="otp-input" maxlength="1">
-  <input type="text" class="otp-input" maxlength="1">
-  <input type="text" class="otp-input" maxlength="1">
-  <input type="text" class="otp-input" maxlength="1">
-  <input type="text" class="otp-input" maxlength="1">
-  <input type="text" class="otp-input" maxlength="1">
+{% for user in users %}
+<div class="eri324">
+  <div class="oner34">
+    <div class="oeruhb34 ajsd45">
+      <div class="dfh42">
+        <div class="hj34ds">
+          {% if user.uicon %}
+            <img src="data:image/jpeg;base64,{{ user.uicon|b64encode_image }}" alt="User Icon" class="hj34ds">
+          {% else %}
+            <img src="{{user.icon}}" alt="User Icon" class="hj34ds">
+          {% endif %}
+        </div>
+        <div class="kloi87">{{user.username}}</div>
+      </div>
+    </div>
+    <div class="oeruhb34 sdfw56">
+      <div class="dfh42">
+        <p class="hg76kd">Polls created: {{ user.poll }}</p>
+        <p class="hg76kd">Replies: {{ user.reply }}</p>
+        <form action="{{ url_for('comment_profile', user_id=user.id) }}" method="POST">
+          <button class="nmk98">VIEW</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
-
-<script>
-const otpInputs = document.querySelectorAll('.otp-input');
-
-otpInputs.forEach(input => {
-  input.addEventListener('input', (e) => {
-    const text = e.target.value;
-    if (text.length === 1) {
-      const nextInput = input.nextElementSibling;
-      if (nextInput) {
-        nextInput.focus(); // Move focus to the next input box
-      }
-    } else if (text.length === 0) {
-      const prevInput = input.previousElementSibling;
-      if (prevInput) {
-        prevInput.focus(); // Move focus to the previous input box
-      }
-    }
-  });
-});
-</script>
+{% endfor %}
 
 </body>
 </html>

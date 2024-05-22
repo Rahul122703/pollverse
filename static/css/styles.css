@@ -610,107 +610,118 @@ header.masthead .post-heading .meta a {
 /*Below code is for profile*/
 
 .container_987 {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
-    .heading_123 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+  .heading_123 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
 
-    .profile-picture_456 {
-      width: 150px;
-      height: 150px;
-      border-radius: 100px; /* Square border radius */
-      margin: 0 auto 20px;
-      display: block;
-      background-color: #ccc; /* Default profile picture background color */
-    }
+  .profile-picture_456 {
+    width: 150px;
+    height: 150px;
+    border-radius: 100px; /* Square border radius */
+    margin: 0 auto 20px;
+    display: block;
+    background-color: #ccc; /* Default profile picture background color */
+  }
 
-    .personal-info_789,
-    .activity-overview_654,
-    .contribution-stats_321,
-    .sentiment-analysis_987 {
-      margin-bottom: 30px;
-    }
+  .personal-info_789,
+  .activity-overview_654,
+  .contribution-stats_321,
+  .sentiment-analysis_987 {
+    margin-bottom: 30px;
+  }
 
-    .button_edit-profile_234 {
-      margin-left: 60px;
-      background-color: #ffc107; /* Button background color */
-      color: #fff; /* Button text color */
-      border: none;
-      border-radius: 50px; /* Rounded button */
-      padding: 10px 25px; /* Padding */
-      font-size: 16px;
-      text-transform: uppercase;
-      transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and transform */
-      cursor: pointer;
-    }
+  .button_edit-profile_234 {
+    margin-left: 60px;
+    background-color: #ffc107; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none;
+    border-radius: 50px; /* Rounded button */
+    padding: 10px 25px; /* Padding */
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and transform */
+    cursor: pointer;
+  }
 
-    .button_edit-profile_234:hover {
-      background-color: #ffca28; /* Button background color on hover */
-      transform: scale(1.05); /* Button scaling on hover */
-    }
+  .button_edit-profile_234:hover {
+    background-color: #ffca28; /* Button background color on hover */
+    transform: scale(1.05); /* Button scaling on hover */
+  }
 
-    .button_change-password_567 {
-      background-color: #4CAF50; /* Green */
-      color: white;
-      border-radius: 50px;
-      padding: 10px 20px;
-      font-size: 16px;
-      text-transform: uppercase;
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      cursor: pointer;
-    }
+  .button_change-password_567 {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+  }
 
-    .button_change-password_567:hover {
-      background-color: #45a049;
-    }
+  .button_change-password_567:hover {
+    background-color: #45a049;
+  }
 
-    /* Modal styles */
-    .modal_789 {
-      display: none; /* Hidden by default */
-      position: fixed; /* Stay in place */
-      z-index: 1000; /* Sit on top */
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto; /* Enable scroll if needed */
-      background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
-    }
-    .modal-content_654 {
-      width: auto;
-      background-color: #fefefe;
-      margin: 10% auto; /* 10% from the top and centered */
-      padding: 20px;
-      border: 1px solid #888;
-      width: 50%; /* Could be more or less, depending on screen size */
-      border-radius: 10px;
-    }
+  /* Modal styles */
+  /* .modal_789 {
+    display: none; 
+    position: fixed; 
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    overflow: auto; 
+  } */
+  
 
-    .close_321 {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+  .modal_789 {
+    position: absolute;
+    top: 0%;
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    z-index: 996;
+    background: rgba(255, 255, 0, 0);
+    /* border: 2px solid red; */
+  }
+  
 
-    .close_321:hover,
-    .close_321:focus {
-      color: black;
-      text-decoration: none;
-    }
+  .modal-content_654 {
+    position: fixed;
+    background-color: #fefefe;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 10px;
+  }
+
+  .close_321 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .close_321:hover,
+  .close_321:focus {
+    color: black;
+    text-decoration: none;
+  }
 
 
 

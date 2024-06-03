@@ -101,4 +101,29 @@
       </div>
   </div>
 </div>
+
+<script>
+  const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const registercontainer = document.getElementById('registercontainer');
+
+signUpButton.addEventListener('click', () => {
+    registercontainer.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+    registercontainer.classList.remove("right-panel-active");
+});
+
+function signUp() {
+    // Add your sign up logic here
+    console.log('Sign Up button clicked');
+}
+
+function signIn() {
+    // Add your sign in logic here
+    console.log('Sign In button clicked');
+}
+</script>
+
 {% include "footer.html" %}

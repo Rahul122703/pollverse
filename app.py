@@ -32,8 +32,8 @@ username = None
 user_icon = None
 current_page = "index"
 from_email = "xieminiproject@gmail.com"
-app_pass = "omni tvxy oelb dctl"
-
+app_pass = "ibpp vdjr pukx fyek"
+#  https://myaccount.google.com/apppasswords 
 app =  Flask(__name__)
 
 ckeditor = CKEditor(app)
@@ -51,7 +51,7 @@ def load_user(user_id):
     return database.session.get(User,user_id)
 
 app.config['SECRET_KEY']="mrpvproject"
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///polling.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = r"sqlite:///I:\My Drive\SE\sem 4\Miniproject\semantic analysis\Polling_app\instance\polling.db"
 
 
 database.init_app(app) 
@@ -216,6 +216,7 @@ def register():
         if user_email == None:
             hashed_password = generate_password_hash(request.form.get('password'), method='pbkdf2:sha256',salt_length=8)
             icons = [i for i in database.session.execute(database.select(icon)).scalars().all()]
+            print(f"the length of icons is {len(icons)}")
             selected_icon = "https://cdn-icons-png.flaticon.com/512/3251/3251650.png" if len(icons) == 0 else random.choice(icons).link
             print(selected_icon)
             new_user = User(
@@ -389,6 +390,7 @@ def profile():
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
         between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
+        
         total_numbers = len(intensities)
         percent_gt_01 = (gt_01_count / total_numbers) * 100
         percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100

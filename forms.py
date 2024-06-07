@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
 from wtforms import StringField, EmailField, PasswordField, SubmitField,URLField,FileField
-from wtforms.validators import DataRequired, Email, URL,Length
+from wtforms.validators import DataRequired, Email,Length
 
 class LoginForm(FlaskForm):
     email = EmailField(validators=[DataRequired(), Email()], render_kw={"placeholder": "Enter your email"}, label= False)

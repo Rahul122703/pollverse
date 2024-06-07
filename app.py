@@ -308,13 +308,13 @@ def sort_comment(value):
     start = 0
     
     print(f"start is {start} and value == {value}")
-    if value == 3: #recetn
+    if value == 3: 
         sorting = "Recent"
         global_comments.reverse()  
     elif value == 2: #most active
         sorting = "Most Active"
         global_comments.reverse()
-        active_comment = []#didn't get it!!
+        active_comment = []
         sorted_comments = sorted(global_comments, key=lambda comment: len(database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment.id)).scalars().all()), reverse=True)
         active_comment.extend(sorted_comments)
         global_comments = active_comment

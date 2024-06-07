@@ -1891,3 +1891,8 @@ input:focus-visible + label {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s; /* Smooth transition for background and transform */
 }
+
+
+/* #chartContainer{
+  border: 2px solid red;
+} */

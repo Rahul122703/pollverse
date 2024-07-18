@@ -1,3 +1,4 @@
 current problems IN POLLVERSE
 1. random allotment to the icon (girly icon)
 2. change of the icon when edited should be displayed without relogging
+3. registertaion page reponsiveness

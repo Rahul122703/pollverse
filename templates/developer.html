@@ -1,138 +1,232 @@
 {% include "headers.html" %}
 
-<header class="masthead" 
-style="background-image: url('https://img.freepik.com/premium-photo/abstract-background-dot-connect-line-cyber-technology-futuristic_34645-1151.jpg?w=1380')">
-    <div class="container position-relative px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                <div class="site-heading">
-                    <span class="subheading"><h1><b>Try our API endpoints
-                    </b></h1></span>
-                </div>
-            </div>
+<header
+  class="masthead"
+  style="
+    background-image: url('https://img.freepik.com/premium-photo/abstract-background-dot-connect-line-cyber-technology-futuristic_34645-1151.jpg?w=1380');
+  "
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <span class="subheading"
+            ><h1><b>Try our API endpoints </b></h1></span
+          >
         </div>
+      </div>
     </div>
+  </div>
 </header>
-<hr/>
-<hr/>
+<hr />
+<hr />
 
-  <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        <div class="carousel-item active">
-        <img src="static\assets\img\api1.jpg" class="d-block w-100" alt="..." height = "900" width = "700">
-        <div class="carousel-caption d-none d-md-block">
-            <h1 style="color:black">Using REST API in Your App</h1>
-            <p style="color:black">integrate RESTful APIs into your application for enhanced functionality and data exchange.</p>            
-        </div>
-        </div>
-        <div class="carousel-item">
-        <img src="static\assets\img\api2.jpg" class="d-block w-100" alt="..."  height = "900" width = "700">
-        <div class="carousel-caption d-none d-md-block">
-            <h1>Explore Varieties of APIs</h1>
-            <p>Discover the diverse range of APIs available and their potential applications in your projects.</p>
-        </div>
-        </div>
-        <div class="carousel-item">
-        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="d-block w-100" alt="..."  height = "900" width = "700">
-        <div class="carousel-caption d-none d-md-block">
-            <h1>Integrate Our REST API into Your Code</h1>
-            <p>Seamlessly incorporate our custom REST API into your codebase for optimized performance and functionality.</p>
-        </div>
-        </div>
+<div
+  id="carouselExampleAutoplaying"
+  class="carousel slide"
+  data-bs-ride="carousel"
+>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img
+        src="static\assets\img\api1.jpg"
+        class="d-block w-100"
+        alt="..."
+        height="900"
+        width="700"
+      />
+      <div class="carousel-caption d-none d-md-block">
+        <h1 style="color: black">Using REST API in Your App</h1>
+        <p style="color: black">
+          integrate RESTful APIs into your application for enhanced
+          functionality and data exchange.
+        </p>
+      </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
+    <div class="carousel-item">
+      <img
+        src="static\assets\img\api2.jpg"
+        class="d-block w-100"
+        alt="..."
+        height="900"
+        width="700"
+      />
+      <div class="carousel-caption d-none d-md-block">
+        <h1>Explore Varieties of APIs</h1>
+        <p>
+          Discover the diverse range of APIs available and their potential
+          applications in your projects.
+        </p>
+      </div>
     </div>
-
-<hr/>
-<hr/>
-<form action="{{ url_for('developer') }}" method="POST">
-    {% if user.ApiKey == None %}
-        <div class="uywefrgy324">
-            <div class="iuefi324" id="iuefi324" style="font-family: Arial, sans-serif; padding: 10px; background-color: #f0f0f0; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);">
-                <p style="margin: 0; font-size: 18px; color: #333;"><strong style="font-weight: bold; color: #007bff;">Create API </strong></p>
-            </div>
-            <div class="iuefi324" id="iuefi324">You don't have any API KEY</div>
-            <button type="submit" class="random324">Generate API Key</button>
-        </div>
-    {% else %}
-        <div class="uywefrgy324">
-            <div class="iuefi324" id="iuefi324" style="font-family: Arial, sans-serif; padding: 10px; background-color: #f0f0f0; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);">
-                <p style="margin: 0; font-size: 18px; color: #333;">Your API Key: <strong style="font-weight: bold; color: #007bff;">{{ user.ApiKey }}</strong></p>
-            </div>
-        </div>
-    {% endif %}
-</form>
-
-<hr/>
-
-<div class="wuefwie432">
-    <h2>User Information Documentation</h2>
-    <p>To retrieve all user information from the database, you can perform a GET request to the following endpoint:</p>
-    <code>/api/all_users</code>
-    <p>This endpoint will return a JSON object containing details of all users stored in the database.</p>
-    <hr/>
-    <button id="try-api-btn1" class ="tryap1234">Try This API</button>
-    <div class="api-usage-container">
-        <textarea type="text" class="api-input123" id = "input1" placeholder="Try this api" > 
-        </textarea>
-        
+    <div class="carousel-item">
+      <img
+        src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        class="d-block w-100"
+        alt="..."
+        height="900"
+        width="700"
+      />
+      <div class="carousel-caption d-none d-md-block">
+        <h1>Integrate Our REST API into Your Code</h1>
+        <p>
+          Seamlessly incorporate our custom REST API into your codebase for
+          optimized performance and functionality.
+        </p>
+      </div>
     </div>
-    <hr/>
+  </div>
+  <button
+    class="carousel-control-prev"
+    type="button"
+    data-bs-target="#carouselExampleAutoplaying"
+    data-bs-slide="prev"
+  >
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button
+    class="carousel-control-next"
+    type="button"
+    data-bs-target="#carouselExampleAutoplaying"
+    data-bs-slide="next"
+  >
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
 
-<hr/>
-<hr/>
+<hr />
+<hr />
+<form action="{{ url_for('developer') }}" method="POST">
+  {% if user.ApiKey == None %}
+  <div class="uywefrgy324">
+    <div
+      class="iuefi324"
+      id="iuefi324"
+      style="
+        font-family: Arial, sans-serif;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+      "
+    >
+      <p style="margin: 0; font-size: 18px; color: #333">
+        <strong style="font-weight: bold; color: #007bff">Create API </strong>
+      </p>
+    </div>
+    <div class="iuefi324" id="iuefi324">You don't have any API KEY</div>
+    <button type="submit" class="random324">Generate API Key</button>
+  </div>
+  {% else %}
+  <div class="uywefrgy324">
+    <div
+      class="iuefi324"
+      id="iuefi324"
+      style="
+        font-family: Arial, sans-serif;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+      "
+    >
+      <p style="margin: 0; font-size: 18px; color: #333">
+        Your API Key:
+        <strong style="font-weight: bold; color: #007bff"
+          >{{ user.ApiKey }}</strong
+        >
+      </p>
+    </div>
+  </div>
+  {% endif %}
+</form>
+
+<hr />
 
 <div class="wuefwie432">
-    <h2>Poll Information Documentation</h2>
-    <p>To retrieve all polls from the database, you can perform a GET request to the following endpoint:</p>
-    <code>/api/all_polls</code>
-    <p>This endpoint will return a JSON object containing details of all polls stored in the database.</p>
-    <button id="try-api-btn2" class ="tryap1234">Try This API</button>
-    <div class="api-usage-container">
-        <textarea type="text" class="api-input123" id = "input2" placeholder="Try this API" > 
-        </textarea>
+  <h2>User Information Documentation</h2>
+  <p>
+    To retrieve all user information from the database, you can perform a GET
+    request to the following endpoint:
+  </p>
+  <code>https://pollverse-80nc.onrender.com/all_users</code>
+  <p>
+    This endpoint will return a JSON object containing details of all users
+    stored in the database.
+  </p>
+  <hr />
+  <button id="try-api-btn1" class="tryap1234">Try This API</button>
+  <div class="api-usage-container">
+    <textarea
+      type="text"
+      class="api-input123"
+      id="input1"
+      placeholder="Try this api"
+    >
+    </textarea>
+  </div>
+  <hr />
+</div>
 
-    </div>
-    <hr/>
+<hr />
+<hr />
+
+<div class="wuefwie432">
+  <h2>Poll Information Documentation</h2>
+  <p>
+    To retrieve all polls from the database, you can perform a GET request to
+    the following endpoint:
+  </p>
+  <code>https://pollverse-80nc.onrender.com/all_polls</code>
+  <p>
+    This endpoint will return a JSON object containing details of all polls
+    stored in the database.
+  </p>
+  <button id="try-api-btn2" class="tryap1234">Try This API</button>
+  <div class="api-usage-container">
+    <textarea
+      type="text"
+      class="api-input123"
+      id="input2"
+      placeholder="Try this API"
+    >
+    </textarea>
+  </div>
+  <hr />
 </div>
 
 <script>
-document.getElementById('try-api-btn1').addEventListener('click', function() {
-    fetch('/all_users')
-    .then(response => response.json())
-    .then(data => {
-        // Format the JSON data for display
-        const formattedData = JSON.stringify(data, null, 2); // Indent with 2 spaces
-        document.getElementById('input1').value = formattedData;
-    })
-    .catch(error => {
-        console.error('Error:', error);
+  document
+    .getElementById("try-api-btn1")
+    .addEventListener("click", function () {
+      fetch("/all_users")
+        .then((response) => response.json())
+        .then((data) => {
+          // Format the JSON data for display
+          const formattedData = JSON.stringify(data, null, 2); // Indent with 2 spaces
+          document.getElementById("input1").value = formattedData;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     });
-});
 
-document.getElementById('try-api-btn2').addEventListener('click', function() {
-    fetch('/all_polls')
-    .then(response => response.json())
-    .then(data => {
-        // Format the JSON data for display
-        const formattedData = JSON.stringify(data, null, 2); // Indent with 2 spaces
-        document.getElementById('input2').value = formattedData;
-    })
-    .catch(error => {
-        console.error('Error:', error);
+  document
+    .getElementById("try-api-btn2")
+    .addEventListener("click", function () {
+      fetch("/all_polls")
+        .then((response) => response.json())
+        .then((data) => {
+          // Format the JSON data for display
+          const formattedData = JSON.stringify(data, null, 2); // Indent with 2 spaces
+          document.getElementById("input2").value = formattedData;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     });
-});
-
 </script>
-
-
 
 {% include "footer.html" %}

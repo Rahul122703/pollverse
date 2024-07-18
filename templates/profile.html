@@ -1,23 +1,39 @@
 {% include "headers.html" %}
-<header class="masthead" 
-style="background-image: url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
-    <div class="container position-relative px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                <div class="site-heading">
-                    <h3>Have a great day {{current_user.username}}</h3>
-                </div>
-            </div>
+<header
+  class="masthead"
+  style="
+    background-image: url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  "
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h3>Have a great day {{current_user.username}}</h3>
         </div>
+      </div>
     </div>
+  </div>
 </header>
 <div class="container_987">
   {% if anonymous_mode %}
-    <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" alt="Profile Picture" class="profile-picture_456" />
+  <img
+    src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png"
+    alt="Profile Picture"
+    class="profile-picture_456"
+  />
   {% elif current_user.uicon %}
-    <img src="data:image/jpeg;base64,{{ current_user.uicon|b64encode_image }}" alt="Profile Picture" class="profile-picture_456">
+  <img
+    src="data:image/jpeg;base64,{{ current_user.uicon|b64encode_image }}"
+    alt="Profile Picture"
+    class="profile-picture_456"
+  />
   {% else %}
-    <img src="{{current_user.icon}}" alt="Profile Picture" class="profile-picture_456">
+  <img
+    src="{{current_user.icon}}"
+    alt="Profile Picture"
+    class="profile-picture_456"
+  />
   {% endif %}
   <div class="personal-info_789">
     <p><strong>Username:</strong> {{current_user.username}}</p>
@@ -26,58 +42,38 @@ style="background-image: url('https://images.unsplash.com/photo-1444703686981-a3
     <p><strong>Replies:</strong> {{current_user.reply}}</p>
     <!-- Move the Edit Profile button here -->
     {% if anonymous_mode == 0%}
-      <div class="edit-profile_654">
-        <button id="edit-profile-btn_234" class="button_edit-profile_234">Edit</button>
-      </div>
+    <div class="edit-profile_654">
+      <button id="edit-profile-btn_234" class="button_edit-profile_234">
+        Edit
+      </button>
+    </div>
     {% endif %}
   </div>
 </div>
 
 <!-- Modal for Edit Profile form -->
-{% if anonymous_mode == 0 %}
-  {% from "bootstrap5/form.html" import render_form %}
-  <div id="edit-profile-modal_789" class="modal_789">
-    <div class="modal-content_654">
-      <span class="close_321">&times;</span>
-      <h2>Edit Profile</h2>
-      <form method = "POST" action = "{{url_for('profile')}}" enctype="multipart/form-data">
-        {{ render_form(profile_form) }}
-        
-      </form>
-    </div>
+{% if anonymous_mode == 0 %} {% from "bootstrap5/form.html" import render_form
+%}
+<div id="edit-profile-modal_789" class="modal_789">
+  <div class="modal-content_654">
+    <span class="close_321">&times;</span>
+    <h2>Edit Profile</h2>
+    <form
+      method="POST"
+      action="{{url_for('profile')}}"
+      enctype="multipart/form-data"
+    >
+      {{ render_form(profile_form) }}
+    </form>
   </div>
-{% endif %}
-{% include "user_activity.html" %}
+</div>
+{% endif %} {% include "user_activity.html" %} 
 
 
-<script>document.addEventListener('DOMContentLoaded', function() {
-  // JavaScript to handle the click event for opening the edit profile form
-  document.getElementById('edit-profile-btn_234').addEventListener('click', function() {
-    // Get the modal element
-    var modal = document.getElementById('edit-profile-modal_789');
-    
-    // Display the modal
-    modal.style.display = 'flex';
-  });
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
-  // Close the modal when the user clicks on the close button (X)
-  document.getElementsByClassName('close_321')[0].addEventListener('click', function() {
-    // Get the modal element
-    var modal = document.getElementById('edit-profile-modal_789');
-    
-    // Hide the modal
-    modal.style.display = 'none';
-  });
 
-  // Close the modal when the user clicks outside of it
-  window.addEventListener('click', function(event) {
-    // Get the modal element
-    var modal = document.getElementById('edit-profile-modal_789');
-    
-    // If the clicked element is the modal, close it
-    if (event.target == modal) {
-      modal.style.display = 'none';
-    }
-  });
-});</script>
-{% include "footer.html" %}
+
+</html>
+  
+

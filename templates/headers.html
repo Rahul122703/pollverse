@@ -48,7 +48,7 @@
             <div class="nav-item dropdown">
                 
                 {% if logged_in %}
-                    <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link  px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {% if anonymous_mode %}
                             <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
                         {% elif current_user.uicon %}
@@ -58,12 +58,12 @@
                         {% endif %}
                     </a>
                 {% else %}
-                    <a class="nav-link dropdown-toggle px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link  px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ url_for('static', filename='assets/icons/user.svg') }}" height="50" width="50" class="rounded-circle" alt="User Icon"/> User Account
                     </a>
                 {% endif %}
                 
-                <ul class="dropdown-menu animated" aria-labelledby="navbarDropdown">
+                <ul class="dropdown-menu animated" aria-labelledby="navbarDropdown" id =  "nav_bar123">
                     {% if logged_in %}
                         <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
                         <li><a href="{{ url_for('register') }}" class="register-link dropdown-item">Register here</a></li>
@@ -202,5 +202,4 @@
             </div>
         </div>
     {% endif %}
-
 

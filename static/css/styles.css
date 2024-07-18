@@ -1,12 +1,16 @@
 @charset "UTF-8";
 
-*{
+* {
   text-decoration: none !important;
 }
 
 body {
   margin: 0;
-  background: linear-gradient(135deg, #ffffff, #fcfcfc); /* Dark gradient background */
+  background: linear-gradient(
+    135deg,
+    #ffffff,
+    #fcfcfc
+  ); /* Dark gradient background */
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
@@ -26,15 +30,29 @@ hr {
   opacity: 0.25;
 }
 
-h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
+h6,
+.h6,
+h5,
+.h5,
+h4,
+.h4,
+h3,
+.h3,
+h2,
+.h2,
+h1,
+.h1 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 800;
   line-height: 1.2;
 }
 
-h1, .h1 {
+h1,
+.h1 {
   font-size: calc(1.375rem + 1.5vw);
 }
 
@@ -72,7 +90,8 @@ header.masthead .page-heading,
 header.masthead .site-heading {
   text-align: right;
 }
-header.masthead .page-heading h1, header.masthead .page-heading .h1,
+header.masthead .page-heading h1,
+header.masthead .page-heading .h1,
 header.masthead .site-heading h1,
 header.masthead .site-heading .h1 {
   font-size: 3rem;
@@ -84,9 +103,12 @@ header.masthead .site-heading .subheading {
   line-height: 1.1;
   display: block;
   margin-top: 0.625rem;
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-header.masthead .post-heading h1, header.masthead .post-heading .h1 {
+header.masthead .post-heading h1,
+header.masthead .post-heading .h1 {
   font-size: 2.25rem;
 }
 header.masthead .post-heading .meta,
@@ -98,13 +120,17 @@ header.masthead .post-heading .subheading {
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0.75rem 0 2rem;
-  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 header.masthead .post-heading .meta {
   font-size: 1.25rem;
   font-weight: 300;
   font-style: italic;
-  font-family: "Lora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: "Lora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
 }
 header.masthead .post-heading .meta a {
   color: #fff;
@@ -114,12 +140,14 @@ header.masthead .post-heading .meta a {
     padding-top: 12.5rem;
     padding-bottom: 12.5rem;
   }
-  header.masthead .page-heading h1, header.masthead .page-heading .h1,
+  header.masthead .page-heading h1,
+  header.masthead .page-heading .h1,
   header.masthead .site-heading h1,
   header.masthead .site-heading .h1 {
     font-size: 5rem;
   }
-  header.masthead .post-heading h1, header.masthead .post-heading .h1 {
+  header.masthead .post-heading h1,
+  header.masthead .post-heading .h1 {
     font-size: 3.5rem;
   }
   header.masthead .post-heading .subheading {
@@ -145,9 +173,10 @@ header.masthead .post-heading .meta a {
 .post-preview > a {
   color: #212529;
 }
-.post-preview > a:focus, .post-preview > a:hover {
+.post-preview > a:focus,
+.post-preview > a:hover {
   text-decoration: none;
-  color: #0085A1;
+  color: #0085a1;
 }
 .post-preview > a > .post-title {
   font-size: 1.875rem;
@@ -172,17 +201,6 @@ header.masthead .post-heading .meta a {
     font-size: 2.25rem;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* These lines is for pop up login page*/
 /* Overlay */
@@ -222,13 +240,23 @@ header.masthead .post-heading .meta a {
   margin: 5px 0;
   border: none;
   border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.8
+  ); /* Semi-transparent white background */
   transition: background-color 0.3s ease;
 }
 
 .popup input[type="text"]:focus,
 .popup input[type="password"]:focus {
-  background-color: rgba(255, 255, 255, 1); /* Fully opaque white background on focus */
+  background-color: rgba(
+    255,
+    255,
+    255,
+    1
+  ); /* Fully opaque white background on focus */
 }
 
 /* Error message */
@@ -267,24 +295,14 @@ header.masthead .post-heading .meta a {
 /* Animation */
 @keyframes slideIn {
   from {
-      opacity: 0;
-      transform: translateY(-50px);
+    opacity: 0;
+    transform: translateY(-50px);
   }
   to {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 /*This blow css is for comments and all its element*/
 
@@ -307,7 +325,6 @@ header.masthead .post-heading .meta a {
   font-size: 14px; /* Adjust as needed */
   color: #777; /* Adjust as needed */
 }
-
 
 .comment-container:hover {
   transform: translateY(-5px);
@@ -345,7 +362,8 @@ header.masthead .post-heading .meta a {
   margin-bottom: 10px;
 }
 
-.upvote, .downvote {
+.upvote,
+.downvote {
   margin-right: 8px;
   cursor: pointer;
   color: #4682b4;
@@ -353,7 +371,8 @@ header.masthead .post-heading .meta a {
   transition: color 0.3s ease;
 }
 
-.upvote:hover, .downvote:hover {
+.upvote:hover,
+.downvote:hover {
   color: #4169e1;
 }
 
@@ -363,32 +382,18 @@ header.masthead .post-heading .meta a {
   font-size: 18px;
 }
 
-.reply-button, .save-button {
+.reply-button,
+.save-button {
   cursor: pointer;
   font-size: 20px;
   transition: color 0.3s ease;
   margin-right: 8px;
 }
 
-.reply-button:hover, .save-button:hover {
+.reply-button:hover,
+.save-button:hover {
   color: #008000;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*BELOW CODE IS FOR COMMENT THREADING*/
 .comment-thread {
@@ -417,7 +422,6 @@ header.masthead .post-heading .meta a {
   font-size: 16px; /* Adjust as needed */
   font-weight: bold; /* Optional: Make the username bold */
 }
-
 
 @keyframes fadeIn {
   from {
@@ -452,7 +456,6 @@ header.masthead .post-heading .meta a {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
   transition: all 0.4s ease; /* Smoother transition */
 }
-
 
 .comment-container:hover {
   transform: translateY(-3px); /* Lift effect on hover */
@@ -539,9 +542,8 @@ header.masthead .post-heading .meta a {
 
 .replies-container {
   margin-left: 30px; /* Reduced margin */
-}s
-
-.replies-container .comment-container {
+}
+s .replies-container .comment-container {
   border: 2px solid #e2e2e2; /* Light gray border */
   border-radius: 8px; /* Reduced border radius */
   padding: 8px; /* Reduced padding */
@@ -574,7 +576,8 @@ header.masthead .post-heading .meta a {
   margin-bottom: 4px; /* Reduced margin */
 }
 
-.upvote, .downvote {
+.upvote,
+.downvote {
   margin-right: 6px; /* Reduced margin */
   cursor: pointer;
   color: #4682b4; /* Steel blue */
@@ -582,7 +585,8 @@ header.masthead .post-heading .meta a {
   transition: color 0.3s ease; /* Smooth color transition */
 }
 
-.upvote:hover, .downvote:hover {
+.upvote:hover,
+.downvote:hover {
   color: #4169e1; /* Royal blue on hover */
 }
 
@@ -591,21 +595,6 @@ header.masthead .post-heading .meta a {
   color: #4682b4; /* Steel blue */
   font-size: 14px; /* Reduced font size */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*Below code is for profile*/
 
@@ -622,62 +611,62 @@ header.masthead .post-heading .meta a {
   align-items: center;
 }
 
-  .heading_123 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
+.heading_123 {
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-  .profile-picture_456 {
-    width: 150px;
-    height: 150px;
-    border-radius: 100px; /* Square border radius */
-    margin: 0 auto 20px;
-    display: block;
-    background-color: #ccc; /* Default profile picture background color */
-  }
+.profile-picture_456 {
+  width: 150px;
+  height: 150px;
+  border-radius: 100px; /* Square border radius */
+  margin: 0 auto 20px;
+  display: block;
+  background-color: #ccc; /* Default profile picture background color */
+}
 
-  .personal-info_789,
-  .activity-overview_654,
-  .contribution-stats_321,
-  .sentiment-analysis_987 {
-    margin-bottom: 30px;
-  }
+.personal-info_789,
+.activity-overview_654,
+.contribution-stats_321,
+.sentiment-analysis_987 {
+  margin-bottom: 30px;
+}
 
-  .button_edit-profile_234 {
-    margin-left: 60px;
-    background-color: #ffc107; /* Button background color */
-    color: #fff; /* Button text color */
-    border: none;
-    border-radius: 50px; /* Rounded button */
-    padding: 10px 25px; /* Padding */
-    font-size: 16px;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and transform */
-    cursor: pointer;
-  }
+.button_edit-profile_234 {
+  margin-left: 60px;
+  background-color: #ffc107; /* Button background color */
+  color: #fff; /* Button text color */
+  border: none;
+  border-radius: 50px; /* Rounded button */
+  padding: 10px 25px; /* Padding */
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and transform */
+  cursor: pointer;
+}
 
-  .button_edit-profile_234:hover {
-    background-color: #ffca28; /* Button background color on hover */
-    transform: scale(1.05); /* Button scaling on hover */
-  }
+.button_edit-profile_234:hover {
+  background-color: #ffca28; /* Button background color on hover */
+  transform: scale(1.05); /* Button scaling on hover */
+}
 
-  .button_change-password_567 {
-    background-color: #4CAF50; /* Green */
-    color: white;
-    border-radius: 50px;
-    padding: 10px 20px;
-    font-size: 16px;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    cursor: pointer;
-  }
+.button_change-password_567 {
+  background-color: #4caf50; /* Green */
+  color: white;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
 
-  .button_change-password_567:hover {
-    background-color: #45a049;
-  }
+.button_change-password_567:hover {
+  background-color: #45a049;
+}
 
-  /* Modal styles */
-  /* .modal_789 {
+/* Modal styles */
+/* .modal_789 {
     display: none; 
     position: fixed; 
     z-index: 1000;
@@ -685,62 +674,41 @@ header.masthead .post-heading .meta a {
     top: 50%;
     overflow: auto; 
   } */
-  
 
-  .modal_789 {
-    position: absolute;
-    top: 0%;
-    display: none; 
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100vw;
-    z-index: 996;
-    background: rgba(255, 255, 0, 0);
-    /* border: 2px solid red; */
-  }
-  
+.modal_789 {
+  position: absolute;
+  top: 0%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  z-index: 996;
+  background: rgba(255, 255, 0, 0);
+  /* border: 2px solid red; */
+}
 
-  .modal-content_654 {
-    position: fixed;
-    background-color: #fefefe;
-    padding: 20px;
-    border: 1px solid #888;
-    border-radius: 10px;
-  }
+.modal-content_654 {
+  position: fixed;
+  background-color: #fefefe;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+}
 
-  .close_321 {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+.close_321 {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-  .close_321:hover,
-  .close_321:focus {
-    color: black;
-    text-decoration: none;
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.close_321:hover,
+.close_321:focus {
+  color: black;
+  text-decoration: none;
+}
 
 /* Below code is for comemnting form */
 .center-wrapper {
@@ -813,31 +781,14 @@ header.masthead .post-heading .meta a {
 
 @keyframes fadeInUp {
   from {
-      opacity: 0;
-      transform: translateY(20px);
+    opacity: 0;
+    transform: translateY(20px);
   }
   to {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*BELOW CODE IS FOR STICKY CIRCLE AT BOTTOM RIGHT CORNER*/
 .sticky-circle-container {
@@ -862,7 +813,8 @@ header.masthead .post-heading .meta a {
   line-height: 60px;
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Shadow effect */
-  transition: width 0.1s ease, height 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease;
+  transition: width 0.1s ease, height 0.3s ease, border-radius 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .sticky-circle-container a:hover {
@@ -886,10 +838,6 @@ header.masthead .post-heading .meta a {
 .sticky-circle-container a:hover .add-post-label {
   opacity: 1;
 }
-
-
-
-
 
 /* PROFILE FLIPPING CSS  */
 /*CSS 1*/
@@ -953,9 +901,15 @@ header.masthead .post-heading .meta a {
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .Jhglkijo:hover {
@@ -1004,7 +958,7 @@ header.masthead .post-heading .meta a {
 }
 
 .ajsd45 {
-  background: linear-gradient(45deg, #FFD700, #FFA500);
+  background: linear-gradient(45deg, #ffd700, #ffa500);
   transform: rotateY(0deg);
   height: 50%; /* Adjusted height */
 }
@@ -1031,7 +985,7 @@ header.masthead .post-heading .meta a {
 }
 
 .kloi87 {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   font-size: 20px;
   font-weight: bold;
   color: #ffffff;
@@ -1045,7 +999,7 @@ header.masthead .post-heading .meta a {
 
 .nmk98 {
   padding: 8px 16px;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   border: none;
   border-radius: 5px;
@@ -1062,7 +1016,6 @@ header.masthead .post-heading .meta a {
   transform: rotateY(180deg);
 }
 
-
 /*THIS BELOW CODE IS FOR NAV BAR*/
 .navbar {
   position: fixed;
@@ -1070,14 +1023,20 @@ header.masthead .post-heading .meta a {
   left: 10%; /* Adjust the left margin */
   width: 80%;
   padding: 5px 0; /* Adjust padding to reduce vertical height */
-  background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5)); /* Transparent mirror effect */
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.5)
+  ); /* Transparent mirror effect */
   z-index: 997; /* Ensure navbar is above other content */
   transition: background-color 0.3s ease; /* Smooth transition for background color */
   border-radius: 30px; /* Rounded corners */
 }
 
 .navbar:hover {
-  background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8)); /* Transparent mirror effect on hover */
+  background: linear-gradient(
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.8)
+  ); /* Transparent mirror effect on hover */
 }
 
 .navbar-brand img {
@@ -1137,20 +1096,21 @@ header.masthead .post-heading .meta a {
   display: none;
 }
 .dropdown-menu {
-    animation: fadeInDown 0.5s ease; /* Fade-in animation */
-    background-color: transparent; /* Set background to transparent */
-    border: none; /* Remove border */
+  animation: fadeInDown 0.5s ease; /* Fade-in animation */
+  background-color: transparent; /* Set background to transparent */
+  border: none; /* Remove border */
+  display: none;
 }
 
 .dropdown-item {
-    background-color: transparent; /* Set background to transparent */
-    color: #fff; /* Text color */
+  background-color: transparent; /* Set background to transparent */
+  color: #fff; /* Text color */
 }
 
 /* Hover effect */
 .dropdown-item:hover {
-    background-color: #ffdb4d; /* Darker yellow on hover */
-    transform: scale(1.05); /* Scale up slightly on hover */
+  background-color: #ffdb4d; /* Darker yellow on hover */
+  transform: scale(1.05); /* Scale up slightly on hover */
 }
 
 .search-input::placeholder {
@@ -1162,7 +1122,8 @@ header.masthead .post-heading .meta a {
   box-shadow: 0 0 8px rgba(255, 152, 0, 0.5); /* Highlight on focus */
 }
 
-.search-btn, .dropdown-item {
+.search-btn,
+.dropdown-item {
   background-color: #ffc107; /* Yellow button color */
   color: #000000; /* Text color */
   border: none;
@@ -1174,7 +1135,8 @@ header.masthead .post-heading .meta a {
 }
 
 /* Hover effect */
-.search-btn:hover, .dropdown-item:hover {
+.search-btn:hover,
+.dropdown-item:hover {
   background-color: #ffdb4d; /* Darker yellow on hover */
   transform: scale(1.05); /* Scale up slightly on hover */
 }
@@ -1186,15 +1148,14 @@ header.masthead .post-heading .meta a {
 
 @keyframes fadeInDown {
   from {
-      opacity: 0;
-      transform: translate3d(0, -10%, 0);
+    opacity: 0;
+    transform: translate3d(0, -10%, 0);
   }
   to {
-      opacity: 1;
-      transform: none;
+    opacity: 1;
+    transform: none;
   }
 }
-
 
 /* Button Styles */
 .btn {
@@ -1213,86 +1174,56 @@ header.masthead .post-heading .meta a {
   transform: scale(1.1); /* Scale up on hover */
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*BELOW CODE IS FOR MAST HEAD */
 .masthead {
-background-image: url('https://img.freepik.com/free-vector/alien-planet-landscape-cosmic-background-deserted-coastline-with-mountains-view-glowing-cleft-stars-shining-spheres-space-extraterrestrial-pc-game-backdrop-cartoon-vector-illustration_107791-8012.jpg?t=st=1710166061~exp=1710169661~hmac=e5f30cfff4c6d45a617074f6385acae70b9f3853d1961c607c8491daa18385b7&w=1380');
-background-size: cover;
-background-position: center;
-padding: 100px 0; /* Adjust padding as needed */
-position: relative;
-overflow: hidden; /* Hide overflowing content */
-filter: blur(0px); /* Apply slight blur effect */
+  background-image: url("https://img.freepik.com/free-vector/alien-planet-landscape-cosmic-background-deserted-coastline-with-mountains-view-glowing-cleft-stars-shining-spheres-space-extraterrestrial-pc-game-backdrop-cartoon-vector-illustration_107791-8012.jpg?t=st=1710166061~exp=1710169661~hmac=e5f30cfff4c6d45a617074f6385acae70b9f3853d1961c607c8491daa18385b7&w=1380");
+  background-size: cover;
+  background-position: center;
+  padding: 100px 0; /* Adjust padding as needed */
+  position: relative;
+  overflow: hidden; /* Hide overflowing content */
+  filter: blur(0px); /* Apply slight blur effect */
 }
 
 /* Container Styles */
 .container {
-position: relative; /* Ensure proper stacking */
-z-index: 1; /* Ensure content is above the blurred background */
+  position: relative; /* Ensure proper stacking */
+  z-index: 1; /* Ensure content is above the blurred background */
 }
 
 /* Site Heading Styles */
 .site-heading h3 {
-color: #fff; /* Text color */
-font-size: 48px; /* Adjust font size as needed */
-font-weight: bold;
-text-align: center;
-margin-bottom: 20px; /* Adjust spacing as needed */
-animation: fadeInUp 2s ease; /* Fade in animation */
+  color: #fff; /* Text color */
+  font-size: 48px; /* Adjust font size as needed */
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px; /* Adjust spacing as needed */
+  animation: fadeInUp 2s ease; /* Fade in animation */
 }
 
 /* Subheading Styles */
 .subheading {
-display: block;
-color: #fff; /* Text color */
-font-size: 24px; /* Adjust font size as needed */
-text-align: center;
-animation: fadeInUp 2s ease; /* Fade in animation */
+  display: block;
+  color: #fff; /* Text color */
+  font-size: 24px; /* Adjust font size as needed */
+  text-align: center;
+  animation: fadeInUp 2s ease; /* Fade in animation */
 }
 
 /* Animation Keyframes */
 @keyframes fadeInUp {
-from {
-  opacity: 0;
-  transform: translateY(20px);
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-to {
-  opacity: 1;
-  transform: translateY(0);
-}
-}
-
-
-
-
 
 /* SIDE NAV BAR */
 /* Side Navigation Styles */
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*This below code is for registration page*/
 
@@ -1300,15 +1231,15 @@ to {
   font-size: 12px;
 }
 
-.registerbutton{
-padding: 10px 20px;
-margin-top: 10px;
-border: none;
-border-radius: 5px;
-background-color: #007bff; /* Blue button color */
-color: #fff; /* White text color */
-cursor: pointer;
-transition: background-color 0.3s ease;
+.registerbutton {
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Blue button color */
+  color: #fff; /* White text color */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .registerbutton:active {
@@ -1319,13 +1250,13 @@ transition: background-color 0.3s ease;
   outline: none;
 }
 
-.registerbutton{
+.registerbutton {
   background-color: transparent;
-  border-color: #FFFFFF;
+  border-color: #ffffff;
 }
 
 .formy {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1351,25 +1282,26 @@ input {
   transform: translate(-50%, -50%);
   background-color: #fff;
   border-radius: 60px;
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-              0 10px 10px rgba(0,0,0,0.22);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   width: 1000px;
   max-width: 100%;
   min-height: 800px;
 }
 
-.formy-registercontainer { 
+.formy-registercontainer {
   /*here*/
-position: absolute;
-border-radius: 60px;
-top: 10;
-height: 100%;
-transition: all 0.6s ease-in-out;
+  position: absolute;
+  border-radius: 60px;
+  top: 10;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
 }
 
-.formy-registercontainer registerbutton:hover, .square-panel button:hover, .search-btn:hover {
-background-color: #ffdb4d; /* Darker yellow on hover */
-transform: scale(1.05); /* Scale up slightly on hover */
+.formy-registercontainer registerbutton:hover,
+.square-panel button:hover,
+.search-btn:hover {
+  background-color: #ffdb4d; /* Darker yellow on hover */
+  transform: scale(1.05); /* Scale up slightly on hover */
 }
 
 .sign-in-registercontainer {
@@ -1407,18 +1339,18 @@ transform: scale(1.05); /* Scale up slightly on hover */
   border-radius: 60px;
 }
 
-.registercontainer.right-panel-active .square-registercontainer{
+.registercontainer.right-panel-active .square-registercontainer {
   transform: translateX(-100%);
 }
 
 .square {
   background: #ffdb4d;
   background: -webkit-linear-gradient(to right, #ffdb4d, #ffdb4d);
-  background: linear-gradient(to right, #FF4B2B, #ffdb4d);
+  background: linear-gradient(to right, #ff4b2b, #ffdb4d);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
-  color: #FFFFFF;
+  color: #ffffff;
   position: relative;
   border-radius: 60px;
   left: -100%;
@@ -1465,8 +1397,6 @@ transform: scale(1.05); /* Scale up slightly on hover */
   transform: translateX(20%);
 }
 
-
-
 /*THIS BELOW CODE IS FOR ANIMATED LINE*/
 .animated-line {
   height: 4px; /* Height of the line */
@@ -1500,15 +1430,12 @@ transform: scale(1.05); /* Scale up slightly on hover */
   }
 }
 
-
-
-
 /*This below code is for tabs on show comment*/
 /*
  CSS for the main interaction
 */
 .tabset > input[type="radio"] {
-  position:absolute;
+  position: absolute;
   left: -200vw;
 }
 
@@ -1546,7 +1473,7 @@ transform: scale(1.05); /* Scale up slightly on hover */
 }
 
 input:focus-visible + label {
-  outline: 2px solid rgba(0,102,204,1);
+  outline: 2px solid rgba(0, 102, 204, 1);
   border-radius: 3px;
 }
 
@@ -1582,16 +1509,9 @@ input:focus-visible + label {
   box-sizing: border-box;
 }
 
-
 .tabset {
   max-width: 65em;
 }
-
-
-
-
-
-
 
 /*This below code is for popup delete and cross button too */
 /* Styling for delete button */
@@ -1670,9 +1590,9 @@ input:focus-visible + label {
 }
 
 /*This below code is for reply_form*/
-.move_to_center{
-  margin-left:20%;
-  margin-right:20%;
+.move_to_center {
+  margin-left: 20%;
+  margin-right: 20%;
   height: 50%;
 }
 
@@ -1694,14 +1614,6 @@ input:focus-visible + label {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
 }
 
-
-
-
-
-
-
-
-
 /*This below code is for api div*/
 .uywefrgy324 {
   background-color: #f4f4f4;
@@ -1715,7 +1627,7 @@ input:focus-visible + label {
 /* Styles for the API key */
 .iuefi324 {
   font-size: 20px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: #333;
   margin-bottom: 20px;
   word-wrap: break-word;
@@ -1723,7 +1635,7 @@ input:focus-visible + label {
 
 /* Styles for the button */
 .random324 {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -1737,13 +1649,10 @@ input:focus-visible + label {
   background-color: #45a049;
 }
 
-
-
-
 /* Styles for api fetching data */
 .api-usage-container {
-  margin-left :5%;
-  margin-right :5%;
+  margin-left: 5%;
+  margin-right: 5%;
   padding: 20px;
   background-color: #f0f0f0;
   border-radius: 10px;
@@ -1766,7 +1675,7 @@ input:focus-visible + label {
 }
 
 .tryap1234 {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -1779,12 +1688,10 @@ input:focus-visible + label {
   background-color: #45a049;
 }
 
-
-
 /*THIS BELOW CODE IS FOR DIV OF THE API TRYING*/
 .wuefwie432 {
-  margin-left:5%;
-  margin-right:5%;
+  margin-left: 5%;
+  margin-right: 5%;
   padding: 20px;
   background-color: #f0f0f0;
   border-radius: 20px;
@@ -1838,7 +1745,7 @@ input:focus-visible + label {
 }
 
 .tryap1234 {
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -1850,7 +1757,6 @@ input:focus-visible + label {
 .tryap1234:hover {
   background-color: #45a049;
 }
-
 
 /*BELOW code is for inputting of otp*/
 .otp-container {
@@ -1880,8 +1786,7 @@ input:focus-visible + label {
   background-color: #f0f0f0;
 }
 
-
-.verify-button123{
+.verify-button123 {
   background-color: #ffc107; /* Yellow button color */
   color: #000000; /* Text color */
   border: none;
@@ -1892,7 +1797,6 @@ input:focus-visible + label {
   transition: background-color 0.3s ease, transform 0.2s; /* Smooth transition for background and transform */
 }
 
-
-/* #chartContainer{
-  border: 2px solid red;
-} */
+.dont_display {
+  display: none;
+}

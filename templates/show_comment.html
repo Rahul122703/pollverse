@@ -142,8 +142,7 @@
             }
         </style>
         {% if length > 0 %}
-            <div class="container123 px-lg-3 py-3 py-lg-4">
-                <div class="content123 px-lg-3 py-3 py-lg-4">  
+
                     
                         <script type="text/javascript" src="https://www.google.com/jsapi"></script>
                         <script type="text/javascript">
@@ -156,6 +155,7 @@
                                     ['Positive',{{plus}}],
                                     ['Negative',{{minus}}],
                                 ]);
+                                console.log(document.querySelector(".width_nav").getBoundingClientRect().width);
                                 var options = {
                                     width:document.querySelector(".width_nav").getBoundingClientRect().width >500?500:400,
                                     height: document.querySelector(".width_nav").getBoundingClientRect().width >500?400:300,
@@ -171,9 +171,7 @@
                             <div class="edit-profile_654">
                                 <button class="button_edit-profile_234"><a href="{{url_for('download',comment_id = comment.id)}}" >Download data</a></button>
                             </div>
-                        </div> 
-                </div>
-            </div>
+
 
             {% include "pnn_replies.html" %}
 

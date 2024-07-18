@@ -157,8 +157,8 @@
                                     ['Negative',{{minus}}],
                                 ]);
                                 var options = {
-                                    width: 600,
-                                    height: 500,
+                                    width:document.querySelector(".width_nav").getBoundingClientRect().width >500?500:400,
+                                    height: document.querySelector(".width_nav").getBoundingClientRect().width >500?400:300,
                                     colors: ['#d3d3d3', '#90ee90', '#e64522'],
                                     is3D: true
                                 };

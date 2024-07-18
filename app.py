@@ -17,6 +17,7 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 import base64
 import string
+import os
 
 logged_in = 0
 not_registering = 1
@@ -51,7 +52,8 @@ def load_user(user_id):
     return database.session.get(User,user_id)
 
 app.config['SECRET_KEY']="mrpvproject"
-app.config['SQLALCHEMY_DATABASE_URI'] = r"sqlite:///I:\My Drive\SE\sem 4\Miniproject\semantic analysis\Polling_app\instance\polling.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI',"sqlite:///polling.db")
+
 
 
 database.init_app(app) 
@@ -227,7 +229,9 @@ def register():
                 created = datetime.now().strftime("%Y-%m-%d"),
                 phoneNo = register_form_object.phoneNo.data,
                 poll = 0,
-                reply = 0
+                reply = 0,
+                admin =0,
+                ApiKey = 0
             )
             database.session.add(new_user)
             database.session.commit()

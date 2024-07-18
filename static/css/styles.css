@@ -1189,6 +1189,7 @@ s .replies-container .comment-container {
 .container {
   position: relative; /* Ensure proper stacking */
   z-index: 1; /* Ensure content is above the blurred background */
+  /* border: 2px solid red; */
 }
 
 /* Site Heading Styles */
@@ -1799,4 +1800,16 @@ input:focus-visible + label {
 
 .dont_display {
   display: none;
+}
+
+.piechart_contianer {
+  /* border: 2px solid red; */
+  display: flex;
+  justify-content: center;
+  width: 70vw;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.piechart {
+  border: 2px solid black;
 }

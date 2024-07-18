@@ -3,3 +3,5 @@ current problems IN POLLVERSE
 2. change of the icon when edited should be displayed without relogging
 3. registertaion page reponsiveness
 4. cross button in the sorted comments in the polls is not working
+5. table UI is not reponsive in the admin
+6. down margin between the filter tabs and the chart's download button in the comment page

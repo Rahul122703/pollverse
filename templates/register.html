@@ -23,11 +23,31 @@
 <body style="background-image: url('https://img.freepik.com/free-vector/realistic-yellow-neon-background_52683-121698.jpg?w=1380&t=st=1711315404~exp=1711316004~hmac=3b0a6ee866a9f0a56b05f4ccad800249ca190d8c53e4ee80f29c9223ed08c095');">
  
   
+<div class = 'phone_register'>
+  <form method='post' action="{{ url_for('register') }}" class = "formy ">
+      <h1>Create Account Or
+      <a href = "{{ url_for('index') }}" ><div class = "btn btn-success login_inside_register" >Log In</div></a> </h1>
+      {% if error %}
+          <p style="color: #ff4d4d; /* Red color for error message */ 
+          font-size: 16px; /* Larger font size */ 
+          font-weight: bold; /* Bold text */ 
+          background-color: #ffe6e6; /* Light red background color */ 
+          padding: 10px; /* Padding around the error message */ 
+          border-radius: 5px; /* Rounded corners */ 
+          border: 1px solid #ff9999; /* Border around the error message */ 
+          margin-bottom: 10px; /* Margin below the error message */">
+          {{ error }}
+          </p>
+      {% endif %}
+      {{  render_form(register_form) }}
+  </form>
+</div>
 
-<div class="registercontainer" id="registercontainer">
-  <div class="formy-registercontainer sign-up-registercontainer">
-      <form method='post' action="{{ url_for('register') }}" class = "formy">
-          <h1>Create Account</h1>
+
+<div class="registercontainer pc_register" id="registercontainer">
+  <div class="formy-registercontainer sign-up-registercontainer registerform123">
+      <form method='post' action="{{ url_for('register') }}" class = "formy ">
+          <h1>Create Account
           {% if error %}
               <p style="color: #ff4d4d; /* Red color for error message */ 
               font-size: 16px; /* Larger font size */ 
@@ -91,7 +111,7 @@
               <button class = "registerbutton" id="signIn">Terms and conditions</button>
               <br><br><br>
               <h1>Already a user?</h1>
-              <a href = "{{ url_for('index') }}" class = "registerbutton" id="signIn"><button class = "registerbutton" id="signIn" >Log In</button></a>
+              <a href = "{{ url_for('index') }}" class = "pc_login" id="signIn"><button class = "registerbutton" id="signIn" >Log In</button></a>
           </div>
           <div class="square-panel square-right">
               <h1>Hello, Friend!</h1>

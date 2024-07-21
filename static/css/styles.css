@@ -1853,3 +1853,20 @@ input:focus-visible + label {
 .all_links_container {
   overflow: hidden;
 }
+
+.phone_register {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .pc_register {
+    display: none;
+  }
+  .phone_register {
+    display: block;
+    margin-top: 30%;
+  }
+  .formy {
+    border-radius: 0px;
+  }
+}

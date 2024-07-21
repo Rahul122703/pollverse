@@ -1858,6 +1858,10 @@ input:focus-visible + label {
   display: none;
 }
 
+.phone_table {
+  display: none;
+}
+
 @media (max-width: 900px) {
   .pc_register {
     display: none;
@@ -1868,5 +1872,11 @@ input:focus-visible + label {
   }
   .formy {
     border-radius: 0px;
+  }
+  .pc_table {
+    display: none;
+  }
+  .phone_table {
+    display: block;
   }
 }

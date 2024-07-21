@@ -406,6 +406,10 @@ header.masthead .post-heading .meta a {
   animation: fadeIn 0.8s ease; /* Slower fade-in animation */
 }
 
+.comment-thread123 {
+  background-color: rgb(248, 231, 135);
+}
+
 .user-info123 {
   display: flex;
   align-items: center; /* Optional: Align the items vertically */
@@ -636,13 +640,23 @@ s .replies-container .comment-container {
   margin-left: 60px;
   background-color: #ffc107; /* Button background color */
   color: #fff; /* Button text color */
-  border: none;
-  border-radius: 50px; /* Rounded button */
+  border-radius: 25px; /* Rounded button */
+  border: 2px solid rgb(167, 167, 0);
   padding: 10px 25px; /* Padding */
   font-size: 16px;
   text-transform: uppercase;
   transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for background color and transform */
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .bottom_btn_container {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .button_edit-profile_234 {
+    margin-top: 5px;
+  }
 }
 
 .button_edit-profile_234:hover {
@@ -937,7 +951,7 @@ s .replies-container .comment-container {
   width: 200px;
   height: 400px; /* Reduced height */
   perspective: 1000px;
-  margin-bottom: 20px;
+  margin-bottom: -150px;
 }
 
 .oner34 {
@@ -990,11 +1004,6 @@ s .replies-container .comment-container {
   font-weight: bold;
   color: #ffffff;
   text-align: center;
-  margin-bottom: 10px;
-}
-
-.hg76kd {
-  margin: 5px 0;
 }
 
 .nmk98 {
@@ -1023,20 +1032,20 @@ s .replies-container .comment-container {
   left: 10%; /* Adjust the left margin */
   width: 80%;
   padding: 5px 0; /* Adjust padding to reduce vertical height */
-  background: linear-gradient(
-    rgba(255, 255, 255, 0.2),
-    rgba(255, 255, 255, 0.5)
-  ); /* Transparent mirror effect */
+  background: rgba(255, 255, 255, 0);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   z-index: 997; /* Ensure navbar is above other content */
   transition: background-color 0.3s ease; /* Smooth transition for background color */
   border-radius: 30px; /* Rounded corners */
+  color: white;
 }
 
 .navbar:hover {
-  background: linear-gradient(
-    rgba(255, 255, 255, 0.5),
-    rgba(255, 255, 255, 0.8)
-  ); /* Transparent mirror effect on hover */
+  background: rgba(255, 255, 255, 0.192);
 }
 
 .navbar-brand img {
@@ -1062,7 +1071,7 @@ s .replies-container .comment-container {
 }
 
 .nav-item:hover .nav-link {
-  color: #fff; /* Text color on hover */
+  color: #000000; /* Text color on hover */
 }
 
 .navbar-toggler {
@@ -1810,6 +1819,37 @@ input:focus-visible + label {
   box-sizing: border-box;
   margin: 0 auto;
 }
-.piechart {
-  border: 2px solid black;
+
+.reply_form123 {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+#chartContainer {
+  margin: 0 auto;
+  margin-bottom: 20px;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.bottom_btn_container {
+  /* border: 2px solid black; */
+  display: flex;
+}
+
+.search_container {
+  /* border: 2px solid black; */
+  display: flex;
+  justify-content: center;
+}
+
+.navbar_upper {
+  overflow: hidden;
+}
+.all_links_container {
+  overflow: hidden;
 }

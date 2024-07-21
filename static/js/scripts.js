@@ -16,17 +16,20 @@ document.querySelectorAll(".yes-button321").forEach((yesButton) => {
 
 document.querySelectorAll(".no-button321").forEach((noButton) => {
   noButton.addEventListener("click", () => {
-    const targetPopupId = noButton.closest(".popup321").id;
-    const deletePopup = document.getElementById(targetPopupId);
-    deletePopup.style.display = "none";
+    noButton.parentElement.parentElement.parentElement.style.display = "none";
+    console.log(
+      noButton.parentElement.parentElement.parentElement.style.display
+    );
+    document.querySelectorAll(".popup321").forEach((currentItem) => {
+      currentItem.style.display = "none";
+    });
   });
 });
 
-document.querySelectorAll(".cross321").forEach((crossButton) => {
-  crossButton.addEventListener("click", () => {
-    const targetPopupId = crossButton.closest(".popup321").id;
-    const deletePopup = document.getElementById(targetPopupId);
-    deletePopup.style.display = "none";
+document.querySelectorAll(".delete-button321").forEach((currentItem) => {
+  currentItem.addEventListener("click", () => {
+    console.log(currentItem.nextElementSibling);
+    currentItem.nextElementSibling.style.display = "block";
   });
 });
 
@@ -85,4 +88,26 @@ document.addEventListener("DOMContentLoaded", function () {
       modal.style.display = "none";
     }
   });
+});
+
+const navbar_links = document.querySelectorAll(".navbar_links123");
+window.addEventListener("scroll", () => {
+  navbar_links.forEach((currentItem) => {
+    currentItem.style.color = window.pageYOffset < 500 ? "white" : "black";
+  });
+  console.log("here");
+});
+
+const toggle = document.querySelector(".navbar-toggler-icon");
+const links_container = document.querySelector(".above_link_container");
+const btm_container = document.querySelector(".all_links_container");
+
+toggle.addEventListener("click", function () {
+  const btm_height = btm_container.getBoundingClientRect().height; // new
+  const links_container_height = links_container.getBoundingClientRect().height;
+  if (links_container_height != btm_height) {
+    links_container.style.height = `${btm_height}px`;
+  } else {
+    links_container.style.height = `0px`;
+  }
 });

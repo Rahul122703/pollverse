@@ -22,15 +22,17 @@ import os
 logged_in = 0
 not_registering = 1
 current_user_id = 0
+current_user_pic = None
 otp_send = 0
 anonymous_mode = 0
-
+comment = None
 random_username = None
 current_user_email = None
 user_otp = None
 current_user = None
 username = None
 user_icon = None
+
 current_page = "index"
 from_email = "xieminiproject@gmail.com"
 app_pass = "ibpp vdjr pukx fyek"
@@ -183,7 +185,7 @@ with app.app_context():
 @app.context_processor
 def common_variable():
     global logged_in, not_registering, current_user_id, otp_send, anonymous_mode,current_page,admin_flash,sorting,positive_replies,negative_replies,neutral_replies
-    global current_user_email, user_otp, current_user, username, user_icon,random_username
+    global current_user_email, user_otp, current_user, username, user_icon,random_username,current_user_pic,comment
     words_list = ["ShadowSeeker", "WhisperWanderer", "VeilVoyager", "EchoExplorer", "SilentSleuth", "ShadeShifter", "PhantomProwler", "IncognitoInquirer", "StealthStroller", "EnigmaRoamer"]
     random_username = random.choice(words_list)
 
@@ -205,8 +207,10 @@ def common_variable():
                 user_otp = user_otp,
                 username = username,
                 user_icon = user_icon,
-                random_username = random_username)
-    
+                random_username = random_username,
+                current_user_pic = current_user_pic,
+                comment = comment)
+     
 @app.route('/register',methods = ['GET','POST'])
 def register():
     global not_registering,current_user_id,current_user,logged_in
@@ -271,8 +275,8 @@ def register():
 
 
 @app.route('/login_user',methods = ['GET','POST'])
-def login():
-    global logged_in,current_user,current_user_id,current_user_email
+def login(): #login123
+    global logged_in,current_user,current_user_id,current_user_email,current_user_pic
     form_instance = LoginForm()
     
     if form_instance.validate_on_submit():
@@ -285,6 +289,7 @@ def login():
                 login_user(user)
                 logged_in = 1
                 current_user_id = user.id
+                current_user_pic = user.uicon
                 print(f"here!!!!!!!!! {current_user_id}")
                 current_user = user
                 current_user_email = entred_email
@@ -331,7 +336,7 @@ def sort_comment(value):
 
 
 @app.route('/') 
-def index():
+def index(): #index123
     global current_user_id,current_user,login_form,logged_in,current_page,global_comments,start
     print(f"->>>>>>>>>>>>>>>>>>{logged_in }-<<<<<<<<<<<<<<")
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
@@ -362,35 +367,39 @@ def logout():
 
 
 @app.route('/profile',methods = ['GET','POST'])
-def profile():
-    global current_page
+def profile():#profile123
+    print("you are on profile page")
+    global current_page,current_user,comment,current_user_pic
     current_page = 'profile'
-    current_user = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
+    changed_user = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
+    print(changed_user.uicon)
     profile_form = EditProfileForm()
     if profile_form.validate_on_submit():
         if len(profile_form.ProfilePic.data)!=0:
-            current_user.icon = profile_form.ProfilePic.data 
+            changed_user.icon = profile_form.ProfilePic.data 
         if  len(profile_form.username.data)!=0:    
-            current_user.username = profile_form.username.data
+            changed_user.username = profile_form.username.data
         if len(profile_form.password.data)!=0:    
-            current_user.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
+            changed_user.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
         if profile_form.SelectPic.data is not None:   
             print("done!!") 
-            current_user.uicon = profile_form.SelectPic.data.read()
-            print(profile_form.SelectPic.data.read())
-            print("this is being printed and this is here")
-        database.session.commit()   
+            changed_user.uicon = profile_form.SelectPic.data.read()
+            # print(profile_form.SelectPic.data.read())
+            # print("this is being printed and this is here")
+        database.session.commit() 
+        
         return redirect(url_for('profile'))
     
     
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
 
     comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
-
+    comment  = len(comments)!=0 if comments[0] else None
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user.id)).scalars().all()
     intensities = [i.intensity for i in all_replies]
-
+    current_user_pic = changed_user.uicon
     if len(intensities):
+        print("if one")
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
         between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
@@ -399,7 +408,6 @@ def profile():
         percent_gt_01 = (gt_01_count / total_numbers) * 100
         percent_lt_minus01 = (lt_minus01_count / total_numbers) * 100
         percent_between_minus01_to_01 = (between_minus01_to_01_count / total_numbers) * 100
-        
         return render_template('profile.html',
                            comments = comments,
                            profile_form = profile_form,
@@ -407,13 +415,15 @@ def profile():
                            plus = percent_gt_01,
                            minus = percent_lt_minus01 ,
                            neutral = percent_between_minus01_to_01,
-                           all_replies = all_replies)
-    
+                           all_replies = all_replies,
+                           current_user_pic = current_user_pic)
+    print("if two")
     return render_template('profile.html',
                            length = len(intensities),
                            all_replies  = all_replies ,
                            comments = comments,
-                           profile_form = profile_form)
+                           profile_form = profile_form,
+                           current_user_pic = current_user_pic)
  
 @app.route('/comment_profile/<int:user_id>',methods = ['GET','POST'])
 def comment_profile(user_id):

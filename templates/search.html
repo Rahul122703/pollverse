@@ -46,34 +46,34 @@
 </div>
 
 <div class="container px-4 px-lg-5 profile-card-container">
-    <div class="row gx-4 gx-lg-5 justify-content-center">
+    <div class="row gx-4 gx-lg-5 search_container">
         {% for user in users %}
             <div class="eri324">
-            <div class="oner34">
-                <div class="oeruhb34 ajsd45">
-                <div class="dfh42">
-                    <div class="hj34ds">
-                    {% if user.uicon %}
-                        <img src="data:image/jpeg;base64,{{ user.uicon|b64encode_image }}" alt="User Icon" class="hj34ds">
-                    {% else %}
-                        <img src="{{user.icon}}" alt="User Icon" class="hj34ds">
-                    {% endif %}
+                <div class="oner34">
+                    <div class="oeruhb34 ajsd45">
+                        <div class="dfh42">
+                            <div class="hj34ds">
+                                {% if user.uicon %}
+                                    <img src="data:image/jpeg;base64,{{ user.uicon|b64encode_image }}" alt="User Icon" class="hj34ds">
+                                {% else %}
+                                    <img src="{{user.icon}}" alt="User Icon" class="hj34ds">
+                                {% endif %}
+                            </div>
+                        <div class="kloi87">{{user.username}}</div>
                     </div>
-                    <div class="kloi87">{{user.username}}</div>
-                </div>
                 </div>
                 <div class="oeruhb34 sdfw56">
-                <div class="dfh42">
-                    <p class="hg76kd">Polls created: {{ user.poll }}</p>
-                    <p class="hg76kd">Replies: {{ user.reply }}</p>
-                    <p class="hg76kd">Joined: {{ user.created }}</p>
-                    <form action="{{ url_for('comment_profile', user_id=user.id) }}" method="POST">
-                    <button class="nmk98">VIEW</button>
-                    </form>
-                </div>
+                    <div class="dfh42">
+                            <p class="hg76kd">Polls created: {{ user.poll }}</p>
+                            <p class="hg76kd">Replies: {{ user.reply }}</p>
+                            <p class="hg76kd">Joined: {{ user.created }}</p>
+                            <form action="{{ url_for('comment_profile', user_id=user.id) }}" method="POST">
+                                <button class="nmk98">VIEW</button>
+                            </form>
+                    </div>
                 </div>
             </div>
-            </div>
+        </div>
         {% endfor %}
     </div>
 </div>

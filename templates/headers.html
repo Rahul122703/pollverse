@@ -52,6 +52,8 @@
                     <a class="nav-link  px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         {% if anonymous_mode %}
                             <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                        {% elif current_user_pic %}
+                            <img src="data:image/jpeg;base64,{{ current_user_pic|b64encode_image }}" height="50" width="50" class="rounded-circle" alt="User Icon">
                         {% elif current_user.uicon %}
                             <img src="data:image/jpeg;base64,{{ current_user.uicon|b64encode_image }}" height="50" width="50" class="rounded-circle" alt="User Icon">
                         {% else %}
@@ -98,14 +100,14 @@
         
         
         <!-- Navbar Links -->
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('index') }}">Polls</a></li>
-                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('about') }}">About Us</a></li>
-                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('contact',user_id = current_user_id)}}">Contact Us</a></li>
-                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('developer')}}">Developer</a></li>
+        <div class="collapse navbar-collapse above_link_container" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto py-4 py-lg-0 all_links_container">
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{ url_for('index') }} ">Polls</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{ url_for('about') }}">About Us</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{url_for('contact',user_id = current_user_id)}}">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{url_for('developer')}}">Developer</a></li>
                 {% if current_user_id == 1 or current_user.admin%}
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{ url_for('for_admin') }}">Admin</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{ url_for('for_admin') }}">Admin</a></li>
                 {% endif %}
             </ul>
         </div>

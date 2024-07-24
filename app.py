@@ -208,7 +208,7 @@ def common_variable():
      
 @app.route('/register',methods = ['GET','POST'])
 def register():#reg123
-    global not_registering,current_user_id,current_user,logged_in
+    global not_registering,current_user_id,current_user,logged_in,current_user_pic
     not_registering = 0
     register_form_object = RegisterForm()
     if register_form_object.validate_on_submit():
@@ -235,6 +235,7 @@ def register():#reg123
             current_user = new_user
             logged_in = 1
             current_user_id = current_user.id
+            current_user_pic = None
             login_user(new_user)
             body = f'''
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;">
@@ -338,7 +339,7 @@ def index(): #index123
     quote_text = f"'{quote['quote']}' - {quote['author']}"
     print(f"current user id is ---> {current_user_id}")
     return render_template('index.html',
-                           quote = "this is quote",
+                           quote = quote_text,
                            comments = global_comments)
 
 @app.route('/logout')

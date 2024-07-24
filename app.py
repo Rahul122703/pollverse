@@ -22,9 +22,9 @@ import os
 logged_in = 0
 not_registering = 1
 current_user_id = 0
-current_user_pic = None
 otp_send = 0
 anonymous_mode = 0
+current_user_pic = None
 comment = None
 random_username = None
 current_user_email = None
@@ -96,9 +96,6 @@ def send_mail(from_user,to_user,body):
     server = smtplib.SMTP("smtp.gmail.com", 587)
     server.starttls()
     server.login(user="xieminiproject@gmail.com", password=app_pass)
-    print(body)
-    print(from_user)
-    print(to_user)
     msg = MIMEMultipart()
     msg['From'] = from_user
     msg['To'] = to_user
@@ -113,8 +110,6 @@ def is_logged(function):
     global logged_in  
     def wrapper_function():
         if logged_in:
-            print("You are logged in!")
-            print(f"Function name is {function.__name__}")
             return function()  
         else:
             return '''<h1 style="color: #FF5733; font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #F2F2F2; border-radius: 10px;">You Are Not Logged In</h1>'''
@@ -212,7 +207,7 @@ def common_variable():
                 comment = comment)
      
 @app.route('/register',methods = ['GET','POST'])
-def register():
+def register():#reg123
     global not_registering,current_user_id,current_user,logged_in
     not_registering = 0
     register_form_object = RegisterForm()
@@ -222,9 +217,7 @@ def register():
         if user_email == None:
             hashed_password = generate_password_hash(request.form.get('password'), method='pbkdf2:sha256',salt_length=8)
             icons = [i for i in database.session.execute(database.select(icon)).scalars().all()]
-            print(f"the length of icons is {len(icons)}")
             selected_icon = "https://cdn-icons-png.flaticon.com/512/3251/3251650.png" if len(icons) == 0 else random.choice(icons).link
-            print(selected_icon)
             new_user = User(
                 username = register_form_object.username.data,
                 icon = selected_icon,
@@ -243,7 +236,6 @@ def register():
             logged_in = 1
             current_user_id = current_user.id
             login_user(new_user)
-            print("user added sucessfully")
             body = f'''
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;">
 <div class="notification-container" style="width: 400px; margin: 100px auto; background-color: #f0f0f0; padding: 20px; border-radius: 20px; box-shadow: 20px 20px 50px #b9b9b9, -20px -20px 50px #ffffff;">
@@ -290,20 +282,17 @@ def login(): #login123
                 logged_in = 1
                 current_user_id = user.id
                 current_user_pic = user.uicon
-                print(f"here!!!!!!!!! {current_user_id}")
                 current_user = user
                 current_user_email = entred_email
+                print(f">>>>>> {entred_email} has logged in <<<<<")
                 return redirect(url_for('index'))
             else:
-                print("wrong pass")
                 current_user_email = entred_email
                 error = "Forgot password? click to change"
                 return render_template('index.html',error = error)
             
         else:
-            print("no account")
             error = "No account by this name"
-            print(current_user_id)
             return render_template('index.html',error = error)    
     return redirect(url_for('index'))
 
@@ -317,7 +306,6 @@ def sort_comment(value):
     
     start = 0
     
-    print(f"start is {start} and value == {value}")
     if value == 3: 
         sorting = "Recent"
         global_comments.reverse()  
@@ -328,7 +316,6 @@ def sort_comment(value):
         sorted_comments = sorted(global_comments, key=lambda comment: len(database.session.execute(database.select(Subcomment).where(Subcomment.comment_id == comment.id)).scalars().all()), reverse=True)
         active_comment.extend(sorted_comments)
         global_comments = active_comment
-        print(active_comment)
     elif value == 1: #oldest
         sorting = "Oldest"
         start = 1
@@ -338,23 +325,20 @@ def sort_comment(value):
 @app.route('/') 
 def index(): #index123
     global current_user_id,current_user,login_form,logged_in,current_page,global_comments,start
-    print(f"->>>>>>>>>>>>>>>>>>{logged_in }-<<<<<<<<<<<<<<")
+    current_page = "index"
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
-    print(f"start ->>>>>>> {start}")
     if start:
         comments = [comment for comment in all_comments]
         global_comments = comments
-    print(global_comments,start)
     login_form = LoginForm()
 
     api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
     QUOTE_API_KEY = '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'
     quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
     quote_text = f"'{quote['quote']}' - {quote['author']}"
-    
     print(f"current user id is ---> {current_user_id}")
     return render_template('index.html',
-                           quote = quote_text,
+                           quote = "this is quote",
                            comments = global_comments)
 
 @app.route('/logout')
@@ -368,11 +352,9 @@ def logout():
 
 @app.route('/profile',methods = ['GET','POST'])
 def profile():#profile123
-    print("you are on profile page")
     global current_page,current_user,comment,current_user_pic
     current_page = 'profile'
     changed_user = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
-    print(changed_user.uicon)
     profile_form = EditProfileForm()
     if profile_form.validate_on_submit():
         if len(profile_form.ProfilePic.data)!=0:
@@ -382,10 +364,7 @@ def profile():#profile123
         if len(profile_form.password.data)!=0:    
             changed_user.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
         if profile_form.SelectPic.data is not None:   
-            print("done!!") 
             changed_user.uicon = profile_form.SelectPic.data.read()
-            # print(profile_form.SelectPic.data.read())
-            # print("this is being printed and this is here")
         database.session.commit() 
         
         return redirect(url_for('profile'))
@@ -394,12 +373,13 @@ def profile():#profile123
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user_id)).scalars().all()
 
     comments = database.session.execute(database.select(Comment).where(Comment.userId == current_user_id)).scalars().all()
-    comment  = len(comments)!=0 if comments[0] else None
+    print(f'comments = {comments} and current_userId = {current_user_id}')
+    # comment  = len(comments)!=0 if comments[0] else None
+    
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == current_user.id)).scalars().all()
     intensities = [i.intensity for i in all_replies]
     current_user_pic = changed_user.uicon
     if len(intensities):
-        print("if one")
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
         between_minus01_to_01_count = sum(1 for num in intensities if -0.1 <= num <= 0.1)
@@ -417,7 +397,6 @@ def profile():#profile123
                            neutral = percent_between_minus01_to_01,
                            all_replies = all_replies,
                            current_user_pic = current_user_pic)
-    print("if two")
     return render_template('profile.html',
                            length = len(intensities),
                            all_replies  = all_replies ,
@@ -427,7 +406,6 @@ def profile():#profile123
  
 @app.route('/comment_profile/<int:user_id>',methods = ['GET','POST'])
 def comment_profile(user_id):
-    print(f"the user id is {user_id}")
     comment_user = database.get_or_404(User,user_id)
     all_replies = database.session.execute(database.select(Subcomment).where(Subcomment.user_id == user_id)).scalars().all()
 
@@ -445,7 +423,6 @@ def comment_profile(user_id):
         if len(profile_form.password.data)!=0:    
             comment_user.password =  generate_password_hash( profile_form.password.data, method='pbkdf2:sha256',salt_length=8)  
         if profile_form.SelectPic.data is not None:   
-            print("done!!") 
             comment_user.uicon = profile_form.SelectPic.data.read()
         database.session.commit()  
         return redirect(url_for('comment_profile', user_id=user_id)) 
@@ -479,7 +456,7 @@ def comment_profile(user_id):
 def new_comment():
     global current_page,anonymous_mode
     comment_form = CommentForm()
-
+    print("you are here")
     if comment_form.validate_on_submit():
         new_comment = Comment(
             head = comment_form.head.data,
@@ -487,7 +464,9 @@ def new_comment():
             bg_image = comment_form.bg_image.data,
             date = format_time_and_date(datetime.now()),
             userId = current_user.id ,
-            anonymous = anonymous_mode if anonymous_mode else anonymous_mode
+            anonymous = anonymous_mode if anonymous_mode else anonymous_mode,
+            upvote = 0,
+            downvote = 0
         )
         current_user.poll += 1
         database.session.add(new_comment)
@@ -504,17 +483,15 @@ positive_replies = None
 negative_replies = None
 neutral_replies = None
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
-def show_comment(comment_id):
+def show_comment(comment_id): #show123
     global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01,positive_replies,negative_replies,neutral_replies
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
     body = str(reply_form.body.data)
     polarity = analyze_sentiment(body)
     if reply_form.validate_on_submit():
-        print(f"THE POLARITY IS {polarity} and the color is { map_polarity_to_color(polarity)}")
         parent_user = database.session.execute(database.select(User).where(User.id == chosen_comment.userId)).scalar()
         date = format_time_and_date(datetime.now())
-        print(polarity)
         new_reply = Subcomment(
             upvote = 0,
             downvote = 0,
@@ -561,10 +538,8 @@ def show_comment(comment_id):
     negative_replies = [reply for reply in all_replies if reply.color == "#00f200"]
     neutral_replies = [reply for reply in all_replies if reply.color == "#596061"]
     
-    print(positive_replies,negative_replies,neutral_replies)
     
     intensities = [i.intensity for i in all_replies]
-    print(intensities)
     if len(intensities):
         gt_01_count = sum(1 for num in intensities if num > 0.1)
         lt_minus01_count = sum(1 for num in intensities if num < -0.1)
@@ -598,11 +573,9 @@ def change_password():
     if change_password_form.validate_on_submit():
         password1 = change_password_form.password1.data
         password2 = change_password_form.password2.data  
-        print(current_user.email)
         if password2 == password1:
             logged_in = 1
             login_user(current_user)
-            print(f"this is the user {current_user}")
             current_user1 = database.session.execute(database.select(User).where(User.email == current_user.email)).scalar()
             current_user1.password = generate_password_hash(password1,method='pbkdf2:sha256',salt_length=8)
             database.session.commit()
@@ -619,7 +592,6 @@ def send_otp():
     global otp_send,current_user_email,current_user_id,user_otp,current_user,logged_in,from_email,app_pass
     # otp_form = OtpForm()
     random_otp = ''.join(random.choice(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) for i in range(6))
-    print(f"value of otp sent is {otp_send}")
     if otp_send == 0:
         otp_send = 1
         user_otp = random_otp
@@ -650,12 +622,10 @@ def send_otp():
 
         return render_template('index.html', error=1)
 
-    print(current_user_email)
-    print(f"OTP = {user_otp}")
     entred_otp = ""
     for i in range(1,7):
         entred_otp += request.form.get(f"{i}")
-    print(entred_otp)
+    
     if entred_otp == user_otp:
         otp_send = 0
         return redirect(url_for('change_password'))
@@ -665,7 +635,7 @@ def send_otp():
         return render_template('index.html',error = error) 
    
 @app.route('/anonymous')  
-def anonymous():
+def anonymous():#ana123
     global username,user_icon,current_user,anonymous_mode,random_username
     if anonymous_mode == 0:
         username = current_user.username
@@ -682,6 +652,7 @@ def anonymous():
 
 @app.route('/search',methods = ['POST','GET'])
 def search():
+    global current_page
     search_form = SearchForm()
     searched = search_form.text.data
     comments = Comment.query
@@ -690,7 +661,6 @@ def search():
     users = users.filter(User.username.like('%' + searched +'%'))
     comment_count = comments.filter(Comment.head.like('%' + searched +'%')).count()
     user_count = users.filter(User.username.like('%' + searched +'%')).count()
-    print(f"the users uicons are {[user.uicon for user in users]}")
     return render_template('search.html',comments = comments,users = users,comment_count = comment_count,user_count = user_count)
 
 @app.route('/delete_reply/<int:reply_id>',methods = ['POST','GET'])   
@@ -707,14 +677,15 @@ def delete_reply(reply_id):
     
 
 @app.route('/admin_panel',methods = ['POST','GET'])   
-def for_admin():
+def for_admin(): 
+    global current_page
+    current_page = "for_admin"
     database_form = DatabaseForm()
     if database_form.validate_on_submit():
         new_icon = icon(link = database_form.icon_link.data)
         database.session.add(new_icon)
         database.session.commit()
     users = database.session.execute(database.select(User)).scalars().all()
-    print(users)
     return render_template('database_control.html',database_form = database_form,users = users)
 
 mail_flash = None
@@ -727,7 +698,6 @@ def contact(user_id):
         mail_flash = "Email sent sucessfully"
         body = contact_form.body.data
         send_mail(user.email,from_email,body)
-        print("here !!")
         return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
     mail_flash = None
     return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
@@ -766,6 +736,8 @@ def download(comment_id):
 
 @app.route('/about')
 def about():
+    global current_page
+    current_page = "about"
     return render_template('about.html')
 
 user_data = None
@@ -775,7 +747,8 @@ def generate_api_key(length=32):
 
 @app.route('/developer', methods=['POST', 'GET'])
 def developer():    
-    global user_data,current_user_id
+    global user_data,current_user_id,current_page
+    current_page = "developer"
     user = database.get_or_404(User,current_user_id)
     if request.method == 'POST':     
         user.ApiKey = generate_api_key(length = 32)
@@ -812,7 +785,6 @@ def get_all_users():
 def get_all_polls():
     all_data = database.session.execute(database.select(Comment).order_by(Comment.id)).scalars().all()
     poll= {"polls" : []}
-    print(poll)
     user = database.get_or_404(User,current_user_id)
     if user.ApiKey:
         for data in all_data:
@@ -833,13 +805,7 @@ def get_all_polls():
 @app.route('/add_reply',methods=['POST'])
 def add_reply():
     user = database.get_or_404(User,current_user_id)
-    print("Body:", request.form.get('body'))
-    print("User ID:", request.form.get('user_id'))
-    print("Comment ID:", request.form.get('comment_id'))
-    print("Date:", request.form.get('date'))
-    print("Anonymous:", request.form.get('anonymous'))
-    print("Color:", request.form.get('color'))
-    print("Intensity:", request.form.get('intensity'))
+
     if user.ApiKey:
         new_reply = Subcomment(
         body = request.form.get('body'),

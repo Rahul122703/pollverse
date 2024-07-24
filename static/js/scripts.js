@@ -90,12 +90,12 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+//color123
 const navbar_links = document.querySelectorAll(".navbar_links123");
 window.addEventListener("scroll", () => {
   navbar_links.forEach((currentItem) => {
     currentItem.style.color = window.pageYOffset < 500 ? "white" : "black";
   });
-  console.log("here");
 });
 
 const toggle = document.querySelector(".navbar-toggler-icon");

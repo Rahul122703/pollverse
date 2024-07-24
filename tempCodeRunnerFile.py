@@ -1,1 +1,2 @@
-s
+
+    QUOTE_API_KEY = '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'

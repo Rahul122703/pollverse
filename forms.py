@@ -15,11 +15,11 @@ class RegisterForm(FlaskForm):
     phoneNo = StringField( validators=[DataRequired()], render_kw={"placeholder": "Enter Working Phone number"}, label= False)
     submit = SubmitField('register',render_kw={"class": "btn btn-success"})
 
-class CommentForm(FlaskForm):
+class CommentForm(FlaskForm): #123
     head = StringField( validators=[DataRequired()], render_kw={"placeholder": "Enter heading"})
     body = CKEditorField('Body', validators=[DataRequired()])
     bg_image = URLField('Enter background image URL',render_kw={"placeholder": "Enter background image URL (optional)"})
-    submit = SubmitField('Post poll',render_kw={"class": "btn btn-success"})
+    submit = SubmitField('Post poll',render_kw={"class": " new"})
     
 class DatabaseForm(FlaskForm):
     icon_link = URLField(validators=[DataRequired()], render_kw={"placeholder": "Enter valid icon link"}, label= False)
@@ -44,7 +44,7 @@ class EditProfileForm(FlaskForm):
 
 class ReplyForm(FlaskForm):
     body = CKEditorField(validators=[DataRequired()], label= False)
-    submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
+    submit = SubmitField('Submit')
     
 class SearchForm(FlaskForm):
     text = StringField(validators=[DataRequired()], render_kw={"class": "form-control search-input me-2", "type": "search", "placeholder": "Search", "aria-label": "Search"})
@@ -52,7 +52,6 @@ class SearchForm(FlaskForm):
     
 class ContactForm(FlaskForm):
     body = CKEditorField(validators=[DataRequired()], label= False)
-    submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
+    # submit = SubmitField('Submit',render_kw={"class": "btn btn-primary"})
+    submit = SubmitField('Submit')
     
-#contact us
-#sentimant

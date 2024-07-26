@@ -208,8 +208,9 @@ def common_variable():
      
 @app.route('/register',methods = ['GET','POST'])
 def register():#reg123
-    global not_registering,current_user_id,current_user,logged_in,current_user_pic
+    global not_registering,current_user_id,current_user,logged_in,current_user_pic,anonymous_mode 
     not_registering = 0
+    
     register_form_object = RegisterForm()
     if register_form_object.validate_on_submit():
         entred_email = request.form.get('email')
@@ -236,6 +237,7 @@ def register():#reg123
             logged_in = 1
             current_user_id = current_user.id
             current_user_pic = None
+            anonymous_mode = 0
             login_user(new_user)
             body = f'''
 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f0f0f0;">
@@ -269,7 +271,7 @@ def register():#reg123
 
 @app.route('/login_user',methods = ['GET','POST'])
 def login(): #login123
-    global logged_in,current_user,current_user_id,current_user_email,current_user_pic
+    global logged_in,current_user,current_user_id,current_user_email,current_user_pic,anonymous_mode
     form_instance = LoginForm()
     
     if form_instance.validate_on_submit():
@@ -285,6 +287,7 @@ def login(): #login123
                 current_user_pic = user.uicon
                 current_user = user
                 current_user_email = entred_email
+                anonymous_mode = 0
                 print(f">>>>>> {entred_email} has logged in <<<<<")
                 return redirect(url_for('index'))
             else:

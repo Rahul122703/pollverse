@@ -1676,14 +1676,6 @@ input:focus-visible + label {
   box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
 
-.api-input123 {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
-}
-
 .tryap1234 {
   background-color: #4caf50;
   color: white;
@@ -1744,14 +1736,15 @@ input:focus-visible + label {
 
 .api-input123 {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
+  padding: 1px;
+  border: 0.5px solid #ccc;
+  border-radius: 1px;
+  margin-right: 5px;
   font-family: monospace; /* Ensures JSON data is displayed properly */
   white-space: pre; /* Preserves white space for formatting */
   overflow: auto; /* Enables scrolling if the content exceeds the input size */
-  min-height: 100px; /* Adjust the minimum height as needed */
+  min-height: 400px; /* Adjust the minimum height as needed */
+  min-width: 98%;
 }
 
 .tryap1234 {
@@ -1822,7 +1815,7 @@ input:focus-visible + label {
 
 .reply_form123 {
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: 800px;
 }
 
 #chartContainer {

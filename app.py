@@ -336,13 +336,13 @@ def index(): #index123
         global_comments = comments
     login_form = LoginForm()
 
-    api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
+    '''api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
     QUOTE_API_KEY = '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'
     quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
-    quote_text = f"'{quote['quote']}' - {quote['author']}"
+    quote_text = f"'{quote['quote']}' - {quote['author']}"'''
     print(f"current user id is ---> {current_user_id}")
     return render_template('index.html',
-                           quote = quote_text,
+                           quote = "quote_text",
                            comments = global_comments)
 
 @app.route('/logout')

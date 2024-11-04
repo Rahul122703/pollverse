@@ -1,7 +1,5 @@
 # PollVerse - Sentiment Analyzer Web-App
 
-![PollVerse Banner](https://example.com/banner.png)
-
 Hosted Link: [discussly.onrender.com](https://discussly.onrender.com)
 
 ## Description

@@ -19,6 +19,22 @@ PollVerse is a sentiment analyzer web-app designed to analyze the sentiment of d
 
 ---
 
+# Project Screenshots
+
+## Phone View
+
+|  |  |  |  |
+| --- | --- | --- | --- |
+| ![Homepage](./screenshots/homepage_phone-portrait.png) | ![Create Poll](./screenshots/phone_create_poll-portrait.png) | ![Poll Sentiment](./screenshots/pollverse_sentiment-portrait.png) | ![Profile](./screenshots/porfiel_phone-portrait.png) |
+
+## PC View
+
+|  |  |  |  |
+| --- | --- | --- | --- |
+| ![Create Account](./screenshots/create_accPc-front.png) | ![Delete Account](./screenshots/del_pc-front.png) | ![Pollverse](./screenshots/pollverse-front.png) | ![Search](./screenshots/search-front.png) |
+
+
+
 ## Getting Started
 
 ### Prerequisites
@@ -34,3 +50,5 @@ Ensure that you have Python and pip installed on your machine.
   ```bash
    pip install -r requirements.txt
    flask run
+
+

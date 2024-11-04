@@ -1,57 +1,36 @@
-# Sentiment Analyzer Web App 📊
+# PollVerse - Sentiment Analyzer Web-App
 
-**🌐 Live Demo:** [discussly.onrender.com](https://discussly.onrender.com) 🚀
+![PollVerse Banner](https://example.com/banner.png)
 
-Welcome to the **Sentiment Analyzer Web App**! This application enables users to analyze sentiments within discussion threads. It is designed to provide an interactive platform for creating anonymous polls, engaging in discussions, and understanding the sentiment trends within these discussions over time.
+Hosted Link: [discussly.onrender.com](https://discussly.onrender.com)
 
----
+## Description
+PollVerse is a sentiment analyzer web-app designed to analyze the sentiment of discussion threads. The app allows users to create and participate in anonymous polls, initiate discussions, and observe sentiment analysis over time.
 
-## 🚀 Features
-
-### 🎭 Anonymous Poll Creation
-- Users can create anonymous polls on topics of interest, sparking engagement and insights on various subjects.
-
-### 🗣 Discussion Threads
-- Allows users to participate in discussion threads related to polls, promoting active interaction.
-
-### 📈 Sentiment Analysis
-- The app employs sentiment analysis to assess the overall mood expressed in comments over time, offering insights into the nature of discussions.
-
-### 🔐 User Authentication
-- Includes registration, login, and account management, as well as a password reset feature with OTP for secure access.
-
-### 👤 User Profiles
-- Each user has a profile page to view their activity, including their contributions to polls and discussions.
-
-### 📱 Responsive Interface
-- Built to be responsive across all device sizes, ensuring an accessible and smooth user experience.
-
-### 🗄 Database Connectivity
-- Stores and manages user data, polls, and discussions efficiently using an SQL database.
-
-### 🌐 REST API
-- Provides an API with API key authentication, allowing external access for **GET** requests.
+## Features
+- **Anonymous Poll Creation**: Logged-in users can anonymously create polls on various topics of interest.
+- **Discussion Threads**: Users can initiate and participate in discussion threads related to the polls.
+- **Sentiment Analysis**: The system employs sentiment analysis to analyze the sentiments expressed in the comments.
+- **User Authentication**: Enables user registration, login, and account management with a forgot password system that uses OTP.
+- **User Profiles**: Each user has a profile page displaying their activity.
+- **Responsive Interface**: Offers a smooth user experience on different device sizes.
+- **Database Connectivity**: Manages all user data, polls, and discussion threads in an SQL database.
+- **REST API**: Provides a REST API with API key authentication for `GET` requests.
 
 ---
 
-## 🛠 Tech Stack
-
-- **Frontend**: HTML, CSS (Bootstrap), JavaScript
-- **Backend**: Flask (Python)
-- **Database**: SQL
-- **Additional Libraries**: WTForms, Sentiment Analysis API (Specify the tool/library if applicable)
-
----
-
-## 🚩 Getting Started
+## Getting Started
 
 ### Prerequisites
-- Python 3.x
-- SQL database setup (SQLite recommended for development)
-- Flask and other dependencies (specified in `requirements.txt`)
+Ensure that you have Python and pip installed on your machine.
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/yourusername/yourrepository.git
+   git clone https://github.com/yourusername/pollverse.git
+   cd pollverse
+2. Install Libraries and Run 
+  ```bash
+   pip install -r requirements.txt
+   flask run

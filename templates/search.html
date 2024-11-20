@@ -1,0 +1,94 @@
+{% include "headers.html" %}
+<header class="masthead" style="background-image: url('https://images.unsplash.com/photo-1421930866250-aa0594cea05c?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h2>{{ comment_count }} search results for Polls</h2>
+                    <h2>{{ user_count }} search results for Users</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            {% for comment in comments %}
+                <a href = "{{ url_for('show_comment',comment_id = comment.id) }}">
+                    <div class="comment-container ">
+                        <div class="user-info">
+                            {% if comment.anonymous %}
+                                <img src = "https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                                <div class="username">{{random_username}}</div></div>
+                            {% else %}
+                                    
+                               
+                                {% if comment.comment_author.uicon  %}
+                                    <img src="data:image/jpeg;base64,{{comment.comment_author.uicon|b64encode_image }}" height="50" width="50" class="user-icon" >
+                                {% else %}
+                                    <img src="{{comment.comment_author.icon}}" alt="Profile Picture" height="50" width="50" class="user-icon" >
+                                {% endif %}
+                                <div class="username">{{comment.comment_author.username}}</div></div>
+                            {% endif %}
+                            <div class="comment-content"><b><h4>{{ comment.head }}</h4></b></div>
+                            <div class="comment-content">{{ comment.body[:250]|safe}}.....</div>
+                            <div class="votes">
+                            <span class="upvote" onclick="vote(this)">▲ {{ comment.upvote }}</span>
+                            <span class="vote-count">0</span>
+                            <span class="downvote" onclick="vote(this)">▼</span>
+                           
+                            </div>
+                
+                    </div>
+                    <hr class="animated-line">
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="container px-4 px-lg-5 profile-card-container">
+    <div class="row gx-4 gx-lg-5 search_container">
+        {% for user in users %}
+            <div class="eri324">
+                <div class="oner34">
+                    <div class="oeruhb34 ajsd45">
+                        <div class="dfh42">
+                            <div class="hj34ds">
+                                {% if user.uicon %}
+                                    <img src="data:image/jpeg;base64,{{ user.uicon|b64encode_image }}" alt="User Icon" class="hj34ds">
+                                {% else %}
+                                    <img src="{{user.icon}}" alt="User Icon" class="hj34ds">
+                                {% endif %}
+                            </div>
+                        <div class="kloi87">{{user.username}}</div>
+                    </div>
+                </div>
+                <div class="oeruhb34 sdfw56">
+                    <div class="dfh42">
+                            <p class="hg76kd">Polls created: {{ user.poll }}</p>
+                            <p class="hg76kd">Replies: {{ user.reply }}</p>
+                            <p class="hg76kd">Joined: {{ user.created }}</p>
+                            <form action="{{ url_for('comment_profile', user_id=user.id) }}" method="POST">
+                                <button class="nmk98">VIEW</button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="sticky-circle-container" draggable="true">
+    <a href="{{ url_for('new_comment') }}" >
+        <div class="plus-symbol"><b>+</b></div>
+        <div class="add-post-label"> <b>POST</b> </div>
+    </a>
+  </div>
+</body>
+{% include "footer.html" %}

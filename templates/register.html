@@ -1,0 +1,149 @@
+
+{% from "bootstrap5/form.html" import render_form %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    {{ bootstrap.load_css() }}
+    {% from "bootstrap5/form.html" import render_form %} 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Pollverse</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"/>
+</head>
+<body style="background-image: url('https://img.freepik.com/free-vector/realistic-yellow-neon-background_52683-121698.jpg?w=1380&t=st=1711315404~exp=1711316004~hmac=3b0a6ee866a9f0a56b05f4ccad800249ca190d8c53e4ee80f29c9223ed08c095');">
+ 
+  
+<div class = 'phone_register'>
+  <form method='post' action="{{ url_for('register') }}" class = "formy ">
+      <h1>Create Account Or
+      <a href = "{{ url_for('index') }}" ><div class = "btn btn-success login_inside_register" >Log In</div></a> </h1>
+      {% if error %}
+          <p style="color: #ff4d4d; /* Red color for error message */ 
+          font-size: 16px; /* Larger font size */ 
+          font-weight: bold; /* Bold text */ 
+          background-color: #ffe6e6; /* Light red background color */ 
+          padding: 10px; /* Padding around the error message */ 
+          border-radius: 5px; /* Rounded corners */ 
+          border: 1px solid #ff9999; /* Border around the error message */ 
+          margin-bottom: 10px; /* Margin below the error message */">
+          {{ error }}
+          </p>
+      {% endif %}
+      {{  render_form(register_form) }}
+  </form>
+</div>
+
+
+<div class="registercontainer pc_register" id="registercontainer">
+  <div class="formy-registercontainer sign-up-registercontainer registerform123">
+      <form method='post' action="{{ url_for('register') }}" class = "formy ">
+          <h1>Create Account
+          {% if error %}
+              <p style="color: #ff4d4d; /* Red color for error message */ 
+              font-size: 16px; /* Larger font size */ 
+              font-weight: bold; /* Bold text */ 
+              background-color: #ffe6e6; /* Light red background color */ 
+              padding: 10px; /* Padding around the error message */ 
+              border-radius: 5px; /* Rounded corners */ 
+              border: 1px solid #ff9999; /* Border around the error message */ 
+              margin-bottom: 10px; /* Margin below the error message */">
+              {{ error }}
+              </p>
+          {% endif %}
+          {{  render_form(register_form) }}
+      </form>
+  </div>
+  <div class="formy-registercontainer sign-in-registercontainer">
+
+          <span class = "cary"><b><center><h1>Terms and Conditions</h1></center></b><br>
+              <ol>
+                  <li>
+                    <strong>Acceptance of Terms:</strong> By using PollVerse, you agree to abide by these terms and conditions.
+                    <hr>
+                  </li>
+                  <li>
+                    <strong>User Conduct:</strong> Respectful participation in polls and discussions is mandatory. No abuse, harassment, or fraudulent activities allowed.
+                    <hr>
+                  </li>
+                  <li>
+                    <strong>Account Responsibility:</strong> Users are responsible for their account security and must report any unauthorized access.
+                    <hr>
+                  </li>
+                  <li>
+                    <strong>Content Ownership:</strong> Users own the content they upload, but grant PollVerse the right to use it.
+                    <hr>
+                  </li>
+                  <li>
+                    <strong>Privacy Policy:</strong> User data is collected and processed according to our Privacy Policy.
+                    <hr>
+                  </li>
+                  <li>
+                    <strong>Disclaimer:</strong> Use PollVerse at your own risk. We do not guarantee the accuracy or reliability of content.
+                    <hr>
+                  </li>
+                  <li>
+                    <strong>Limitation of Liability:</strong> PollVerse is not liable for indirect damages.
+                    <hr>
+                  </li>
+                  <li>
+                    <strong>Changes to Terms:</strong> PollVerse may update these terms without notice. Check periodically for changes.
+                    <hr>
+                  </li>
+                  
+                </ol>
+                
+          </div>
+  <div class="square-registercontainer">
+      <div class="square">
+          <div class="square-panel square-left">
+              <h1>Welcome User!</h1>
+              <p>To keep connected with us please Register with your personal info</p>
+              <button class = "registerbutton" id="signIn">Terms and conditions</button>
+              <br><br><br>
+              <h1>Already a user?</h1>
+              <a href = "{{ url_for('index') }}" class = "pc_login" id="signIn"><button class = "registerbutton" id="signIn" >Log In</button></a>
+          </div>
+          <div class="square-panel square-right">
+              <h1>Hello, Friend!</h1>
+              <p>Enter your personal details and start journey with us</p>
+              <button class = "registerbutton" id="signUp">Sign Up</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  const signUpButton = document.getElementById('signUp');
+const signInButton = document.getElementById('signIn');
+const registercontainer = document.getElementById('registercontainer');
+
+signUpButton.addEventListener('click', () => {
+    registercontainer.classList.add("right-panel-active");
+});
+
+signInButton.addEventListener('click', () => {
+    registercontainer.classList.remove("right-panel-active");
+});
+
+function signUp() {
+    // Add your sign up logic here
+    console.log('Sign Up button clicked');
+}
+
+function signIn() {
+    // Add your sign in logic here
+    console.log('Sign In button clicked');
+}
+</script>
+
+{% include "footer.html" %}

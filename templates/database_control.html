@@ -1,0 +1,144 @@
+{% from "bootstrap5/form.html" import render_form %} {% include "headers.html"
+%}
+<header
+  class="masthead"
+  style="
+    background-image: url('https://img.freepik.com/premium-vector/administrator-business-minimal-infographic-web-banner-vector-analyzing-researching-chart-people-administrator-occupation-interview-purchases-color-illustration_87720-4412.jpg?w=1800');
+  "
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h3>WELCOME ADMIN</h3>
+          <span class="subheading"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button
+      class="nav-link active"
+      id="nav-home-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-home"
+      type="button"
+      role="tab"
+      aria-controls="nav-home"
+      aria-selected="true"
+    >
+      Users
+    </button>
+    <button
+      class="nav-link"
+      id="nav-profile-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-profile"
+      type="button"
+      role="tab"
+      aria-controls="nav-profile"
+      aria-selected="false"
+    >
+      Database
+    </button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div
+    class="tab-pane fade show active"
+    id="nav-home"
+    role="tabpanel"
+    aria-labelledby="nav-home-tab"
+    tabindex="0"
+  >
+    <div class="bd-example pc_table">
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">USERNAME</th>
+            <th scope="col">EMAIL</th>
+            <th scope="col">JOINED</th>
+            <th scope="col">PHONE NO.</th>
+            <th scope="col">POLL</th>
+            <th scope="col">REPLY</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <th scope="row">{{user.id}}</th>
+            <td>
+              <a href="{{ url_for('comment_profile', user_id=user.id) }}"
+                >{{user.username}}</a
+              >
+            </td>
+            <td>{{user.email}}</td>
+            <td>{{user.created}}</td>
+            <td>{{user.phoneNo}}</td>
+            <td>{{user.poll}}</td>
+            <td>{{user.reply}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="phone_table" style="overflow-x: auto">
+      <table class="table">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">USERNAME</th>
+            <th scope="col">EMAIL</th>
+            <th scope="col">JOINED</th>
+            <th scope="col">PHONE NO.</th>
+            <th scope="col">POLL</th>
+            <th scope="col">REPLY</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <th scope="row">{{user.id}}</th>
+            <td>
+              <a href="{{ url_for('comment_profile', user_id=user.id) }}"
+                >{{user.username}}</a
+              >
+            </td>
+            <td>{{user.email}}</td>
+            <td>{{user.created}}</td>
+            <td>{{user.phoneNo}}</td>
+            <td>{{user.poll}}</td>
+            <td>{{user.reply}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div
+    class="tab-pane fade"
+    id="nav-profile"
+    role="tabpanel"
+    aria-labelledby="nav-profile-tab"
+    tabindex="0"
+  >
+    <main class="mb-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <form method="POST" action="{{ url_for('for_admin') }}">
+              {{ render_form(database_form) }}
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+{% include "footer.html" %}

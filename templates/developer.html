@@ -1,0 +1,157 @@
+{% include "headers.html" %}
+
+<header
+  class="masthead"
+  style="
+    background-image: url('https://img.freepik.com/free-vector/abstract-design-technology-particle-background_23-2148286886.jpg?w=1380&t=st=1721979192~exp=1721979792~hmac=d9189a9619e3f12f0a66eb288a57ee8adf9150fd7f41773cbef9f20689bcc278');
+  "
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <span class="subheading"
+            ><h1><b>Try our API endpoints </b></h1></span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<hr />
+<hr />
+
+<hr />
+<hr />
+<form action="{{ url_for('developer') }}" method="POST">
+  {% if user.ApiKey == None %}
+  <div class="uywefrgy324">
+    <div
+      class="iuefi324"
+      id="iuefi324"
+      style="
+        font-family: Arial, sans-serif;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+      "
+    >
+      <p style="margin: 0; font-size: 18px; color: #333">
+        <strong style="font-weight: bold; color: #007bff">Create API </strong>
+      </p>
+    </div>
+    <div class="iuefi324" id="iuefi324">You don't have any API KEY</div>
+    <button type="submit" class="random324">Generate API Key</button>
+  </div>
+  {% else %}
+  <div class="uywefrgy324">
+    <div
+      class="iuefi324"
+      id="iuefi324"
+      style="
+        font-family: Arial, sans-serif;
+        padding: 10px;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+      "
+    >
+      <p style="margin: 0; font-size: 18px; color: #333">
+        Your API Key:
+        <strong style="font-weight: bold; color: #007bff"
+          >{{ user.ApiKey }}</strong
+        >
+      </p>
+    </div>
+  </div>
+  {% endif %}
+</form>
+
+<hr />
+
+<div class="wuefwie432">
+  <h2>User Information Documentation</h2>
+  <p>
+    To retrieve all user information from the database, you can perform a GET
+    request to the following endpoint:
+  </p>
+  <code>https://pollverse-80nc.onrender.com/all_users</code>
+  <p>
+    This endpoint will return a JSON object containing details of all users
+    stored in the database.
+  </p>
+  <hr />
+  <button id="try-api-btn1" class="tryap1234">Try This API</button>
+  <div class="api-usage-container">
+    <textarea
+      type="text"
+      class="api-input123"
+      id="input1"
+      placeholder="Try this api"
+    >
+    </textarea>
+  </div>
+  <hr />
+</div>
+
+<hr />
+<hr />
+
+<div class="wuefwie432">
+  <h2>Poll Information Documentation</h2>
+  <p>
+    To retrieve all polls from the database, you can perform a GET request to
+    the following endpoint:
+  </p>
+  <code>https://pollverse-80nc.onrender.com/all_polls</code>
+  <p>
+    This endpoint will return a JSON object containing details of all polls
+    stored in the database.
+  </p>
+  <button id="try-api-btn2" class="tryap1234">Try This API</button>
+  <div class="api-usage-container">
+    <textarea
+      type="text"
+      class="api-input123"
+      id="input2"
+      placeholder="Try this API"
+    >
+    </textarea>
+  </div>
+  <hr />
+</div>
+
+<script>
+  document
+    .getElementById("try-api-btn1")
+    .addEventListener("click", function () {
+      fetch("/all_users")
+        .then((response) => response.json())
+        .then((data) => {
+          // Format the JSON data for display
+          const formattedData = JSON.stringify(data, null, 2); // Indent with 2 spaces
+          document.getElementById("input1").value = formattedData;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+
+  document
+    .getElementById("try-api-btn2")
+    .addEventListener("click", function () {
+      fetch("/all_polls")
+        .then((response) => response.json())
+        .then((data) => {
+          // Format the JSON data for display
+          const formattedData = JSON.stringify(data, null, 2); // Indent with 2 spaces
+          document.getElementById("input2").value = formattedData;
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+</script>
+
+{% include "footer.html" %}

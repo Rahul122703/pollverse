@@ -1,0 +1,91 @@
+{% include "headers.html" %}
+
+<header class="masthead" 
+style="background-image: url('https://lp-cms-production.imgix.net/2021-01/GettyRF_450207051.jpg?auto=format&w=1440&h=810&fit=crop&q=75')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <span class="subheading"><h2><b>{{quote}}</b></h2></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+<!-- Main Content-->
+</style>
+</head>
+<body>
+
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+
+                <a class="nav-link active" aria-current="page" href="{{ url_for('sort_comment',value = 1) }}">Oldest</a>
+
+        </li>
+        <li class="nav-item">
+
+                <a class="nav-link" aria-current="page" href="{{ url_for('sort_comment',value = 2) }}">Most active</a>
+
+        </li>
+        <li class="nav-item">
+
+                <a class="nav-link" aria-current="page" href="{{ url_for('sort_comment',value = 3) }}">Recent</a>
+
+        </li>
+    </ul>
+
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <h2><center>{{ sorting }}</center></h2>
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            {% for comment in comments %}
+            
+                <a href = "{{ url_for('show_comment',comment_id = comment.id) }}">
+                    <div class="comment-container">
+                        <div class="user-info">
+                            {% if comment.anonymous %}
+                            <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                            <div class="username">{{ random_username }}</div>
+                            {% else %}
+                                {% if comment.comment_author.uicon %}
+                                    <img src="data:image/jpeg;base64,{{ comment.comment_author.uicon|b64encode_image }}"  class="user-icon">
+                                {% else %}
+                                    <img src="{{ comment.comment_author.icon }}" class="user-icon" />
+                                {% endif %}
+
+                                <div class="username">{{ comment.comment_author.username }}</div>
+                            {% endif %}
+
+
+                        </div>
+                        <div class="datetime">{{ comment.date }}</div> <!-- Move this line up -->
+                        <div class="comment-content">
+                            <b><h4>{{ comment.head }}</h4></b>
+                            {{ comment.body[:250]|safe }}.....
+                        </div>
+                        <div class="votes">
+                            <span class="upvote" onclick="vote(this)">▲ {{ comment.upvote }}</span>
+                            <span class="downvote" onclick="vote(this)">▼ {{ comment.downvote }}</span>
+                        
+                        </div>
+                    </div>   
+                </a>
+            <hr class="animated-line">
+            {% endfor %}
+
+        </div> 
+    </div>   
+</div>
+
+<div class="sticky-circle-container" draggable="true">
+    <a href="{{ url_for('new_comment') }}" >
+        <div class="plus-symbol"><b>+</b></div>
+        <div class="add-post-label"> <b>POST</b> </div>
+    </a>
+</div>
+
+{% include "footer.html" %}

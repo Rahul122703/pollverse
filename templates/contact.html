@@ -1,0 +1,46 @@
+{% include "headers.html" %}
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url('https://img.freepik.com/free-photo/business-people-communication-colleagues-working-concept_53876-13891.jpg?t=st=1710181714~exp=1710185314~hmac=aa68d314bccf35766c67e0b61f58bbe4b69599180f21de96fe660adba749090d&w=996')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="page-heading">
+                            <h1>Contact Me</h1>
+                            <span class="subheading">Have questions? I have answers.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        <main class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <p>Want to get in touch? Fill out the form below to send me a message and I will get back to you as soon as possible!</p>
+                        <div class="my-5">
+                            {% from "bootstrap5/form.html" import render_form %} 
+                            {{ ckeditor.load() }}
+                            {{ ckeditor.config(name='body') }}
+                            <form method="POST" action="{{url_for('contact',user_id = current_user_id)}}">
+                                {% if mail_flash %}
+                                    <p style="color: #008000; /* Green color for success message */
+                                    font-size: 16px; /* Larger font size */
+                                    font-weight: bold; /* Bold text */
+                                    background-color: #e6ffe6; /* Light green background color */
+                                    padding: 10px; /* Padding around the success message */
+                                    border-radius: 5px; /* Rounded corners */
+                                    border: 1px solid #99ff99; /* Border around the success message */
+                                    margin-bottom: 10px; /* Margin below the success message */">
+                                        {{ mail_flash }}
+                                    </p>
+                                {% endif %}
+                                {{ render_form(contact_form) }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Footer-->
+{% include "footer.html" %}

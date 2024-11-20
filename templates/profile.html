@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    {{ bootstrap.load_css() }}
+    {% from "bootstrap5/form.html" import render_form %} 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>PollVerse</title>
+    <link rel="icon" href="./static/assets/pollverse_logo.png" type="image/icon type">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet"/>
+</head>
+<body>
+
+
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light width_nav" id="mainNav">
+        <button  style="
+            font-size: 20px;
+            background-color: Transparent;
+            color: #000000;
+            border: none;
+            border-radius: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 20px;
+            margin-left: 20px;
+            transition: 
+                background-color 0.3s ease,
+                transform 0.2s;
+        " 
+        onclick="w3_open()" 
+        onmouseover="this.innerHTML='➤'" 
+        onmouseout="this.innerHTML='►'">➤</button>
+        <!-- User Dropdown -->
+        <div class="navbar-brand">
+            <div class="nav-item dropdown">
+                
+                {% if logged_in %}
+                    <a class="nav-link  px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {% if anonymous_mode %}
+                            <img src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png" class="user-icon" />
+                        {% elif current_user_pic %}
+                            <img src="data:image/jpeg;base64,{{ current_user_pic|b64encode_image }}" height="50" width="50" class="rounded-circle" alt="User Icon">
+                        {% else %}
+                            <img src="{{current_user.icon}}" alt="Profile Picture" height="50" width="50" class="rounded-circle" alt="User Icon">
+                        {% endif %}
+                    </a>
+                {% else %}
+                    <a class="nav-link  px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ url_for('static', filename='assets/icons/user.svg') }}" height="50" width="50" class="rounded-circle" alt="User Icon"/> User Account
+                    </a>
+                {% endif %}
+                
+                <ul class="dropdown-menu animated" aria-labelledby="navbarDropdown" id =  "nav_bar123">
+                    {% if logged_in %}
+                        <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
+                        <li><a href="{{ url_for('register') }}" class="register-link dropdown-item">Register here</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('profile') }}">View {{current_user.username}}</a></li>
+                        {% if anonymous_mode == 0  %}
+                            <li><a class="dropdown-item" href="{{ url_for('anonymous') }}">Go Incognito</a></li>
+                        {% endif %}
+                        {% if anonymous_mode  %}
+                            <li><a class="dropdown-item" href="{{ url_for('anonymous') }}">Reveal</a></li>
+                        {% endif %}
+                    {% else %}
+                        <li><a class="dropdown-item" href="{{ url_for('index') }}">Log In</a></li>
+                    {% endif %}
+                </ul>
+                
+            </div>
+        </div>
+
+        <!-- Navbar Toggle Button (Hamburger Icon) -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Animated Search -->
+        <form class="d-flex align-items-center"action = "{{url_for('search')}}" method="POST">
+            {{ search_form.text(class="form-control search-input me-2") }}
+            <button class="btn btn-outline-primary" type="submit">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        
+        
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{ url_for('index') }}">Polls</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{ url_for('about') }}">About Us</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{url_for('contact',user_id = current_user_id)}}">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{url_for('developer')}}">Developer</a></li>
+                {% if current_user_id == 1 or current_user.admin%}
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4 navbar_links123" href="{{ url_for('for_admin') }}">Admin</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+    
+
+
+    <!-- Your page content goes here -->
+    {% if current_user_id == 0 %}
+        <div class="overlay" id="loginPopup">
+            <div class="popup">
+                <h2><center>Login</center></h2>
+                
+                    {% if error == 1 %}
+                    <form action ="{{  url_for('send_otp') }}" method="POST">
+                        <form action ="{{ url_for('send_otp') }}"  method="POST">
+                            <div style="background-color: #ffffcc; /* Yellowish background color */
+                                        border: 1px solid #ffcc00; /* Yellow border */
+                                        border-radius: 5px; /* Rounded corners */
+                                        padding: 15px; /* Padding around the box */
+                                        text-align: center; /* Center text within the box */
+                                        margin-bottom: 20px; /* Add margin to the bottom */">
+                                <h4 style="color: #b8860b; /* Dark yellow text color */
+                                            font-family: Arial, sans-serif; /* Font family */
+                                            font-size: 20px; /* Larger font size */
+                                            font-weight: bold; /* Bold text */">
+                                    ENTER OTP SENT AT YOUR MAIL
+                                </h4>
+                            </div>
+                                <div class="otp-container">
+                                    <input name = "1" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
+                                    <input name = "2" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
+                                    <input name = "3" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
+                                    <input name = "4" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
+                                    <input name = "5" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
+                                    <input name = "6" type="text" class="otp-input" maxlength="1" style="width: 40px; height: 40px; border: 1px solid #ccc; border-radius: 5px; margin: 0 5px; font-size: 18px; text-align: center; transition: all 0.3s ease;">
+                                </div>
+                                <button type="submit" style="background-color: #ffc107; /* Yellow button color */
+                                color: #ffffff; /* White text color */
+                                border: none;
+                                border-radius: 10px; /* Adjust border-radius for curved edges */
+                                padding: 10px 20px;
+                                font-size: 16px;
+                                font-weight: bold; /* Make text bold */
+                                cursor: pointer;
+                                transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.2s; /* Smooth transitions */
+                                outline: none; /* Remove default outline */
+                                text-decoration: none; /* Remove default underline */
+                                box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Add shadow effect */
+                                "
+                                onmousedown="this.style.transform='scale(0.95)'" 
+                                onmouseup="this.style.transform='scale(1)'"
+                                onmouseout="this.style.transform='scale(1)'"
+                                >
+                                Verify
+                                </button>
+                        </form>
+                    {% elif error == 2 or form_again == 1%}
+                        {% if error2 %}
+                            <p style="color: #ff4d4d; /* Red color for error message */ 
+                            font-size: 16px; /* Larger font size */ 
+                            font-weight: bold; /* Bold text */ 
+                            background-color: #ffe6e6; /* Light red background color */ 
+                            padding: 10px; /* Padding around the error message */ 
+                            border-radius: 5px; /* Rounded corners */ 
+                            border: 1px solid #ff9999; /* Border around the error message */ 
+                            margin-bottom: 10px; /* Margin below the error message */">
+                                {{ error2 }}
+                            </p>
+                        {% endif %}
+                    <form action ="{{  url_for('change_password') }}" method="POST">
+                        <form action ="{{ url_for('change_password') }}" method="POST">
+                            {{ render_form(change_password_form) }}
+                        </form>
+                    {% elif error %}
+                    <form action ="{{ url_for('login') }}" method="POST">
+                        <a href = "{{ url_for('send_otp') }}">
+                            <p style="color: #ff4d4d; /* Red color for error message */ 
+                                font-size: 16px; /* Larger font size */ 
+                                font-weight: bold; /* Bold text */ 
+                                background-color: #ffe6e6; /* Light red background color */ 
+                                padding: 10px; /* Padding around the error message */ 
+                                border-radius: 5px; /* Rounded corners */ 
+                                border: 1px solid #ff9999; /* Border around the error message */ 
+                                margin-bottom: 10px; /* Margin below the error message */">
+                                    {{ error }}
+                            </p>
+                        </a>
+                    {% endif %}
+                    <form action ="{{ url_for('login') }}" method="POST">
+                        {{ render_form(login_form) }}
+                    </form>
+                <p>Don't have an account? <a href="{{ url_for('register') }}" class="register-link">Register here</a></p>
+            </div>
+        </div>
+    {% endif %}
+
+
+<header 
+  class="masthead"
+  style="
+    background-image: url('https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  "
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="site-heading">
+          <h3>Have a great day {{current_user.username}}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="container_987">
+  {% if anonymous_mode %}
+  <img
+    src="https://cdn-icons-png.flaticon.com/512/4123/4123763.png"
+    alt="Profile Picture"
+    class="profile-picture_456"
+  />
+  {% elif current_user_pic %}
+  <img
+    src="data:image/jpeg;base64,{{ current_user_pic|b64encode_image }}"
+    alt="Profile Picture"
+    class="profile-picture_456"
+  />
+  {% else %}
+  <img
+    src="{{current_user.icon}}"
+    alt="Profile Picture"
+    class="profile-picture_456"
+  />
+  {% endif %}
+  <div class="personal-info_789">
+    <p><strong>Username:</strong> {{current_user.username}}</p>
+    <p><strong>Email:</strong> {{current_user.email}}</p>
+    <p><strong>Polls:</strong> {{current_user.poll}}</p>
+    <p><strong>Replies:</strong> {{current_user.reply}}</p>
+    <!-- Move the Edit Profile button here -->
+    {% if anonymous_mode == 0%}
+    <div class="edit-profile_654">
+      <button id="edit-profile-btn_234" class="button_edit-profile_234">
+        Edit
+      </button>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Modal for Edit Profile form -->
+{% if anonymous_mode == 0 %} {% from "bootstrap5/form.html" import render_form
+%}
+<div id="edit-profile-modal_789" class="modal_789">
+  <div class="modal-content_654">
+    <span class="close_321">&times;</span>
+    <h2>Edit Profile</h2>
+    <form
+      method="POST"
+      action="{{url_for('profile')}}"
+      enctype="multipart/form-data"
+    >
+      {{ render_form(profile_form) }}
+    </form>
+  </div>
+</div>
+{% endif %} {% include "user_activity.html" %} 
+
+
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+
+
+</html>
+  
+

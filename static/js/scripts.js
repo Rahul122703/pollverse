@@ -114,3 +114,16 @@ toggle.addEventListener("click", function () {
     links_container.style.height = `0px`;
   }
 });
+
+const index_login = document.querySelector("#indexLogin");
+const index_modal = document.querySelector("#loginPopup");
+
+index_login.addEventListener("click", () => {
+  index_modal.classList.remove("dont_show");
+  index_modal.classList.add("overlay");
+});
+
+index_modal.addEventListener("click", () => {
+  index_modal.classList.remove("overlay");
+  index_modal.classList.add("dont_show");
+});

@@ -18,6 +18,11 @@ import matplotlib.pyplot as plt
 import base64
 import string
 import os
+from dotenv import load_dotenv
+
+load_dotenv() 
+api_key = os.getenv("API_KEY")
+print(api_key)
 
 logged_in = 0
 not_registering = 1
@@ -64,7 +69,7 @@ bootstrap_app = Bootstrap5(app)
 #abcde
 def analyze_sentiment(comment):
     api_url = f'https://api.api-ninjas.com/v1/sentiment?text={comment}'
-    response = requests.get(api_url, headers={'X-Api-Key': '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'})
+    response = requests.get(api_url, headers={'X-Api-Key': 'oBCu1eDCEZdDYk6oHgIokQ==kjmShcGj3Tcbu34B'})
     
     if response.status_code == requests.codes.ok:
         data = response.json()
@@ -336,13 +341,12 @@ def index(): #index123
         global_comments = comments
     login_form = LoginForm()
 
-    '''api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
-    QUOTE_API_KEY = '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'
-    quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
-    quote_text = f"'{quote['quote']}' - {quote['author']}"'''
+    api_url = 'https://api-get-quotes.vercel.app/api/v1/random'
+    quote = requests.get(api_url).json()
+    quote_text = f"'{quote['quote']['quote']}' - {quote['quote']['author']}"
     print(f"current user id is ---> {current_user_id}")
     return render_template('index.html',
-                           quote = "quote_text",
+                           quote = quote_text,
                            comments = global_comments)
 
 @app.route('/logout')
@@ -699,6 +703,8 @@ def contact(user_id):
     contact_form = ContactForm()
     if contact_form.validate_on_submit():
         user = database.get_or_404(User,user_id)
+        if user == None:
+            user = "xieminiproject@gmail.com"
         mail_flash = "Email sent sucessfully"
         body = contact_form.body.data
         send_mail(user.email,from_email,body)

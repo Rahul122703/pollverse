@@ -62,7 +62,7 @@
                     </a>
                 {% else %}
                     <a class="nav-link  px-lg-3 py-3 py-lg-4" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ url_for('static', filename='assets/icons/user.svg') }}" height="50" width="50" class="rounded-circle" alt="User Icon"/> User Account
+                        <img src="{{ url_for('static', filename='assets/icons/user.svg') }}" height="50" width="50" class="rounded-circle" alt="User Icon"/> User 
                     </a>
                 {% endif %}
                 
@@ -78,7 +78,7 @@
                             <li><a class="dropdown-item" href="{{ url_for('anonymous') }}">Reveal</a></li>
                         {% endif %}
                     {% else %}
-                        <li><a class="dropdown-item" href="{{ url_for('index') }}">Log In</a></li>
+                        <li><a class="dropdown-item" id ="indexLogin">Log In</a></li> <!--1234-->
                     {% endif %}
                 </ul>
                 
@@ -118,7 +118,7 @@
 
     <!-- Your page content goes here -->
     {% if current_user_id == 0 %}
-        <div class="overlay" id="loginPopup">
+        <div class="dont_show" id="loginPopup">
             <div class="popup">
                 <h2><center>Login</center></h2>
                 

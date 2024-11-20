@@ -212,7 +212,7 @@ header.masthead .post-heading .meta a {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
   justify-content: center;
   align-items: center;
   z-index: 999; /* Ensure the overlay is on top of other content */
@@ -1872,4 +1872,12 @@ input:focus-visible + label {
   .phone_table {
     display: block;
   }
+}
+
+.dont_show {
+  display: none;
+}
+
+.show_it {
+  display: flex;
 }

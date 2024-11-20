@@ -107,12 +107,17 @@
     </div>
 
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
+        {% if current_user_id != 0 %}
         <h2><center>REPLY</center></h2>
         {{ ckeditor.load() }}
         {{ ckeditor.config(name='body') }}
-        <form method="POST" action="{{url_for('show_comment',comment_id = comment.id)}}"class = "reply_form123">
+        <form method="POST" action="{{ url_for('show_comment', comment_id=comment.id) }}" class="reply_form123">
             {{ render_form(reply_form) }}
         </form>
+        {% else %}
+        <h2><center>LOGIN OR REGISTER TO PARTICIPATE IN THIS POLL</center></h2>
+        {% endif %}
+
     </div>
 
     <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabindex="0">

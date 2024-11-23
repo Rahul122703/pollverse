@@ -120,8 +120,10 @@
     {% if current_user_id == 0 %}
         <div class="dont_show" id="loginPopup">
             <div class="popup">
-                <h2><center>Login</center></h2>
-                
+                <div class = "top_container">                
+                    <h2>Login</h2>
+                    <img src= './static/assets/icons/cross.png' id="cross_png" />
+                </div>  
                     {% if error == 1 %}
                     <form action ="{{  url_for('send_otp') }}" method="POST">
                         <form action ="{{ url_for('send_otp') }}"  method="POST">

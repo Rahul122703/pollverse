@@ -1881,3 +1881,14 @@ input:focus-visible + label {
 .show_it {
   display: flex;
 }
+
+.top_container {
+  display: flex;
+  min-width: 100%;
+  justify-content: space-between;
+}
+
+#cross_png {
+  height: 15px;
+  cursor: pointer;
+}

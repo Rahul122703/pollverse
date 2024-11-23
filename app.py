@@ -18,6 +18,8 @@ import matplotlib.pyplot as plt
 import base64
 import string
 import os
+from dotenv import load_dotenv
+
 
 logged_in = 0
 not_registering = 1
@@ -35,8 +37,13 @@ user_icon = None
 
 current_page = "index"
 from_email = "xieminiproject@gmail.com"
-app_pass = "ibpp vdjr pukx fyek"
-#  https://myaccount.google.com/apppasswords 
+# app_pass = "ibpp vdjr pukx fyek"
+
+load_dotenv() 
+app_pass = os.getenv("app_pass")
+secret_key = os.getenv("SECRET_KEY")
+sentiment_api_key = os.getenv("SENTIMENT_API_KEY")
+
 app =  Flask(__name__)
 
 ckeditor = CKEditor(app)
@@ -53,7 +60,7 @@ login_manager.init_app(app)
 def load_user(user_id):
     return database.session.get(User,user_id)
 
-app.config['SECRET_KEY']="mrpvproject"
+app.config['SECRET_KEY']=secret_key
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_URI',"sqlite:///posts.db")
 
 
@@ -64,7 +71,7 @@ bootstrap_app = Bootstrap5(app)
 #abcde
 def analyze_sentiment(comment):
     api_url = f'https://api.api-ninjas.com/v1/sentiment?text={comment}'
-    response = requests.get(api_url, headers={'X-Api-Key': '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'})
+    response = requests.get(api_url, headers={'X-Api-Key': sentiment_api_key})
     
     if response.status_code == requests.codes.ok:
         data = response.json()
@@ -207,7 +214,7 @@ def common_variable():
                 comment = comment)
      
 @app.route('/register',methods = ['GET','POST'])
-def register():#reg123
+def register():
     global not_registering,current_user_id,current_user,logged_in,current_user_pic,anonymous_mode 
     not_registering = 0
     
@@ -270,7 +277,7 @@ def register():#reg123
 
 
 @app.route('/login_user',methods = ['GET','POST'])
-def login(): #login123
+def login(): 
     global logged_in,current_user,current_user_id,current_user_email,current_user_pic,anonymous_mode
     form_instance = LoginForm()
     
@@ -289,7 +296,7 @@ def login(): #login123
                 current_user_email = entred_email
                 anonymous_mode = 0
                 print(f">>>>>> {entred_email} has logged in <<<<<")
-                return redirect(url_for('index'))
+                return redirect(url_for(f'{current_page}'))
             else:
                 current_user_email = entred_email
                 error = "Forgot password? click to change"
@@ -327,7 +334,7 @@ def sort_comment(value):
 
 
 @app.route('/') 
-def index(): #index123
+def index(): 
     global current_user_id,current_user,login_form,logged_in,current_page,global_comments,start
     current_page = "index"
     all_comments = database.session.execute(database.select(Comment)).scalars().all()
@@ -336,13 +343,12 @@ def index(): #index123
         global_comments = comments
     login_form = LoginForm()
 
-    '''api_url = 'https://api.api-ninjas.com/v1/quotes?category=success'
-    QUOTE_API_KEY = '9No6wnmZqzRC/NRH0VvxHA==QRYgA94Njvme77Wg'
-    quote = requests.get(api_url, headers={'X-Api-Key': QUOTE_API_KEY}).json()[0]
-    quote_text = f"'{quote['quote']}' - {quote['author']}"'''
+    api_url = 'https://api-get-quotes.vercel.app/api/v1/random'
+    quote = requests.get(api_url).json()
+    quote_text = f"'{quote['quote']['quote']}' - {quote['quote']['author']}"
     print(f"current user id is ---> {current_user_id}")
     return render_template('index.html',
-                           quote = "quote_text",
+                           quote = quote_text,
                            comments = global_comments)
 
 @app.route('/logout')
@@ -355,7 +361,7 @@ def logout():
 
 
 @app.route('/profile',methods = ['GET','POST'])
-def profile():#profile123
+def profile():
     global current_page,current_user,comment,current_user_pic
     current_page = 'profile'
     changed_user = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
@@ -487,7 +493,7 @@ positive_replies = None
 negative_replies = None
 neutral_replies = None
 @app.route('/comment/<int:comment_id>',methods = ['GET','POST'])
-def show_comment(comment_id): #show123
+def show_comment(comment_id): 
     global current_page,anonymous_mode,current_user,percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01,positive_replies,negative_replies,neutral_replies
     chosen_comment = database.session.execute(database.select(Comment).where(Comment.id == comment_id)).scalar()
     reply_form = ReplyForm()
@@ -639,7 +645,7 @@ def send_otp():
         return render_template('index.html',error = error) 
    
 @app.route('/anonymous')  
-def anonymous():#ana123
+def anonymous():
     global username,user_icon,current_user,anonymous_mode,random_username
     if anonymous_mode == 0:
         username = current_user.username
@@ -689,19 +695,19 @@ def for_admin():
         new_icon = icon(link = database_form.icon_link.data)
         database.session.add(new_icon)
         database.session.commit()
-    users = database.session.execute(database.select(User)).scalars().all()
+    users = database.session.execute(database.select(User)).scalars().all() 
     return render_template('database_control.html',database_form = database_form,users = users)
 
 mail_flash = None
-@app.route('/contact/<int:user_id>',methods = ['POST','GET'])
+@app.route('/contact/<int:user_id>',methods = ['POST','GET']) 
 def contact(user_id): 
     global current_page,from_email,current_user_id,mail_flash
     contact_form = ContactForm()
     if contact_form.validate_on_submit():
-        user = database.get_or_404(User,user_id)
+        user = database.session.execute(database.select(User).where(User.id == user_id)).scalar()
         mail_flash = "Email sent sucessfully"
         body = contact_form.body.data
-        send_mail(user.email,from_email,body)
+        send_mail(user.email if user else "xieminiproject@gmail.com",from_email,body)
         return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
     mail_flash = None
     return render_template('contact.html',contact_form = contact_form,mail_flash = mail_flash)
@@ -720,23 +726,36 @@ def addremove(user_id):
     database.session.commit()
     return redirect(url_for('comment_profile', user_id=user_id))
 
-
-@app.route('/download/<int:comment_id>', methods=['GET'])
+@app.route('/download/<int:comment_id>', methods=['GET'])#11
 def download(comment_id):
-    global percent_gt_01,percent_lt_minus01,percent_between_minus01_to_01
-    labels = ['> 0.1', '< -0.1', '-0.1 to 0.1']
+    print("2")
+    global percent_gt_01, percent_lt_minus01, percent_between_minus01_to_01
+    print("3")
+    labels = ['positive', 'negative', 'neutral']
+    print("4")
     sizes = [percent_gt_01, percent_lt_minus01, percent_between_minus01_to_01]
+    print("5")
+    colors = ['green', 'red', 'grey']  # Assign colors for each label
+    print("6")
     plt.figure(figsize=(8, 6))
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
-    plt.title('Distribution of Numbers')
+    print("7")
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
+    print("8")
+    plt.title('SENTIMENT PIE CHART')
+    print("9")
     plt.savefig(f'pie-data-{comment_id}.pdf', format='pdf')
+    print("10")
 
     file_path = f"pie-data-{comment_id}.pdf" 
+    print("11")
     try:
+        print("12")
         # Send the file to the client for download
         return send_file(file_path, as_attachment=True)
     except Exception as e:
+        print("13")
         return str(e)
+
 
 @app.route('/about')
 def about():
@@ -751,83 +770,52 @@ def generate_api_key(length=32):
 
 @app.route('/developer', methods=['POST', 'GET'])
 def developer():    
+    print("------------------ THIS IS DEVELOPER ROUTE -------------------")
     global user_data,current_user_id,current_page
     current_page = "developer"
-    user = database.get_or_404(User,current_user_id)
+    user = database.session.execute(database.select(User).where(User.id == current_user_id)).scalar()
+    print("this is the user " ,user)
     if request.method == 'POST':     
         user.ApiKey = generate_api_key(length = 32)
         database.session.commit()
     return render_template('developer.html',user = user)
 
 
+
 #CREATING API
 @app.route('/all_users')
-@is_logged
 def get_all_users():
     all_data = database.session.execute(database.select(User).order_by(User.id)).scalars().all()
     users = {"Users" : []}
-    
-    user = database.get_or_404(User,current_user_id)
-    if user.ApiKey:
-        for data in all_data:
-            users['Users'].append({
-            "id" : data.id,
-            "username" : data.username,
-            "icon_link" : data.icon,
-            "email" : data.email,
-            "created_on" : data.created,
-            "total_polls" : data.poll,
-            "total_replies" : data.reply
-            })
-        return jsonify(users) 
-    else:
-        return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
+    for data in all_data:
+        users['Users'].append({
+        "id" : data.id,
+        "username" : data.username,
+        "icon_link" : data.icon,
+        "email" : data.email,
+        "created_on" : data.created,
+        "total_polls" : data.poll,
+        "total_replies" : data.reply
+        })
+    return jsonify(users) 
     
     
-@is_logged    
+    
 @app.route('/all_polls')
 def get_all_polls():
     all_data = database.session.execute(database.select(Comment).order_by(Comment.id)).scalars().all()
     poll= {"polls" : []}
-    user = database.get_or_404(User,current_user_id)
-    if user.ApiKey:
-        for data in all_data:
-            poll['polls'].append({
-            "id" : data.id,
-            "upvote" : data.upvote,
-            "downvote" : data.downvote,
-            "head" : data.head,
-            "created_on" : data.date,
-            "body" : data.body,
-            "is_anonymous" : data.anonymous
-            })
-        return jsonify(poll) 
-    else:
-        return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
-
-
-@app.route('/add_reply',methods=['POST'])
-def add_reply():
-    user = database.get_or_404(User,current_user_id)
-
-    if user.ApiKey:
-        new_reply = Subcomment(
-        body = request.form.get('body'),
-        upvote = request.form.get('upvote'),
-        downvote = request.form.get('downvote'),
-        user_id = request.form.get('user_id'),
-        comment_id = request.form.get('comment_id'),
-        date = request.form.get('date'),
-        anonymous = request.form.get('anonymous'),
-        color =  request.form.get('color'),
-        intensity = request.form.get('intensity')
-    )
-        database.session.add(new_reply)
-        database.session.commit()
-        return jsonify(response={"success": "All the replies have been added to the desired poll"})
-    
-    else:
-        return jsonify(error={"Forbidden": "Sorry, that's not allowed. Make sure you have the correct api_key."}), 403
+    for data in all_data:
+        poll['polls'].append({
+        "id" : data.id,
+        "upvote" : data.upvote,
+        "downvote" : data.downvote,
+        "head" : data.head,
+        "created_on" : data.date,
+        "body" : data.body,
+        "is_anonymous" : data.anonymous
+        })
+    return jsonify(poll) 
 
 if __name__== "__main__":
     app.run(debug=True)
